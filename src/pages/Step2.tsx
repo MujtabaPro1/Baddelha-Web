@@ -1,0 +1,253 @@
+import React, { useState } from 'react';
+import { Check } from 'lucide-react';
+
+const Step2 = () => {
+    const [bodyType, setBodyType] = useState('Sedan');
+    const [engineSize, setEngineSize] = useState('');
+    const [mileage, setMileage] = useState('Up to 60,000 KM');
+    const [option, setOption] = useState('');
+    const [paint, setPaint] = useState('');
+    const [gccSpecs, setGccSpecs] = useState('');
+    
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Process form data and handle completion
+        console.log('Form submitted with:', { bodyType, engineSize, mileage, option, paint, gccSpecs });
+        // Here you would typically send the data to your backend or navigate to the next step
+        window.location.href = '/step3';
+
+    };
+    
+    return (
+        <div className="max-w-5xl mt-[120px] mx-auto px-4 py-8">
+            {/* Progress Indicator */}
+            <div className="mb-8">
+                <div className="relative">
+                    <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                        <div style={{ width: '66%' }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#f78f37]"></div>
+                    </div>
+                    <div className="flex justify-between">
+                        <div className="text-center">
+                            <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
+                                <Check className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="mt-2 font-medium text-[#f78f37]">SELECT</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
+                                <div className="h-3 w-3 bg-white rounded-full"></div>
+                            </div>
+                            <div className="mt-2 font-medium text-[#f78f37]">CONDITION</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="w-10 h-10 mx-auto rounded-full bg-gray-300 flex items-center justify-center">
+                                <div className="h-3 w-3 bg-white rounded-full"></div>
+                            </div>
+                            <div className="mt-2 font-medium text-gray-500">BOOK</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+                <div className="bg-[#3d3d40] px-6 py-4 text-white">
+                    <h2 className="text-xl font-semibold">Toyota Corolla 2023</h2>
+                    <p className="text-blue-100 text-sm">Please enter the following information to see your car valuation</p>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        {/* Body Type */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Body Type</label>
+                            <div className="relative">
+                                <select
+                                    value={bodyType}
+                                    onChange={(e) => setBodyType(e.target.value)}
+                                    className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
+                                >
+                                    <option value="Sedan">Sedan</option>
+                                    <option value="SUV">SUV</option>
+                                    <option value="Hatchback">Hatchback</option>
+                                    <option value="Coupe">Coupe</option>
+                                    <option value="Convertible">Convertible</option>
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div className="absolute right-0 top-0 h-full flex items-center pr-10">
+                                    <Check className="h-5 w-5 text-green-500" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Engine */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Engine</label>
+                            <div className="relative">
+                                <select
+                                    value={engineSize}
+                                    onChange={(e) => setEngineSize(e.target.value)}
+                                    className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
+                                >
+                                    <option value="">Select Engine Size</option>
+                                    <option value="1.6L">1.6L</option>
+                                    <option value="1.8L">1.8L</option>
+                                    <option value="2.0L">2.0L</option>
+                                    <option value="2.5L">2.5L</option>
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Mileage */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Mileage</label>
+                            <div className="relative">
+                                <select
+                                    value={mileage}
+                                    onChange={(e) => setMileage(e.target.value)}
+                                    className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
+                                >
+                                    <option value="Up to 60,000 KM">Up to 60,000 KM</option>
+                                    <option value="60,000 - 100,000 KM">60,000 - 100,000 KM</option>
+                                    <option value="100,000 - 150,000 KM">100,000 - 150,000 KM</option>
+                                    <option value="Over 150,000 KM">Over 150,000 KM</option>
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div className="absolute right-0 top-0 h-full flex items-center pr-10">
+                                    <Check className="h-5 w-5 text-green-500" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Option */}
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Option</label>
+                        <div className="flex flex-wrap gap-2">
+                            <button 
+                                type="button" 
+                                onClick={() => setOption('Basic')} 
+                                className={`px-4 py-2 rounded-md ${option === 'Basic' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                Basic
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => setOption('Mid option')} 
+                                className={`px-4 py-2 rounded-md ${option === 'Mid option' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                Mid option
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => setOption('Full option')} 
+                                className={`px-4 py-2 rounded-md ${option === 'Full option' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                Full option
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => setOption('I don\'t know')} 
+                                className={`px-4 py-2 rounded-md ${option === 'I don\'t know' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                I don't know
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Paint */}
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Paint</label>
+                        <div className="flex flex-wrap gap-2">
+                            <button 
+                                type="button" 
+                                onClick={() => setPaint('Original paint')} 
+                                className={`px-4 py-2 rounded-md ${paint === 'Original paint' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                Original paint
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => setPaint('Partial repaint')} 
+                                className={`px-4 py-2 rounded-md ${paint === 'Partial repaint' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                Partial repaint
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => setPaint('Total repaint')} 
+                                className={`px-4 py-2 rounded-md ${paint === 'Total repaint' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                Total repaint
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => setPaint('I don\'t know')} 
+                                className={`px-4 py-2 rounded-md ${paint === 'I don\'t know' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                I don't know
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* GCC Specs */}
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">GCC Specs?</label>
+                        <div className="flex flex-wrap gap-2">
+                            <button 
+                                type="button" 
+                                onClick={() => setGccSpecs('GCC Specs')} 
+                                className={`px-4 py-2 rounded-md ${gccSpecs === 'GCC Specs' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                GCC Specs
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => setGccSpecs('Non GCC Specs')} 
+                                className={`px-4 py-2 rounded-md ${gccSpecs === 'Non GCC Specs' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                Non GCC Specs
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => setGccSpecs('I don\'t know')} 
+                                className={`px-4 py-2 rounded-md ${gccSpecs === 'I don\'t know' ? 'bg-blue-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+                            >
+                                I don't know
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Continue Button */}
+                    <div className="mt-8">
+                        <button
+                            type="submit"
+                            className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 shadow-md flex items-center justify-center"
+                        >
+                            CONTINUE
+                        </button>
+                    </div>
+                </form>
+                
+                <div className="bg-gray-50 px-6 py-4 text-xs text-gray-500 border-t border-gray-100">
+                    <p>By continuing you agree to the <a href="#" className="text-blue-600 hover:underline">Terms and Conditions</a> and <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a></p>
+                    <p className="mt-1">This site is protected by reCAPTCHA and the Google <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a> and <a href="#" className="text-blue-600 hover:underline">Terms and Conditions</a> apply.</p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Step2;
