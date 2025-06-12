@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Login from './pages/Login';
 import Buy from './pages/Buy';
+import CarDetail from './pages/CarDetail';
 
 function App() {
   useEffect(() => {
@@ -38,6 +39,10 @@ function App() {
     {
       path: '/buy',
       element: <Buy />,
+    },
+    {
+      path: '/car/:id',
+      element: <CarDetail />,
     },
   ]);
 
