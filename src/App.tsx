@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Login from './pages/Login';
 import Buy from './pages/Buy';
 import CarDetail from './pages/CarDetail';
+import Purchase from './pages/Purchase';
 
 function App() {
   useEffect(() => {
@@ -43,6 +44,10 @@ function App() {
     {
       path: '/car/:id',
       element: <CarDetail />,
+    },
+    {
+      path: '/purchase/:id',
+      element: <Purchase />,
     },
   ]);
 

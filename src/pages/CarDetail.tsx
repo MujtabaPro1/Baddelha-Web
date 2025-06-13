@@ -535,7 +535,10 @@ const CarDetail: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                <button className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105">
+                <button 
+                  onClick={() => window.location.href = `/purchase/${carData.id}`}
+                  className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
+                >
                   Purchase Now
                 </button>
                 <button 
