@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
               </span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <Link href="#buy" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Buy</Link>
+              <Link href="/buy" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Buy</Link>
               <Link href="#sell" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Sell</Link>
               <Link href="#trade-in" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Trade-In</Link>
               <Link href="#valuation" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Valuation</Link>
