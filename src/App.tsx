@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Buy from './pages/Buy';
 import CarDetail from './pages/CarDetails';
 import Purchase from './pages/Purchase';
+import TradeIn from './pages/TradeIn';
 
 function App() {
   useEffect(() => {
@@ -48,6 +49,10 @@ function App() {
     {
       path: '/purchase/:id',
       element: <Purchase />,
+    },
+    {
+      path: '/trade-in',
+      element: <TradeIn />,
     },
   ]);
 
