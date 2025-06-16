@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
               <Car className={`h-6 w-6 ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`} />
               <span
               onClick={() => window.location.href = '/'}
-              className={`ml-2 text-xl font-bold ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>
+              className={`ml-2 text-xl font-bold ${isScrolled ? 'text-[#3d3d40]' : 'text-white'} cursor-pointer`}>
                 BADDELHA |
 بدلها
               </span>
@@ -80,9 +80,9 @@ const Navbar: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white shadow-lg absolute top-full left-0 right-0 p-4 transition-transform">
           <nav className="flex flex-col space-y-4 py-4">
-            <Link href="#buy" className="transition hover:text-blue-600">Buy</Link>
+            <Link href="/buy" className="transition hover:text-blue-600">Buy</Link>
             <Link href="#sell" className="transition hover:text-blue-600">Sell</Link>
-            <Link href="#trade-in" className="transition hover:text-blue-600">Trade-In</Link>
+            <Link href="/trade-in" className="transition hover:text-blue-600">Trade-In</Link>
             <Link href="#valuation" className="transition hover:text-blue-600">Valuation</Link>
             <Link href="#financing" className="transition hover:text-blue-600">Financing</Link>
           </nav>
