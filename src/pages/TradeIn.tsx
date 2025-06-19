@@ -586,14 +586,18 @@ const TradeIn: React.FC = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Model *
                         </label>
-                        <input
-                          type="text"
+                        <select
                           required
                           value={vehicle.model}
                           onChange={(e) => updateVehicle(vehicle.id, 'model', e.target.value)}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
-                          placeholder="Enter model"
-                        />
+                        >
+                          <option value="">Select Model</option>
+                          <option value="Camry">Camry</option>
+                          <option value="Accord">Accord</option>
+                          <option value="Civic">Civic</option>
+                          <option value="Corolla">Corolla</option>
+                        </select>
                       </div>
                       
                       <div>

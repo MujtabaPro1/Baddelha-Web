@@ -15,7 +15,7 @@ import Auction from './pages/Auction';
 
 function App() {
   useEffect(() => {
-    document.title = 'DriveMarket - Premium Car Marketplace';
+    document.title = 'BADDELHA - Premium Car Marketplace';
   }, []);
 
   const router = createBrowserRouter([
