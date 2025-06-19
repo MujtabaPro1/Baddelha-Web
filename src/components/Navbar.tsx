@@ -42,6 +42,7 @@ const Navbar: React.FC = () => {
               <Link href="/buy" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Buy</Link>
               <Link href="#sell" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Sell</Link>
               <Link href="/trade-in" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Trade-In</Link>
+              <Link href="/auction" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Auction</Link>
               <Link href="#valuation" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Valuation</Link>
               <Link href="#financing" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Financing</Link>
             </nav>
@@ -83,6 +84,7 @@ const Navbar: React.FC = () => {
             <Link href="/buy" className="transition hover:text-blue-600">Buy</Link>
             <Link href="#sell" className="transition hover:text-blue-600">Sell</Link>
             <Link href="/trade-in" className="transition hover:text-blue-600">Trade-In</Link>
+            <Link href="/auction" className="transition hover:text-blue-600">Auction</Link>
             <Link href="#valuation" className="transition hover:text-blue-600">Valuation</Link>
             <Link href="#financing" className="transition hover:text-blue-600">Financing</Link>
           </nav>

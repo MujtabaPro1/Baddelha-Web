@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Phone as PhoneIcon, X } from 'lucide-react';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '../components/ui/input-otp';
 
 const Step3 = () => {
     const [branch, setBranch] = useState('');
@@ -9,7 +10,13 @@ const Step3 = () => {
     const [lastName, setLastName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
-    const [revealPrice,setRevealPrice] = useState(false);
+    const [revealPrice, setRevealPrice] = useState(false);
+    const [showPhoneVerification, setShowPhoneVerification] = useState(false);
+    const [verificationPhone, setVerificationPhone] = useState('');
+    const [otpSent, setOtpSent] = useState(false);
+    const [otp, setOtp] = useState('');
+    const [otpVerified, setOtpVerified] = useState(false);
+    const [otpError, setOtpError] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -69,7 +76,7 @@ const Step3 = () => {
                                 {revealPrice ? ' 75,000' : 
                                   <button
                                     onClick={()=>{
-                                        setRevealPrice(true);
+                                        setShowPhoneVerification(true);
                                     }}
                                     className="bg-[#f78f37] ml-2 mr-2 text-xs px-3 py-1 rounded hover:bg-yellow-600 transition">
                                         REVEAL PRICE
@@ -249,6 +256,137 @@ const Step3 = () => {
                     </div>
                 </div>
             </div>
+            
+            {/* Phone Verification Modal */}
+            {showPhoneVerification && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative">
+                        <button 
+                            onClick={() => setShowPhoneVerification(false)}
+                            className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+                        
+                        <div className="text-center mb-6">
+                            <div className="bg-orange-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                                <PhoneIcon className="h-8 w-8 text-[#f78f37]" />
+                            </div>
+                            <h3 className="text-xl font-bold">{otpVerified ? 'Verification Successful!' : (otpSent ? 'Enter Verification Code' : 'Verify Your Phone Number')}</h3>
+                            <p className="text-gray-600 mt-1">
+                                {otpVerified ? 'Thank you for verifying your phone number.' : 
+                                 (otpSent ? 'We sent a 6-digit code to your phone.' : 'To reveal your vehicle price, please verify your phone number.')}
+                            </p>
+                        </div>
+                        
+                        {!otpVerified && (
+                            <div>
+                                {!otpSent ? (
+                                    <div>
+                                        <div className="mb-4">
+                                            <label className="block text-sm font-medium mb-1">Mobile Number</label>
+                                            <div className="flex">
+                                                <span className="inline-flex items-center px-3 text-gray-900 bg-gray-200 rounded-l-md border border-r-0 border-gray-300">
+                                                    +966
+                                                </span>
+                                                <input
+                                                    type="tel"
+                                                    value={verificationPhone}
+                                                    onChange={(e) => setVerificationPhone(e.target.value)}
+                                                    placeholder="Phone Number"
+                                                    className="block w-full border-2 rounded-r-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                if (verificationPhone.trim()) {
+                                                    // Simulate sending OTP
+                                                    setOtpSent(true);
+                                                    setOtpError('');
+                                                    // In a real app, you would call an API to send the OTP
+                                                }
+                                            }}
+                                            className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md"
+                                        >
+                                            Send Verification Code
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div className="mb-6">
+                                            <label className="block text-sm font-medium mb-3 text-center">Enter the 6-digit code</label>
+                                            <InputOTP
+                                                maxLength={6}
+                                                value={otp}
+                                                onChange={(value: string) => setOtp(value)}
+                                                containerClassName="justify-center gap-2"
+                                            >
+                                                <InputOTPGroup className="gap-2">
+                                                    <InputOTPSlot index={0} className="rounded-md border-gray-300" />
+                                                    <InputOTPSlot index={1} className="rounded-md border-gray-300" />
+                                                    <InputOTPSlot index={2} className="rounded-md border-gray-300" />
+                                                    <InputOTPSlot index={3} className="rounded-md border-gray-300" />
+                                                    <InputOTPSlot index={4} className="rounded-md border-gray-300" />
+                                                    <InputOTPSlot index={5} className="rounded-md border-gray-300" />
+                                                </InputOTPGroup>
+                                            </InputOTP>
+                                            {otpError && <p className="text-red-500 text-sm mt-2">{otpError}</p>}
+                                        </div>
+                                        
+                                        <div className="flex flex-col space-y-3">
+                                            <button
+                                                onClick={() => {
+                                                    // Simulate OTP verification
+                                                    if (otp.length === 6) {
+                                                        // For demo, we'll accept any 6-digit code
+                                                        // In a real app, you would verify this with your backend
+                                                        setOtpVerified(true);
+                                                        setOtpError('');
+                                                        // Set the phone number for the booking form
+                                                        setPhone(verificationPhone);
+                                                    } else {
+                                                        setOtpError('Please enter a valid 6-digit code');
+                                                    }
+                                                }}
+                                                className="bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md"
+                                            >
+                                                Verify Code
+                                            </button>
+                                            
+                                            <button
+                                                onClick={() => {
+                                                    // Resend OTP logic would go here
+                                                    setOtp('');
+                                                    setOtpError('');
+                                                }}
+                                                className="text-[#f78f37] hover:text-[#e67d26] text-sm font-medium"
+                                            >
+                                                Resend Code
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        
+                        {otpVerified && (
+                            <div className="mt-6">
+                                <button
+                                    onClick={() => {
+                                        setShowPhoneVerification(false);
+                                        setRevealPrice(true);
+                                    }}
+                                    className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md"
+                                >
+                                    View Your Vehicle Price
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
             
             {/* Disclaimer */}
             <div className="mt-8 bg-white p-6 rounded-lg shadow-md text-sm text-gray-600">

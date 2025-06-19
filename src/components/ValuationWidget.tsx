@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Check, ArrowRight, AlertCircle } from 'lucide-react';
 
 const carMakes = ['Audi', 'BMW', 'Ford', 'Honda', 'Hyundai', 'Kia', 'Lexus', 'Mercedes', 'Nissan', 'Toyota', 'Volkswagen'];
+const carModels = ['Camry', 'Corolla', 'Civic', 'Accord', 'Camry', 'Corolla', 'Civic', 'Accord', 'Camry', 'Corolla', 'Civic', 'Accord'];
 const years = Array.from({ length: 20 }, (_, i) => (new Date().getFullYear() - i).toString());
 
 const ValuationWidget: React.FC = () => {
@@ -58,14 +59,17 @@ const ValuationWidget: React.FC = () => {
           
           <div>
             <label htmlFor="model" className="block text-sm font-medium text-gray-700 mb-1">Model</label>
-            <input
-              type="text"
+            <select
               id="model"
               value={model}
-              onChange={(e) => setModel(e.target.value)}
-              placeholder="e.g. Camry"
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setModel(e.target.value)}
               className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 focus:border-blue-500 focus:ring-blue-500"
-            />
+            >
+              <option value="">Select Model</option>
+              {carModels.map(model => (
+                <option key={model} value={model}>{model}</option>
+              ))}
+            </select>
           </div>
           
           <div>
