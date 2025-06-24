@@ -1,5 +1,6 @@
 import React from 'react';
 import { Car, Facebook, Twitter, Instagram, Linkedin, Youtube, Mail } from 'lucide-react';
+import Logo from '../logo-light.png';
 
 const Footer: React.FC = () => {
   return (
@@ -8,12 +9,15 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4">
-              <Car className="h-6 w-6 text-amber-500" />
-              <span className="ml-2 text-xl font-bold">BADDELHA |
-بدلها</span>
+              <span className="text-xl font-bold">
+                <img src={Logo} alt="Baddelha Logo" 
+                className="w-[150px] h-[70px] object-cover"
+                />
+              </span>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
-              DriveMarket is your trusted partner for all car-related services. 
+              BADDELHA |
+بدلها is your trusted partner for all car-related services. 
               From buying and selling to valuation and financing, we make the process 
               simple, transparent, and enjoyable.
             </p>

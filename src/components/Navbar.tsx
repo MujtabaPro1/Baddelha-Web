@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Car, Menu, X, Search, Phone } from 'lucide-react';
 import { Link } from './ui/Link';
+import Logo from '../logo.png';
+import LogoLight from '../logo-light.png';
+
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,21 +33,18 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="flex items-center mr-6">
-              <Car className={`h-6 w-6 ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`} />
               <span
               onClick={() => window.location.href = '/'}
               className={`ml-2 text-xl font-bold ${isScrolled ? 'text-[#3d3d40]' : 'text-white'} cursor-pointer`}>
-                BADDELHA |
-بدلها
+               <img src={!isScrolled ? LogoLight : Logo} alt="Baddelha Logo" 
+               className="w-[150px] h-[50px] object-cover"
+               />
               </span>
             </div>
             <nav className="hidden md:flex space-x-8">
               <Link href="/buy" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Buy</Link>
-              <Link href="#sell" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Sell</Link>
               <Link href="/trade-in" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Trade-In</Link>
               <Link href="/auction" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Auction</Link>
-              <Link href="#valuation" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Valuation</Link>
-              <Link href="#financing" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Financing</Link>
             </nav>
           </div>
           
@@ -82,11 +82,8 @@ const Navbar: React.FC = () => {
         <div className="md:hidden bg-white shadow-lg absolute top-full left-0 right-0 p-4 transition-transform">
           <nav className="flex flex-col space-y-4 py-4">
             <Link href="/buy" className="transition hover:text-blue-600">Buy</Link>
-            <Link href="#sell" className="transition hover:text-blue-600">Sell</Link>
             <Link href="/trade-in" className="transition hover:text-blue-600">Trade-In</Link>
             <Link href="/auction" className="transition hover:text-blue-600">Auction</Link>
-            <Link href="#valuation" className="transition hover:text-blue-600">Valuation</Link>
-            <Link href="#financing" className="transition hover:text-blue-600">Financing</Link>
           </nav>
           <div className="mt-4 pt-4 border-t border-gray-100">
             <div className="relative">
