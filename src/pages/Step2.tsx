@@ -1,21 +1,120 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check } from 'lucide-react';
+import axiosInstance from '../services/axiosInstance';
 
 const Step2 = () => {
-    const [bodyType, setBodyType] = useState('Sedan');
+    const [bodyType, setBodyType] = useState('');
     const [engineSize, setEngineSize] = useState('');
-    const [mileage, setMileage] = useState('Up to 60,000 KM');
+    const [mileage, setMileage] = useState('');
     const [option, setOption] = useState('');
     const [paint, setPaint] = useState('');
     const [gccSpecs, setGccSpecs] = useState('');
     
+    // State for car details from Step1
+    const [carDetails, setCarDetails] = useState<{ make: string; model: string; year: string }>({ make: '', model: '', year: '' });
+    
+    // State for API data
+    const [bodyTypes, setBodyTypes] = useState<{id: string; name: string}[]>([]);
+    const [engineSizes, setEngineSizes] = useState<{id: string; name: string}[]>([]);
+    const [mileageOptions, setMileageOptions] = useState<{id: string; name: string}[]>([]);
+    
+    // Loading states
+    const [loading, setLoading] = useState({
+        bodyTypes: false,
+        engineSizes: false,
+        mileage: false
+    });
+    
+    // Error states
+    const [error, setError] = useState({
+        bodyTypes: '',
+        engineSizes: '',
+        mileage: ''
+    });
+    
+    // Load car details from sessionStorage
+    useEffect(() => {
+        const storedCarDetails = sessionStorage.getItem('carDetails');
+        if (storedCarDetails) {
+            setCarDetails(JSON.parse(storedCarDetails));
+        }
+    }, []);
+    
+    // Fetch body types
+    useEffect(() => {
+        const fetchBodyTypes = async () => {
+            setLoading(prev => ({ ...prev, bodyTypes: true }));
+            setError(prev => ({ ...prev, bodyTypes: '' }));
+            
+            try {
+                const response = await axiosInstance.get('/api/1.0/car-options/body-types');
+                setBodyTypes(response.data || []);
+                if (response.data?.length > 0) {
+                    setBodyType(response.data[0].id);
+                }
+            } catch (err) {
+                console.error('Error fetching body types:', err);
+                setError(prev => ({ ...prev, bodyTypes: 'Failed to load body types' }));
+            } finally {
+                setLoading(prev => ({ ...prev, bodyTypes: false }));
+            }
+        };
+        
+        fetchBodyTypes();
+    }, []);
+    
+    // Fetch engine sizes
+    useEffect(() => {
+        const fetchEngineSizes = async () => {
+            setLoading(prev => ({ ...prev, engineSizes: true }));
+            setError(prev => ({ ...prev, engineSizes: '' }));
+            
+            try {
+                const response = await axiosInstance.get('/api/1.0/car-options/engine-size');
+                setEngineSizes(response.data || []);
+                if (response.data?.length > 0) {
+                    setEngineSize(response.data[0].id);
+                }
+            } catch (err) {
+                console.error('Error fetching engine sizes:', err);
+                setError(prev => ({ ...prev, engineSizes: 'Failed to load engine sizes' }));
+            } finally {
+                setLoading(prev => ({ ...prev, engineSizes: false }));
+            }
+        };
+        
+        fetchEngineSizes();
+    }, []);
+    
+    // Fetch mileage options
+    useEffect(() => {
+        const fetchMileageOptions = async () => {
+            setLoading(prev => ({ ...prev, mileage: true }));
+            setError(prev => ({ ...prev, mileage: '' }));
+            
+            try {
+                const response = await axiosInstance.get('/api/1.0/car-options/car-mileage');
+                setMileageOptions(response.data || []);
+                if (response.data?.length > 0) {
+                    setMileage(response.data[0].id);
+                }
+            } catch (err) {
+                console.error('Error fetching mileage options:', err);
+                setError(prev => ({ ...prev, mileage: 'Failed to load mileage options' }));
+            } finally {
+                setLoading(prev => ({ ...prev, mileage: false }));
+            }
+        };
+        
+        fetchMileageOptions();
+    }, []);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Process form data and handle completion
         console.log('Form submitted with:', { bodyType, engineSize, mileage, option, paint, gccSpecs });
         // Here you would typically send the data to your backend or navigate to the next step
         window.location.href = '/step3';
-
     };
     
     return (
@@ -51,7 +150,7 @@ const Step2 = () => {
             
             <div className="bg-white rounded-xl shadow-xl overflow-hidden">
                 <div className="bg-[#3d3d40] px-6 py-4 text-white">
-                    <h2 className="text-xl font-semibold">Toyota Corolla 2023</h2>
+                    <h2 className="text-xl font-semibold">{carDetails.make} {carDetails.model} {carDetails.year}</h2>
                     <p className="text-blue-100 text-sm">Please enter the following information to see your car valuation</p>
                 </div>
                 
@@ -65,22 +164,36 @@ const Step2 = () => {
                                     value={bodyType}
                                     onChange={(e) => setBodyType(e.target.value)}
                                     className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
+                                    disabled={loading.bodyTypes}
                                 >
-                                    <option value="Sedan">Sedan</option>
-                                    <option value="SUV">SUV</option>
-                                    <option value="Hatchback">Hatchback</option>
-                                    <option value="Coupe">Coupe</option>
-                                    <option value="Convertible">Convertible</option>
+                                    {loading.bodyTypes ? (
+                                        <option>Loading...</option>
+                                    ) : bodyTypes.length > 0 ? (
+                                        bodyTypes.map(type => (
+                                            <option key={type.id} value={type.id}>{type.name}</option>
+                                        ))
+                                    ) : (
+                                        <option value="">No body types available</option>
+                                    )}
                                 </select>
                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                    </svg>
+                                    {loading.bodyTypes ? (
+                                        <span className="animate-spin h-4 w-4 border-2 border-gray-500 rounded-full border-t-transparent"></span>
+                                    ) : (
+                                        <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                    )}
                                 </div>
-                                <div className="absolute right-0 top-0 h-full flex items-center pr-10">
-                                    <Check className="h-5 w-5 text-green-500" />
-                                </div>
+                                {bodyType && !loading.bodyTypes && (
+                                    <div className="absolute right-0 top-0 h-full flex items-center pr-10">
+                                        <Check className="h-5 w-5 text-green-500" />
+                                    </div>
+                                )}
                             </div>
+                            {error.bodyTypes && (
+                                <p className="mt-1 text-sm text-red-600">{error.bodyTypes}</p>
+                            )}
                         </div>
                         
                         {/* Engine */}
@@ -91,19 +204,36 @@ const Step2 = () => {
                                     value={engineSize}
                                     onChange={(e) => setEngineSize(e.target.value)}
                                     className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
+                                    disabled={loading.engineSizes}
                                 >
-                                    <option value="">Select Engine Size</option>
-                                    <option value="1.6L">1.6L</option>
-                                    <option value="1.8L">1.8L</option>
-                                    <option value="2.0L">2.0L</option>
-                                    <option value="2.5L">2.5L</option>
+                                    {loading.engineSizes ? (
+                                        <option>Loading...</option>
+                                    ) : engineSizes.length > 0 ? (
+                                        engineSizes.map(engine => (
+                                            <option key={engine.id} value={engine.id}>{engine.name}</option>
+                                        ))
+                                    ) : (
+                                        <option value="">No engine sizes available</option>
+                                    )}
                                 </select>
                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                    </svg>
+                                    {loading.engineSizes ? (
+                                        <span className="animate-spin h-4 w-4 border-2 border-gray-500 rounded-full border-t-transparent"></span>
+                                    ) : (
+                                        <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                    )}
                                 </div>
+                                {engineSize && !loading.engineSizes && (
+                                    <div className="absolute right-0 top-0 h-full flex items-center pr-10">
+                                        <Check className="h-5 w-5 text-green-500" />
+                                    </div>
+                                )}
                             </div>
+                            {error.engineSizes && (
+                                <p className="mt-1 text-sm text-red-600">{error.engineSizes}</p>
+                            )}
                         </div>
                         
                         {/* Mileage */}
@@ -114,21 +244,36 @@ const Step2 = () => {
                                     value={mileage}
                                     onChange={(e) => setMileage(e.target.value)}
                                     className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
+                                    disabled={loading.mileage}
                                 >
-                                    <option value="Up to 60,000 KM">Up to 60,000 KM</option>
-                                    <option value="60,000 - 100,000 KM">60,000 - 100,000 KM</option>
-                                    <option value="100,000 - 150,000 KM">100,000 - 150,000 KM</option>
-                                    <option value="Over 150,000 KM">Over 150,000 KM</option>
+                                    {loading.mileage ? (
+                                        <option>Loading...</option>
+                                    ) : mileageOptions.length > 0 ? (
+                                        mileageOptions.map(option => (
+                                            <option key={option.id} value={option.id}>{option.label}</option>
+                                        ))
+                                    ) : (
+                                        <option value="">No mileage options available</option>
+                                    )}
                                 </select>
                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                    </svg>
+                                    {loading.mileage ? (
+                                        <span className="animate-spin h-4 w-4 border-2 border-gray-500 rounded-full border-t-transparent"></span>
+                                    ) : (
+                                        <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                    )}
                                 </div>
-                                <div className="absolute right-0 top-0 h-full flex items-center pr-10">
-                                    <Check className="h-5 w-5 text-green-500" />
-                                </div>
+                                {mileage && !loading.mileage && (
+                                    <div className="absolute right-0 top-0 h-full flex items-center pr-10">
+                                        <Check className="h-5 w-5 text-green-500" />
+                                    </div>
+                                )}
                             </div>
+                            {error.mileage && (
+                                <p className="mt-1 text-sm text-red-600">{error.mileage}</p>
+                            )}
                         </div>
                     </div>
                     
