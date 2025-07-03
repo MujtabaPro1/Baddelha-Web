@@ -56,7 +56,7 @@ const ValuationWidget: React.FC = () => {
   
   // Fetch car models when make changes
   useEffect(() => {
-    if (!make) {
+    if (!makeId) {
       setModels([]);
       return;
     }
@@ -78,7 +78,7 @@ const ValuationWidget: React.FC = () => {
     };
     
     fetchCarModels();
-  }, [make]);
+  }, [makeId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,8 +110,9 @@ const ValuationWidget: React.FC = () => {
             <div className="relative">
               <select
                 id="make"
-                value={make}
+                value={makeId}
                 onChange={(e) => {
+                  console.log(e.target.options[e.target.selectedIndex].text)
                   setMake(e.target.options[e.target.selectedIndex].text);
                   setMakeId(e.target.value);
                 }}
@@ -141,8 +142,8 @@ const ValuationWidget: React.FC = () => {
             <div className="relative">
               <select
                 id="model"
-                value={model}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                value={modelId}
+                onChange={(e) => {
                   setModel(e.target.options[e.target.selectedIndex].text);
                   setModelId(e.target.value);
                 }}

@@ -42,9 +42,10 @@ const Navbar: React.FC = () => {
               </span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <Link href="/buy" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Buy</Link>
+            
+              <Link href={window.location.pathname.includes('buy') ? '/' : '/buy'} className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>{window.location.pathname.includes('buy') ? 'Sell' : 'Buy'}</Link>
               <Link href="/trade-in" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Trade-In</Link>
-              <Link href="/auction" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Auction</Link>
+              {/* <Link href="/auction" className={`transition ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>Auction</Link> */}
             </nav>
           </div>
           

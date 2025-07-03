@@ -1,29 +1,192 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check, Phone as PhoneIcon, X } from 'lucide-react';
+import axiosInstance from '../services/axiosInstance';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '../components/ui/input-otp';
 
 const Step3 = () => {
     const [branch, setBranch] = useState('');
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
+    const [selectedDay, setSelectedDay] = useState<string | null>(null);
+    const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [revealPrice, setRevealPrice] = useState(false);
+    const [carPrice, setCarPrice] = useState<number | null>(null);
+    const [carImage, setCarImage] = useState<string | null>(null);
     const [showPhoneVerification, setShowPhoneVerification] = useState(false);
     const [verificationPhone, setVerificationPhone] = useState('');
     const [otpSent, setOtpSent] = useState(false);
     const [otp, setOtp] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
     const [otpError, setOtpError] = useState('');
+    
+    // State for branches from API
+    const [branches, setBranches] = useState<{id: string; name: string; address: string}[]>([]);
+    const [loadingBranches, setLoadingBranches] = useState(false);
+    const [branchError, setBranchError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    
+    // State for branch timing slots
+    type TimeSlot = {
+        label: string;
+    };
+    
+    type DaySchedule = {
+        day: string;
+        date: string;
+        slots: TimeSlot[];
+    };
+    
+    const [branchTimings, setBranchTimings] = useState<DaySchedule[]>([]);
+    const [loadingTimings, setLoadingTimings] = useState(false);
+    const [timingsError, setTimingsError] = useState('');
+    
+    // State for Step2 data
+    const [step2Data, setStep2Data] = useState<{
+        bodyType: string;
+        engineSize: string;
+        mileage: string;
+        option: string;
+        paint: string;
+        gccSpecs: string;
+    } | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // Load Step2 data from sessionStorage
+    useEffect(() => {
+        const storedStep2Data = sessionStorage.getItem('step2Data');
+        if (storedStep2Data) {
+            setStep2Data(JSON.parse(storedStep2Data));
+        }
+    }, []);
+    
+    // Fetch branches from API
+    useEffect(() => {
+        const fetchBranches = async () => {
+            setLoadingBranches(true);
+            setBranchError('');
+            
+            try {
+                const response = await axiosInstance.get('/api/1.0/branch');
+                setBranches(response.data || []);
+                if (response.data?.length > 0) {
+                    // Don't auto-select a branch, let user choose
+                }
+            } catch (err) {
+                console.error('Error fetching branches:', err);
+                setBranchError('Failed to load branches');
+            } finally {
+                setLoadingBranches(false);
+            }
+        };
+        
+        fetchBranches();
+    }, []);
+    
+    // Fetch branch timings from API
+    useEffect(() => {
+        const fetchBranchTimings = async () => {
+            if (!branch) return;
+            
+            setLoadingTimings(true);
+            setTimingsError('');
+            setSelectedDay(null);
+            setSelectedTimeSlot(null);
+            
+            try {
+                const response = await axiosInstance.get('/api/1.0/branch-timing');
+                setBranchTimings(response.data || []);
+                if (response.data?.length > 0) {
+                    // Don't auto-select a day/time, let user choose
+                }
+            } catch (err) {
+                console.error('Error fetching branch timings:', err);
+                setTimingsError('Failed to load available time slots');
+            } finally {
+                setLoadingTimings(false);
+            }
+        };
+        
+        fetchBranchTimings();
+    }, [branch]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Process form data and handle booking
-        console.log('Booking submitted with:', { branch, date, time, firstName, lastName, phone, email });
-        // Here you would typically send the data to your backend
-        window.location.href = '/confirmation';
+        
+        try {
+            // Get step1 data from sessionStorage if available
+            const storedStep1Data = sessionStorage.getItem('step1Data');
+            const step1Data = storedStep1Data ? JSON.parse(storedStep1Data) : {};
+            
+            // Format the appointment date and time
+            // Find the selected day's date from branchTimings
+            const selectedDayObj = branchTimings.find(day => day.day === selectedDay);
+            
+            if (!selectedDayObj || !selectedTimeSlot) {
+                throw new Error('Please select both a day and time slot');
+            }
+            
+            // Extract date parts from the selectedDayObj.date (format: "Jun 30")
+            const [month, day] = selectedDayObj.date.split(' ');
+            const currentYear = new Date().getFullYear();
+            
+            // Create a date string in ISO format
+            const appointmentDate = new Date(`${month} ${day}, ${currentYear}`).toISOString();
+            
+            // Combine all car details from step1 and step2
+            const carDetail = JSON.stringify({
+                ...step1Data,
+                ...step2Data
+            });
+            
+            // Prepare the request body
+            const bookingData = {
+                branchId: Number(branch),
+                appointmentDate: appointmentDate,
+                appointmentTime: appointmentDate, // Using the same date for now, would need proper time parsing
+                firstName,
+                lastName,
+                phone,
+                email,
+                carDetail
+            };
+            
+            console.log('Sending booking data:', bookingData);
+            
+            // Make the API call
+            const response = await axiosInstance.post('/api/1.0/book-appointment/', bookingData);
+            
+            // Store the response data in localStorage for the confirmation page
+            localStorage.setItem('bookingDetails', JSON.stringify({
+                branch: branches.find(b => b.id == branch)?.enName || '',
+                date: appointmentDate,
+                time: selectedTimeSlot,
+                firstName,
+                lastName,
+                phone,
+                email,
+                bookingId: response.data?.id || '',
+                carPrice: carPrice,
+            }));
+            
+            // Store car details in localStorage
+            if (step1Data && step2Data) {
+                localStorage.setItem('carDetails', JSON.stringify({
+                    make: step1Data.make || '',
+                    model: step1Data.model || '',
+                    year: step1Data.year || '',
+                    price: carPrice,
+                    image: step1Data.image || 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb'
+                }));
+            }
+            
+            // Redirect to confirmation page
+            window.location.href = '/confirmation';
+            
+        } catch (error) {
+            console.error('Error submitting booking:', error);
+            alert('There was an error submitting your booking. Please try again.');
+        }
     };
 
     return (
@@ -73,13 +236,49 @@ const Step3 = () => {
                             <div>
                                 <p className="text-sm">Your vehicle market price</p>
                                 <h3 className="text-3xl font-bold flex items-center animate-pulse">SAR
-                                {revealPrice ? ' 75,000' : 
+                                {revealPrice ? (carPrice ? ` ${carPrice.toLocaleString()}` : '') : 
                                   <button
-                                    onClick={()=>{
-                                        setShowPhoneVerification(true);
+                                    onClick={async ()=>{
+                                        try {
+                                            setIsLoading(true);
+                                            // Sample car data - in a real app, you would get this from form inputs or state
+                                            const storedStep1Data = sessionStorage.getItem('carDetails');
+                                            const step1Data = storedStep1Data ? JSON.parse(storedStep1Data) : {};
+                                            const step2 = sessionStorage.getItem('step2Data');
+                                            const step2Data = step2 ? JSON.parse(step2) : {};
+                                            const carData = {
+                                                make: step1Data.make,
+                                                model: step1Data.model,
+                                                year: Number(step1Data.year),
+                                                mileage: '60,000',
+                                                bodyType: 'Sedan',
+                                                engineType: 'Petrol',
+                                                engineSize: '1.5',
+                                                gearType: 'Manual'
+                                            };
+                                            const response = await axiosInstance.post('/api/1.0/core/evaluate/car', carData);
+                                            
+                                            if (response.data) {
+                                                setCarPrice(response.data.estimatedPriceSAR);
+                                                if (response.data.sampleImageUrl) {
+                                                    setCarImage('https://images.unsplash.com/photo-1550355291-bbee04a92027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=6');
+                                                }
+                                            }
+                                            setRevealPrice(true);
+                                            setIsLoading(false);
+                                        } catch (error) {
+                                            console.error('Error fetching car price:', error);
+                                            setRevealPrice(true); // Still reveal the UI section even if API fails
+                                            setIsLoading(false);
+                                        }
+                                    
                                     }}
-                                    className="bg-[#f78f37] ml-2 mr-2 text-xs px-3 py-1 rounded hover:bg-yellow-600 transition">
-                                        REVEAL PRICE
+                                    className="bg-[#f78f37] ml-2 mr-2 text-xs px-3 py-1 rounded hover:bg-yellow-600 transition w-[110px] mt-2 h-[40px] flex items-center justify-center">
+                                        {!isLoading? 'REVEAL PRICE': 
+                                        
+                                        <div className="w-4 h-4 border-2 border-white border-dashed rounded-full animate-spin"></div>
+
+                                        }
                                     </button>
                                 }
                                 </h3>
@@ -90,7 +289,7 @@ const Step3 = () => {
                     
                     <div className="bg-white p-4 rounded-b-lg shadow-md">
                         <img 
-                            src="https://images.unsplash.com/photo-1550355291-bbee04a92027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60" 
+                            src={carImage || "https://images.unsplash.com/photo-1550355291-bbee04a92027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"} 
                             alt="Car" 
                             className="w-full h-auto rounded-lg mb-4" 
                         />
@@ -115,69 +314,100 @@ const Step3 = () => {
                         <div className="mb-4">
                             <label className="block text-sm font-medium mb-1">Branches</label>
                             <div className="relative">
-                                <select
-                                    value={branch}
-                                    onChange={(e) => setBranch(e.target.value)}
-                                    className="block w-full rounded-lg border-gray-300 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none bg-white"
-                                    required
-                                >
-                                    <option value="">Select a branch</option>
-                                    <option value="riyadh-tahlia">Riyadh - Tahlia Street</option>
-                                    <option value="riyadh-olaya">Riyadh - Olaya</option>
-                                    <option value="jeddah-main">Jeddah - Main Branch</option>
-                                </select>
+                                {loadingBranches ? (
+                                    <div className="py-3 px-4 text-gray-500">Loading branches...</div>
+                                ) : branchError ? (
+                                    <div className="py-3 px-4 text-red-500">{branchError}</div>
+                                ) : (
+                                    <select
+                                        value={branch}
+                                        onChange={(e) => setBranch(e.target.value)}
+                                        className="block w-full rounded-lg border-gray-300 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none bg-white"
+                                        required
+                                    >
+                                        <option value="">Select a branch</option>
+                                        {branches.map((branchItem) => (
+                                            <option key={branchItem.id} value={branchItem.id}>
+                                                {branchItem.enName}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                                     </svg>
                                 </div>
                             </div>
-                            {branch && (
-                                <p className="text-xs mt-1">8485 Prince Muhammad bin Abd Al Aziz, As Sulimaniyah, 3545, Riyadh 12223</p>
-                            )}
                         </div>
                         
-                        {/* Date and Time */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Date</label>
-                                <div className="relative">
-                                    <input
-                                        type="date"
-                                        value={date}
-                                        onChange={(e) => setDate(e.target.value)}
-                                        className="block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
-                                        required
-                                    />
+                        {/* Date and Time Selection */}
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium mb-2">Select Day & Time</label>
+                            
+                            {loadingTimings ? (
+                                <div className="text-center py-4">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f78f37] mx-auto"></div>
+                                    <p className="mt-2 text-sm text-gray-600">Loading available time slots...</p>
                                 </div>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Time</label>
-                                <div className="relative">
-                                    <select
-                                        value={time}
-                                        onChange={(e) => setTime(e.target.value)}
-                                        className="block w-full rounded-lg border-gray-300 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none bg-white"
-                                        required
-                                    >
-                                        <option value="">Select time</option>
-                                        <option value="9:00 AM">9:00 AM</option>
-                                        <option value="10:00 AM">10:00 AM</option>
-                                        <option value="11:00 AM">11:00 AM</option>
-                                        <option value="12:00 PM">12:00 PM</option>
-                                        <option value="1:00 PM">1:00 PM</option>
-                                        <option value="2:00 PM">2:00 PM</option>
-                                        <option value="3:00 PM">3:00 PM</option>
-                                        <option value="4:00 PM">4:00 PM</option>
-                                        <option value="5:00 PM">5:00 PM</option>
-                                    </select>
-                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                        <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                        </svg>
+                            ) : timingsError ? (
+                                <div className="text-red-500 text-sm py-2">{timingsError}</div>
+                            ) : branchTimings.length === 0 && branch ? (
+                                <div className="text-gray-500 text-sm py-2">No time slots available for this branch</div>
+                            ) : branch ? (
+                                <div>
+                                    {/* Days selection */}
+                                    <div className="flex overflow-x-auto pb-2 mb-4 gap-2">
+                                        {branchTimings.map((daySchedule, index) => (
+                                            <button
+                                                key={index}
+                                                type="button"
+                                                onClick={() => {
+                                                    setSelectedDay(daySchedule.day);
+                                                    setSelectedTimeSlot(null);
+                                                }}
+                                                className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
+                                                    selectedDay === daySchedule.day
+                                                        ? 'bg-[#f78f37] text-white border-[#f78f37]'
+                                                        : 'bg-white text-gray-700 border-gray-300 hover:border-[#f78f37]'
+                                                }`}
+                                            >
+                                                <div className="text-center">
+                                                    <div className="font-medium">{daySchedule.day}</div>
+                                                    <div className="text-xs">{daySchedule.date}</div>
+                                                </div>
+                                            </button>
+                                        ))}
                                     </div>
+                                    
+                                    {/* Time slots */}
+                                    {selectedDay && (
+                                        <div>
+                                            <h4 className="text-sm font-medium mb-2">Available Time Slots</h4>
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                                                {branchTimings
+                                                    .find(day => day.day === selectedDay)
+                                                    ?.slots.map((slot, index) => (
+                                                        <button
+                                                            key={index}
+                                                            type="button"
+                                                            onClick={() => setSelectedTimeSlot(slot.label)}
+                                                            className={`px-3 py-2 text-sm rounded-lg border ${
+                                                                selectedTimeSlot === slot.label
+                                                                    ? 'bg-[#f78f37] text-white border-[#f78f37]'
+                                                                    : 'bg-white text-gray-700 border-gray-300 hover:border-[#f78f37]'
+                                                            }`}
+                                                        >
+                                                            {slot.label}
+                                                        </button>
+                                                    ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="text-gray-500 text-sm py-2">Please select a branch first</div>
+                            )}
                         </div>
                         
                         {/* Name */}

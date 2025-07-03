@@ -113,7 +113,19 @@ const Step2 = () => {
         e.preventDefault();
         // Process form data and handle completion
         console.log('Form submitted with:', { bodyType, engineSize, mileage, option, paint, gccSpecs });
-        // Here you would typically send the data to your backend or navigate to the next step
+        
+        // Save form data to sessionStorage
+        const step2Data = {
+            bodyType,
+            engineSize,
+            mileage,
+            option,
+            paint,
+            gccSpecs
+        };
+        sessionStorage.setItem('step2Data', JSON.stringify(step2Data));
+        
+        // Navigate to the next step
         window.location.href = '/step3';
     };
     
