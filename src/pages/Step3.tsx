@@ -115,7 +115,7 @@ const Step3 = () => {
         
         try {
             // Get step1 data from sessionStorage if available
-            const storedStep1Data = sessionStorage.getItem('step1Data');
+            const storedStep1Data = sessionStorage.getItem('carDetails');
             const step1Data = storedStep1Data ? JSON.parse(storedStep1Data) : {};
             
             // Format the appointment date and time
@@ -136,7 +136,8 @@ const Step3 = () => {
             // Combine all car details from step1 and step2
             const carDetail = JSON.stringify({
                 ...step1Data,
-                ...step2Data
+                ...step2Data,
+                carPrice: carPrice ? carPrice : 0,
             });
             
             // Prepare the request body
@@ -154,6 +155,8 @@ const Step3 = () => {
             console.log('Sending booking data:', bookingData);
             
             // Make the API call
+
+     
             const response = await axiosInstance.post('/api/1.0/book-appointment/', bookingData);
             
             // Store the response data in localStorage for the confirmation page
