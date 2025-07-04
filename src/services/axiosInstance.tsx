@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://stg-service.bddelha.com";
+const BASE_URL = "https://stg-service.bddelha.com";
 
 
 export default axios.create({
