@@ -149,13 +149,15 @@ const Step3 = () => {
                 lastName,
                 phone,
                 email,
-                carDetail
+                carDetail,
+                status: 'Scheduled',
+                type: 'sell'
             };
+
             
             console.log('Sending booking data:', bookingData);
             
             // Make the API call
-
      
             const response = await axiosInstance.post('/api/1.0/book-appointment/', bookingData);
             
@@ -253,10 +255,10 @@ const Step3 = () => {
                                                 make: step1Data.make,
                                                 model: step1Data.model,
                                                 year: Number(step1Data.year),
-                                                mileage: '60,000',
-                                                bodyType: 'Sedan',
+                                                mileage: step2Data.mileageName,
+                                                bodyType: step2Data.bodyTypeName,
                                                 engineType: 'Petrol',
-                                                engineSize: '1.5',
+                                                engineSize: step2Data.engineSizeName,
                                                 gearType: 'Manual'
                                             };
                                             const response = await axiosInstance.post('/api/1.0/core/evaluate/car', carData);

@@ -4,8 +4,11 @@ import axiosInstance from '../services/axiosInstance';
 
 const Step2 = () => {
     const [bodyType, setBodyType] = useState('');
+    const [bodyTypeName, setBodyTypeName] = useState('');
     const [engineSize, setEngineSize] = useState('');
+    const [engineSizeName, setEngineSizeName] = useState('');
     const [mileage, setMileage] = useState('');
+    const [mileageName, setMileageName] = useState('');
     const [option, setOption] = useState('');
     const [paint, setPaint] = useState('');
     const [gccSpecs, setGccSpecs] = useState('');
@@ -121,7 +124,10 @@ const Step2 = () => {
             mileage,
             option,
             paint,
-            gccSpecs
+            gccSpecs,
+            bodyTypeName,
+            engineSizeName,
+            mileageName
         };
         sessionStorage.setItem('step2Data', JSON.stringify(step2Data));
         
@@ -174,7 +180,10 @@ const Step2 = () => {
                             <div className="relative">
                                 <select
                                     value={bodyType}
-                                    onChange={(e) => setBodyType(e.target.value)}
+                                    onChange={(e) => {
+                                        setBodyType(e.target.value)
+                                        setBodyTypeName(bodyTypes.find(type => type.id == e.target.value)?.name || '')
+                                    }}
                                     className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
                                     disabled={loading.bodyTypes}
                                 >
@@ -214,7 +223,10 @@ const Step2 = () => {
                             <div className="relative">
                                 <select
                                     value={engineSize}
-                                    onChange={(e) => setEngineSize(e.target.value)}
+                                    onChange={(e) => {
+                                        setEngineSize(e.target.value)
+                                        setEngineSizeName(engineSizes.find(engine => engine.id == e.target.value)?.name || '')
+                                    }}
                                     className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
                                     disabled={loading.engineSizes}
                                 >
@@ -254,7 +266,10 @@ const Step2 = () => {
                             <div className="relative">
                                 <select
                                     value={mileage}
-                                    onChange={(e) => setMileage(e.target.value)}
+                                    onChange={(e) => {
+                                        setMileage(e.target.value)
+                                        setMileageName(mileageOptions.find(option => option.id == e.target.value)?.label || '')
+                                    }}
                                     className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
                                     disabled={loading.mileage}
                                 >
