@@ -68,8 +68,8 @@ const Step3 = () => {
             
             try {
                 const response = await axiosInstance.get('/api/1.0/branch');
-                setBranches(response?.data?.data || []);
-                if (response?.data?.data?.length > 0) {
+                setBranches(response?.data || []);
+                if (response?.data?.length > 0) {
                     // Don't auto-select a branch, let user choose
                 }
             } catch (err) {
@@ -95,8 +95,8 @@ const Step3 = () => {
             
             try {
                 const response = await axiosInstance.get('/api/1.0/branch-timing');
-                setBranchTimings(response?.data?.data || []);
-                if (response?.data?.data?.length > 0) {
+                setBranchTimings(response?.data || []);
+                if (response?.data?.length > 0) {
                     // Don't auto-select a day/time, let user choose
                 }
             } catch (err) {

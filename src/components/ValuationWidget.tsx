@@ -42,7 +42,7 @@ const ValuationWidget: React.FC = () => {
       
       try {
         const response = await axiosInstance.get('/api/1.0/car-options/car-make');
-        setMakes(response?.data?.data?.data);
+        setMakes(response?.data?.data);
       } catch (err) {
         console.error('Error fetching car makes:', err);
         setError(prev => ({ ...prev, makes: 'Failed to load car makes' }));
@@ -68,7 +68,7 @@ const ValuationWidget: React.FC = () => {
       
       try {
         const response = await axiosInstance.get(`/api/1.0/car-options/car-model/${makeId}`);
-        setModels(response?.data?.data);
+        setModels(response?.data);
       } catch (err) {
         console.error('Error fetching car models:', err);
         setError(prev => ({ ...prev, models: 'Failed to load car models' }));
