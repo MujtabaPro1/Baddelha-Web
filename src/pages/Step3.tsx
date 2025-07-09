@@ -68,8 +68,8 @@ const Step3 = () => {
             
             try {
                 const response = await axiosInstance.get('/api/1.0/branch');
-                setBranches(response.data || []);
-                if (response.data?.length > 0) {
+                setBranches(response?.data?.data || []);
+                if (response?.data?.data?.length > 0) {
                     // Don't auto-select a branch, let user choose
                 }
             } catch (err) {
@@ -95,8 +95,8 @@ const Step3 = () => {
             
             try {
                 const response = await axiosInstance.get('/api/1.0/branch-timing');
-                setBranchTimings(response.data || []);
-                if (response.data?.length > 0) {
+                setBranchTimings(response?.data?.data || []);
+                if (response?.data?.data?.length > 0) {
                     // Don't auto-select a day/time, let user choose
                 }
             } catch (err) {
@@ -259,7 +259,7 @@ const Step3 = () => {
                                                 bodyType: step2Data.bodyTypeName,
                                                 engineType: 'Petrol',
                                                 engineSize: step2Data.engineSizeName,
-                                                gearType: 'Manual'
+                                                gearType: 'Manual',
                                             };
                                             const response = await axiosInstance.post('/api/1.0/core/evaluate/car', carData);
                                             

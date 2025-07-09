@@ -51,9 +51,9 @@ const Step2 = () => {
             
             try {
                 const response = await axiosInstance.get('/api/1.0/car-options/body-types');
-                setBodyTypes(response.data || []);
-                if (response.data?.length > 0) {
-                    setBodyType(response.data[0].id);
+                setBodyTypes(response?.data?.data || []);
+                if (response?.data?.data?.length > 0) {
+                    setBodyType(response?.data?.data[0].id);
                 }
             } catch (err) {
                 console.error('Error fetching body types:', err);
@@ -74,9 +74,9 @@ const Step2 = () => {
             
             try {
                 const response = await axiosInstance.get('/api/1.0/car-options/engine-size');
-                setEngineSizes(response.data || []);
-                if (response.data?.length > 0) {
-                    setEngineSize(response.data[0].id);
+                setEngineSizes(response?.data?.data || []);
+                if (response?.data?.data?.length > 0) {
+                    setEngineSize(response?.data?.data[0].id);
                 }
             } catch (err) {
                 console.error('Error fetching engine sizes:', err);
@@ -97,9 +97,9 @@ const Step2 = () => {
             
             try {
                 const response = await axiosInstance.get('/api/1.0/car-options/car-mileage');
-                setMileageOptions(response.data || []);
-                if (response.data?.length > 0) {
-                    setMileage(response.data[0].id);
+                setMileageOptions(response?.data?.data || []);
+                if (response?.data?.data?.length > 0) {
+                    setMileage(response?.data?.data[0].id);
                 }
             } catch (err) {
                 console.error('Error fetching mileage options:', err);
