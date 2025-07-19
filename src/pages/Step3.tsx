@@ -137,6 +137,8 @@ const Step3 = () => {
             const carDetail = JSON.stringify({
                 ...step1Data,
                 ...step2Data,
+                engineSize: step2Data.engineSizeName,
+                mileage: step2Data.mileageName,
                 carPrice: carPrice ? carPrice : 0,
             });
             
@@ -154,8 +156,7 @@ const Step3 = () => {
                 type: 'sell'
             };
 
-            
-            console.log('Sending booking data:', bookingData);
+       
             
             // Make the API call
      
