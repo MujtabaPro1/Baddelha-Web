@@ -6,10 +6,7 @@ import lang  from '../locale';
 
 const HeroSection: React.FC = () => {
   const { language } = useLanguage();
-
   const languageContent = language === 'ar' ? 'ar' : 'en';
-
-  console.log(lang[languageContent]);
 
   return (
     <div className="relative pt-16">
