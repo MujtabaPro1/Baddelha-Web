@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Heart, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import lang from '../locale';
 
 interface Car {
   id: number;
@@ -77,6 +79,8 @@ const cars: Car[] = [
 
 const CarCard: React.FC<{ car: Car }> = ({ car }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const { language } = useLanguage();
+  const languageContent = language === 'ar' ? 'ar' : 'en';
   
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition">
@@ -95,7 +99,7 @@ const CarCard: React.FC<{ car: Car }> = ({ car }) => {
         
         {car.featured && (
           <div className="absolute top-4 left-4 bg-amber-500 text-blue-900 text-xs font-bold px-3 py-1 rounded-full">
-            Featured
+            {lang[languageContent].featured}
           </div>
         )}
       </div>
@@ -108,28 +112,28 @@ const CarCard: React.FC<{ car: Car }> = ({ car }) => {
           </div>
           <div className="text-right">
             <p className="font-bold text-lg text-blue-800">${car.price.toLocaleString()}</p>
-            <p className="text-gray-500 text-xs">Est. $499/mo</p>
+            <p className="text-gray-500 text-xs">Est. SAR 499/mo</p>
           </div>
         </div>
         
         <div className="grid grid-cols-2 gap-2 mt-4 text-sm">
           <div className="flex items-center text-gray-700">
-            <span className="font-medium">Mileage:</span>
+            <span className="font-medium">{lang[languageContent].mileage}:</span>
             <span className="ml-1">{car.mileage.toLocaleString()} mi</span>
           </div>
           <div className="flex items-center text-gray-700">
-            <span className="font-medium">Fuel:</span>
+            <span className="font-medium">{lang[languageContent].fuel}:</span>
             <span className="ml-1">{car.fuelType}</span>
           </div>
           <div className="flex items-center text-gray-700">
-            <span className="font-medium">Transmission:</span>
+            <span className="font-medium">{lang[languageContent].transmission}:</span>
             <span className="ml-1">{car.transmission}</span>
           </div>
         </div>
         
         <div className="flex gap-2 mt-5">
           <button className="bg-blue-800 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg w-full transition">
-            View Details
+            {lang[languageContent].viewDetails}
           </button>
           <button className="border border-blue-800 text-blue-800 hover:bg-blue-50 font-medium py-2 px-4 rounded-lg transition flex items-center justify-center">
             <Info className="h-4 w-4" />
@@ -143,6 +147,8 @@ const CarCard: React.FC<{ car: Car }> = ({ car }) => {
 const FeaturedCars: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardsToShow = 3;
+  const { language } = useLanguage();
+  const languageContent = language === 'ar' ? 'ar' : 'en';
   
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => 
@@ -163,8 +169,8 @@ const FeaturedCars: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-10">
           <div>
-            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Featured Cars</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2">Find Your Perfect Match</h2>
+            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">{lang[languageContent].featuredCars}</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2">{lang[languageContent].findYourPerfectMatch}</h2>
           </div>
           
           <div className="flex space-x-2">
@@ -198,7 +204,7 @@ const FeaturedCars: React.FC = () => {
         
         <div className="text-center mt-10">
           <button className="bg-blue-50 text-blue-800 hover:bg-blue-100 font-semibold py-3 px-6 rounded-lg transition">
-            View All Cars
+            {lang[languageContent].viewAllCars}
           </button>
         </div>
       </div>

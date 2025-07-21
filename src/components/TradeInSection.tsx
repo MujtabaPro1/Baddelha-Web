@@ -22,6 +22,8 @@ import {
   Settings,
   Eye
 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import lang from '../locale';
 
 interface DesiredVehicle {
   make: string;
@@ -91,6 +93,9 @@ interface AppointmentDetails {
 const TradeIn: React.FC = () => {
   const [clientType, setClientType] = useState<'individual' | 'corporate'>('individual');
   const [currentStep, setCurrentStep] = useState<'desired-car' | 'dealerships' | 'inventory' | 'trade-details' | 'confirmation'>('desired-car');
+
+  const { language } = useLanguage();
+  const languageContent = language === 'ar' ? 'ar' : 'en';
   
   const [desiredVehicle, setDesiredVehicle] = useState<DesiredVehicle>({
     make: '',
@@ -985,13 +990,13 @@ const TradeIn: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Trade-In Your Vehicle</h1>
-            <p className="text-xl text-gray-600">Find your perfect upgrade and get the best value for your current vehicle</p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{lang[languageContent].tradeInTitleSection}</h1>
+            <p className="text-xl text-gray-600">{lang[languageContent].tradeInDescSection}</p>
           </div>
 
           {/* Client Type Selection */}
           <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-            <h2 className="text-xl font-semibold mb-4">Select Client Type</h2>
+            <h2 className="text-xl font-semibold mb-4">{lang[languageContent].selectClientType}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button
                 onClick={() => setClientType('individual')}
@@ -1007,10 +1012,10 @@ const TradeIn: React.FC = () => {
                 <h3 className={`font-semibold text-lg ${
                   clientType === 'individual' ? 'text-[#f78f37]' : 'text-gray-700'
                 }`}>
-                  Individual
+                  {lang[languageContent].individual}
                 </h3>
                 <p className="text-gray-600 text-sm mt-2">
-                  Personal vehicle trade-in for individual customers
+                  {lang[languageContent].individualDesc}
                 </p>
               </button>
 
@@ -1028,10 +1033,10 @@ const TradeIn: React.FC = () => {
                 <h3 className={`font-semibold text-lg ${
                   clientType === 'corporate' ? 'text-[#f78f37]' : 'text-gray-700'
                 }`}>
-                  Corporate
+                  {lang[languageContent].corporate}
                 </h3>
                 <p className="text-gray-600 text-sm mt-2">
-                  Fleet or multiple vehicle trade-in for businesses
+                  {lang[languageContent].corporateDesc}
                 </p>
               </button>
             </div>
@@ -1040,18 +1045,18 @@ const TradeIn: React.FC = () => {
           {/* Desired Vehicle Form */}
           <form onSubmit={handleDesiredCarSubmit}>
             <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-              <h2 className="text-xl font-semibold mb-6">What car are you looking for?</h2>
+              <h2 className="text-xl font-semibold mb-6">{lang[languageContent].whatCarAreYouLookingFor}</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Make *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{lang[languageContent].make}</label>
                   <select
                     required
                     value={desiredVehicle.make}
                     onChange={(e) => setDesiredVehicle({...desiredVehicle, make: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
-                    <option value="">Select Make</option>
+                    <option value="">{lang[languageContent].selectMake}</option>
                     <option value="BMW">BMW</option>
                     <option value="Mercedes">Mercedes</option>
                     <option value="Audi">Audi</option>
@@ -1064,14 +1069,14 @@ const TradeIn: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Model *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{lang[languageContent].model}</label>
                   <select
                     required
                     value={desiredVehicle.model}
                     onChange={(e) => setDesiredVehicle({...desiredVehicle, model: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
-                    <option value="">Select Model</option>
+                    <option value="">{lang[languageContent].selectModel}</option>
                     <option value="X5">X5</option>
                     <option value="3 Series">3 Series</option>
                     <option value="C-Class">C-Class</option>
@@ -1084,14 +1089,14 @@ const TradeIn: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Year *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{lang[languageContent].year}</label>
                   <select
                     required
                     value={desiredVehicle.year}
                     onChange={(e) => setDesiredVehicle({...desiredVehicle, year: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
-                    <option value="">Select Year</option>
+                    <option value="">{lang[languageContent].selectYear}</option>
                     {Array.from({ length: 5 }, (_, i) => (
                       <option key={i} value={2024 - i}>{2024 - i}</option>
                     ))}
@@ -1101,7 +1106,7 @@ const TradeIn: React.FC = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Max Price (SAR)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{lang[languageContent].maxPrice}</label>
                   <input
                     type="number"
                     value={desiredVehicle.maxPrice}
@@ -1112,7 +1117,7 @@ const TradeIn: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Fuel Type</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{lang[languageContent].fuel}</label>
                   <select
                     value={desiredVehicle.fuelType}
                     onChange={(e) => setDesiredVehicle({...desiredVehicle, fuelType: e.target.value})}
@@ -1127,7 +1132,7 @@ const TradeIn: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Transmission</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{lang[languageContent].transmission}</label>
                   <select
                     value={desiredVehicle.transmission}
                     onChange={(e) => setDesiredVehicle({...desiredVehicle, transmission: e.target.value})}
@@ -1148,7 +1153,7 @@ const TradeIn: React.FC = () => {
                 type="submit"
                 className="bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-4 px-12 rounded-lg transition transform hover:scale-105 text-lg"
               >
-                Find Dealerships
+                {lang[languageContent].findDealerships}
                 <ArrowRight className="inline-block ml-2 h-5 w-5" />
               </button>
             </div>
@@ -1156,28 +1161,28 @@ const TradeIn: React.FC = () => {
 
           {/* Benefits Section */}
           <div className="mt-12 bg-white rounded-xl shadow-md p-8">
-            <h2 className="text-2xl font-bold text-center mb-8">Why Choose Our Trade-In Service?</h2>
+            <h2 className="text-2xl font-bold text-center mb-8">{lang[languageContent].whyChooseOurTradeInService}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Calculator className="h-8 w-8 text-blue-600" />
                 </div>
-                <h3 className="font-semibold text-lg mb-2">Fair Market Value</h3>
-                <p className="text-gray-600">Get competitive pricing based on current market conditions and vehicle condition</p>
+                <h3 className="font-semibold text-lg mb-2">{lang[languageContent].fairMarketValue}</h3>
+                <p className="text-gray-600">{lang[languageContent].competitivePricing}</p>
               </div>
               <div className="text-center">
                 <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Zap className="h-8 w-8 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-lg mb-2">Quick Process</h3>
-                <p className="text-gray-600">Fast evaluation and same-day payment options available</p>
+                <h3 className="font-semibold text-lg mb-2">{lang[languageContent].quickProcess}</h3>
+                <p className="text-gray-600">{lang[languageContent].fastEvaluation}</p>
               </div>
               <div className="text-center">
                 <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Shield className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-lg mb-2">Hassle-Free</h3>
-                <p className="text-gray-600">We handle all paperwork and documentation for you</p>
+                <h3 className="font-semibold text-lg mb-2">{lang[languageContent].hassleFree}</h3>
+                <p className="text-gray-600">{lang[languageContent].paperworkDocumentation}</p>
               </div>
             </div>
           </div>

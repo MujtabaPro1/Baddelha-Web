@@ -6,6 +6,7 @@ import Step3 from './pages/Step3';
 import Confirmation from './pages/Confirmation';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import { LanguageProvider } from './contexts/LanguageContext';
 import Login from './pages/Login';
 import Buy from './pages/Buy';
 import CarDetail from './pages/CarDetails';
@@ -62,13 +63,15 @@ function App() {
   ]);
 
   return (
-    <div className="min-h-screen bg-white">
-    <Navbar />
-     <main>
-    <RouterProvider router={router} />
-    </main>
-    <Footer />
-    </div>
+    <LanguageProvider>
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <main>
+          <RouterProvider router={router} />
+        </main>
+        <Footer />
+      </div>
+    </LanguageProvider>
   );
 }
 

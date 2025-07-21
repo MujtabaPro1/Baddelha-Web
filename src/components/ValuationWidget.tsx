@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Check, ArrowRight, AlertCircle } from 'lucide-react';
+import { Check, ArrowRight, AlertCircle, ArrowLeft } from 'lucide-react';
 import axiosInstance from '../services/axiosInstance';
+import { useLanguage } from '../contexts/LanguageContext';
+import lang from '../locale';
 
 // Only keep the years array as static data
 const years = Array.from({ length: 20 }, (_, i) => (new Date().getFullYear() - i).toString());
@@ -33,6 +35,8 @@ const ValuationWidget: React.FC = () => {
   const [modelId, setModelId] = useState('');
   const [year, setYear] = useState('');
   const [isValid, setIsValid] = useState(true);
+  const { language } = useLanguage();
+  const languageContent = language === 'ar' ? 'ar' : 'en';
   
   // Fetch car makes on component mount
   useEffect(() => {
@@ -99,14 +103,14 @@ const ValuationWidget: React.FC = () => {
   return (
     <div className="bg-white rounded-xl shadow-xl overflow-hidden">
       <div className="bg-[#f78f37] px-6 py-4 text-white">
-        <h2 className="text-xl font-semibold">Get Your Car's Value in Seconds</h2>
-        <p className="text-blue-100 text-sm">Free, instant, and accurate valuation</p>
+        <h2 className="text-xl font-semibold">{lang[languageContent].getYourCarsValue}</h2>
+        <p className="text-blue-100 text-sm">{lang[languageContent].freeInstantAndAccurateValuation}</p>
       </div>
       
       <form onSubmit={handleSubmit} className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           <div>
-            <label htmlFor="make" className="block text-sm font-medium text-gray-700 mb-1">Make</label>
+            <label htmlFor="make" className="block text-sm font-medium text-gray-700 mb-1">{lang[languageContent].make}</label>
             <div className="relative">
               <select
                 id="make"
@@ -119,7 +123,7 @@ const ValuationWidget: React.FC = () => {
                 className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
                 disabled={loading.makes}
               >
-                <option value="">Select Make</option>
+                <option value="">{lang[languageContent].selectMake}</option>
                 {makes?.map(makeItem => (
                   <option key={makeItem.id} value={makeItem.id}>{makeItem.name}</option>
                 ))}
@@ -138,7 +142,7 @@ const ValuationWidget: React.FC = () => {
           </div>
           
           <div>
-            <label htmlFor="model" className="block text-sm font-medium text-gray-700 mb-1">Model</label>
+            <label htmlFor="model" className="block text-sm font-medium text-gray-700 mb-1">{lang[languageContent].model}</label>
             <div className="relative">
               <select
                 id="model"
@@ -150,7 +154,7 @@ const ValuationWidget: React.FC = () => {
                 className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500"
                 disabled={loading.models || !make}
               >
-                <option value="">Select Model</option>
+                <option value="">{lang[languageContent].selectModel}</option>
                 {models.map(modelItem => (
                   <option key={modelItem.id} value={modelItem.id}>{modelItem.name}</option>
                 ))}
@@ -175,7 +179,7 @@ const ValuationWidget: React.FC = () => {
                 onChange={(e) => setYear(e.target.value)}
                 className="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none"
               >
-                <option value="">Select Year</option>
+                <option value="">{lang[languageContent].selectYear}</option>
                 {years.map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
@@ -192,20 +196,20 @@ const ValuationWidget: React.FC = () => {
         {!isValid && (
           <div className="flex items-start mb-4 p-3 bg-red-50 text-red-700 rounded-lg">
             <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
-            <p className="text-sm">Please fill out all fields to get your car valuation.</p>
+            <p className="text-sm">{lang[languageContent].fillAllFields}</p>
           </div>
         )}
         
         <div className="flex items-center justify-between">
           <div className="hidden md:flex items-center text-gray-600 text-sm">
             <Check className="h-4 w-4 text-green-500 mr-2" />
-            <span>Bank-approved valuation</span>
+            <span>{lang[languageContent].bankApprovedValuation}</span>
           </div>
           <button
             type="submit"
             className="w-full md:w-auto bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 shadow-md flex items-center justify-center"
           >
-            Get Valuation <ArrowRight className="ml-2 h-5 w-5" />
+            {lang[languageContent].getValuation} {language == 'en' ? <ArrowRight className="ml-2 h-5 w-5" /> : <ArrowLeft className="ml-2 h-5 w-5" />}
           </button>
         </div>
       </form>
@@ -213,19 +217,19 @@ const ValuationWidget: React.FC = () => {
       <div className="bg-gray-50 px-6 py-4 flex flex-wrap items-center justify-between gap-y-2 border-t border-gray-100">
         <div className="flex items-center">
           <Check className="h-4 w-4 text-green-500 mr-2" />
-          <span className="text-sm text-gray-600">Free</span>
+          <span className="text-sm text-gray-600">{lang[languageContent].free}</span>
         </div>
         <div className="flex items-center">
           <Check className="h-4 w-4 text-green-500 mr-2" />
-          <span className="text-sm text-gray-600">No obligations</span>
+          <span className="text-sm text-gray-600">{lang[languageContent].noObligations}</span>
         </div>
         <div className="flex items-center">
           <Check className="h-4 w-4 text-green-500 mr-2" />
-          <span className="text-sm text-gray-600">Instant results</span>
+          <span className="text-sm text-gray-600">{lang[languageContent].instantResults}</span>
         </div>
         <div className="flex items-center">
           <Check className="h-4 w-4 text-green-500 mr-2" />
-          <span className="text-sm text-gray-600">Trade-in options</span>
+          <span className="text-sm text-gray-600">{lang[languageContent].tradeInOptions}</span>
         </div>
       </div>
     </div>

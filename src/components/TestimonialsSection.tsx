@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import lang from '../locale';
 
 interface Testimonial {
   id: number;
@@ -91,6 +93,8 @@ const TestimonialsSection: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const testimonialsPerView = 3;
   const totalViews = Math.ceil(testimonials.length / testimonialsPerView);
+  const { language } = useLanguage();
+  const languageContent = language === 'ar' ? 'ar' : 'en';
   
   // Auto slide
   useEffect(() => {
@@ -113,11 +117,11 @@ const TestimonialsSection: React.FC = () => {
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Testimonials</span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">Hear from Our Happy Customers</h2>
+          <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">{lang[languageContent].testimonials}</span>
+          <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">{lang[languageContent].hearFromOurHappyCustomers}</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Thousands of car owners trust DriveMarket for buying, selling, and valuating their vehicles.
-            Here's what some of them have to say.
+            {lang[languageContent].thousandsOfCarOwnersTrustDriveMarketForBuyingSellingAndValuatingTheirVehicles}
+            {lang[languageContent].hereIsWhatSomeOfThemHaveToSay}
           </p>
         </div>
         

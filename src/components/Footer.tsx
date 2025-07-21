@@ -1,8 +1,12 @@
 import React from 'react';
 import { Car, Facebook, Twitter, Instagram, Linkedin, Youtube, Mail } from 'lucide-react';
 import Logo from '../logo-light.png';
+import { useLanguage } from '../contexts/LanguageContext';
+import lang from '../locale';
 
 const Footer: React.FC = () => {
+  const { language } = useLanguage();
+  const languageContent = language === 'ar' ? 'ar' : 'en';
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
@@ -16,10 +20,7 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
-              BADDELHA |
-بدلها is your trusted partner for all car-related services. 
-              From buying and selling to valuation and financing, we make the process 
-              simple, transparent, and enjoyable.
+              {lang[languageContent].footerText}
             </p>
             <div className="flex space-x-4 mb-6">
               {[Facebook, Twitter, Instagram, Linkedin, Youtube].map((Icon, index) => (
@@ -35,9 +36,9 @@ const Footer: React.FC = () => {
           </div>
           
           <div>
-            <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
+            <h3 className="font-semibold text-lg mb-4">{lang[languageContent].quickLinks}</h3>
             <ul className="space-y-3">
-              {['Buy a Car', 'Sell Your Car', 'Trade-In', 'Car Valuation', 'Financing Options'].map((link, index) => (
+              {[lang[languageContent].buy, lang[languageContent].sell, lang[languageContent].tradeIn, lang[languageContent].carValuation].map((link, index) => (
                 <li key={index}>
                   <a href="#" className="text-gray-400 hover:text-amber-500 transition">
                     {link}
@@ -48,9 +49,9 @@ const Footer: React.FC = () => {
           </div>
           
           <div>
-            <h3 className="font-semibold text-lg mb-4">About Us</h3>
+            <h3 className="font-semibold text-lg mb-4">{lang[languageContent].aboutUs}</h3>
             <ul className="space-y-3">
-              {['Our Story', 'How It Works', 'Testimonials', 'Careers', 'Press', 'Blog'].map((link, index) => (
+              {[lang[languageContent].ourStory, lang[languageContent].howItWorks, lang[languageContent].testimonials].map((link, index) => (
                 <li key={index}>
                   <a href="#" className="text-gray-400 hover:text-amber-500 transition">
                     {link}
@@ -61,11 +62,11 @@ const Footer: React.FC = () => {
           </div>
           
           <div>
-            <h3 className="font-semibold text-lg mb-4">Contact Us</h3>
+            <h3 className="font-semibold text-lg mb-4">{lang[languageContent].contactUs}</h3>
             <address className="not-italic text-gray-400 space-y-3">
-              <p>123 Market Street</p>
-              <p>San Francisco, CA 94103</p>
-              <p>United States</p>
+              <p>{lang[languageContent].address}</p>
+              <p>{lang[languageContent].address1}</p>
+              <p>{lang[languageContent].address2}</p>
               <p className="pt-2">
                 <a href="tel:+18003765432" className="hover:text-amber-500 transition">
                   800-DRIVE-123
@@ -88,10 +89,10 @@ const Footer: React.FC = () => {
 بدلها. All rights reserved.
             </p>
             <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-              <a href="#" className="hover:text-amber-500 transition">Terms of Service</a>
-              <a href="#" className="hover:text-amber-500 transition">Privacy Policy</a>
-              <a href="#" className="hover:text-amber-500 transition">Cookie Policy</a>
-              <a href="#" className="hover:text-amber-500 transition">Sitemap</a>
+              <a href="#" className="hover:text-amber-500 transition">{lang[languageContent].termsOfService}</a>
+              <a href="#" className="hover:text-amber-500 transition">{lang[languageContent].privacyPolicy}</a>
+              <a href="#" className="hover:text-amber-500 transition">{lang[languageContent].cookiePolicy}</a>
+              <a href="#" className="hover:text-amber-500 transition">{lang[languageContent].sitemap}</a>
             </div>
           </div>
         </div>
