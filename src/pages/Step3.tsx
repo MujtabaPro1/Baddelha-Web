@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Check, Phone as PhoneIcon, X } from 'lucide-react';
 import axiosInstance from '../services/axiosInstance';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '../components/ui/input-otp';
+import { useLanguage } from '../contexts/LanguageContext';
+import lang  from '../locale';
 
 const Step3 = () => {
     const [branch, setBranch] = useState('');
@@ -26,6 +28,11 @@ const Step3 = () => {
     const [loadingBranches, setLoadingBranches] = useState(false);
     const [branchError, setBranchError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    const { language } = useLanguage();
+    const languageContent = language === 'ar' ? 'ar' : 'en';
+    
+
     
     // State for branch timing slots
     type TimeSlot = {
@@ -208,19 +215,19 @@ const Step3 = () => {
                             <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
                                 <Check className="h-6 w-6 text-white" />
                             </div>
-                            <div className="mt-2 font-medium text-[#f78f37]">SELECT</div>
+                            <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].select}</div>
                         </div>
                         <div className="text-center">
                             <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
                                 <Check className="h-6 w-6 text-white" />
                             </div>
-                            <div className="mt-2 font-medium text-[#f78f37]">CONDITION</div>
+                            <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].condition}</div>
                         </div>
                         <div className="text-center">
                             <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
                                 <div className="h-3 w-3 bg-white rounded-full"></div>
                             </div>
-                            <div className="mt-2 font-medium text-[#f78f37]">BOOK</div>
+                            <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].book}</div>
                         </div>
                     </div>
                 </div>
@@ -229,10 +236,10 @@ const Step3 = () => {
             {/* Success Message */}
             <div className="bg-green-100 border border-green-200 text-green-700 px-4 py-3 rounded mb-6 flex items-center">
                 <Check className="h-5 w-5 mr-2" />
-                <span>Only 1 step left! 319 slots taken. Secure yours now. 2:41</span>
+                <span>{lang[languageContent].onlyOneStepLeft}</span>
             </div>
             
-            <h2 className="text-2xl font-bold text-center mb-6">Book a FREE car inspection now!</h2>
+            <h2 className="text-2xl font-bold text-center mb-6">{lang[languageContent].bookFreeCarInspection}</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Left Column - Car Image & Price */}
@@ -240,7 +247,7 @@ const Step3 = () => {
                     <div className="bg-[#3d3d40] text-white p-4 rounded-t-lg">
                         <div className="flex justify-between items-center">
                             <div>
-                                <p className="text-sm">Your vehicle market price</p>
+                                <p className="text-sm">{lang[languageContent].yourVehicleMarketPrice}</p>
                                 <h3 className="text-3xl font-bold flex items-center animate-pulse">SAR
                                 {revealPrice ? (carPrice ? ` ${carPrice.toLocaleString()}` : '') : 
                                   <button
@@ -301,13 +308,13 @@ const Step3 = () => {
                         />
                         <div className="text-sm text-gray-600">
                             <p className="flex items-center mb-2">
-                                <span className="mr-2">✓</span> Extra cash no hassle. 100% free.
+                                <span className="mr-2">✓</span> {lang[languageContent].extraCashNoHassle}
                             </p>
                             <p className="flex items-center mb-2">
-                                <span className="mr-2">✓</span> You might get more cash, if your car has special equipment.
+                                <span className="mr-2">✓</span> {lang[languageContent].youMightGetMoreCash}
                             </p>
                             <p className="flex items-center mb-2">
-                                <span className="mr-2">✓</span> Instant payment, no paperwork hassle. We buy ANY car, even if it is financed.
+                                <span className="mr-2">✓</span> {lang[languageContent].instantPaymentNoPaperworkHassle}
                             </p>
                         </div>
                     </div>
@@ -318,10 +325,10 @@ const Step3 = () => {
                     <form onSubmit={handleSubmit}>
                         {/* Branch Selection */}
                         <div className="mb-4">
-                            <label className="block text-sm font-medium mb-1">Branches</label>
+                            <label className="block text-sm font-medium mb-1">{lang[languageContent].branches}</label>
                             <div className="relative">
                                 {loadingBranches ? (
-                                    <div className="py-3 px-4 text-gray-500">Loading branches...</div>
+                                    <div className="py-3 px-4 text-gray-500">{lang[languageContent].loadingBranches}</div>
                                 ) : branchError ? (
                                     <div className="py-3 px-4 text-red-500">{branchError}</div>
                                 ) : (
@@ -331,10 +338,10 @@ const Step3 = () => {
                                         className="block w-full rounded-lg border-gray-300 py-3 px-4 pr-8 focus:border-blue-500 focus:ring-blue-500 appearance-none bg-white"
                                         required
                                     >
-                                        <option value="">Select a branch</option>
+                                        <option value="">{lang[languageContent].selectBranch}</option>
                                         {branches.map((branchItem) => (
                                             <option key={branchItem.id} value={branchItem.id}>
-                                                {branchItem.enName}
+                                                {branchItem.name}
                                             </option>
                                         ))}
                                     </select>
@@ -349,17 +356,17 @@ const Step3 = () => {
                         
                         {/* Date and Time Selection */}
                         <div className="mb-4">
-                            <label className="block text-sm font-medium mb-2">Select Day & Time</label>
+                            <label className="block text-sm font-medium mb-2">{lang[languageContent].selectDayTime}</label>
                             
                             {loadingTimings ? (
                                 <div className="text-center py-4">
                                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f78f37] mx-auto"></div>
-                                    <p className="mt-2 text-sm text-gray-600">Loading available time slots...</p>
+                                    <p className="mt-2 text-sm text-gray-600">{lang[languageContent].loadingTimeSlots}</p>
                                 </div>
                             ) : timingsError ? (
                                 <div className="text-red-500 text-sm py-2">{timingsError}</div>
                             ) : branchTimings.length === 0 && branch ? (
-                                <div className="text-gray-500 text-sm py-2">No time slots available for this branch</div>
+                                <div className="text-gray-500 text-sm py-2">{lang[languageContent].noTimeSlotsAvailable}</div>
                             ) : branch ? (
                                 <div>
                                     {/* Days selection */}
@@ -389,7 +396,7 @@ const Step3 = () => {
                                     {/* Time slots */}
                                     {selectedDay && (
                                         <div>
-                                            <h4 className="text-sm font-medium mb-2">Available Time Slots</h4>
+                                            <h4 className="text-sm font-medium mb-2">{lang[languageContent].availableTimeSlots}</h4>
                                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                                                 {branchTimings
                                                     .find(day => day.day === selectedDay)
@@ -412,30 +419,30 @@ const Step3 = () => {
                                     )}
                                 </div>
                             ) : (
-                                <div className="text-gray-500 text-sm py-2">Please select a branch first</div>
+                                <div className="text-gray-500 text-sm py-2">{lang[languageContent].pleaseSelectBranchFirst}</div>
                             )}
                         </div>
                         
                         {/* Name */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label className="block text-sm font-medium mb-1">First Name</label>
+                                <label className="block text-sm font-medium mb-1">{lang[languageContent].firstName}</label>
                                 <input
                                     type="text"
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
-                                    placeholder="First Name"
+                                    placeholder={lang[languageContent].firstName}
                                     className="block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Last Name</label>
+                                <label className="block text-sm font-medium mb-1">{lang[languageContent].lastName}</label>
                                 <input
                                     type="text"
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    placeholder="Last Name"
+                                    placeholder={lang[languageContent].lastName}
                                     className="block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
                                     required
                                 />
@@ -443,17 +450,17 @@ const Step3 = () => {
                         </div>
                         
                         {/* Mobile */}
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium mb-1">Mobile</label>
+                        <div dir="ltr" className="mb-4">
+                            <label className={`block text-sm font-medium mb-1 ${languageContent === 'ar' ? 'text-right' : 'text-left'}`}>{lang[languageContent].mobile}</label>
                             <div className="flex">
-                                <span className="inline-flex items-center px-3 text-gray-900 bg-gray-200 rounded-l-md border border-r-0 border-gray-300">
+                                <span className={`inline-flex items-center px-3 text-gray-900 bg-gray-200 rounded-l-md border border-r-0 border-gray-300`}>
                                     +966
                                 </span>
                                 <input
                                     type="tel"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
-                                    placeholder="Phone Number"
+                                    placeholder={lang[languageContent].mobile}
                                     className="block w-full rounded-r-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
                                     required
                                 />
@@ -462,18 +469,18 @@ const Step3 = () => {
                         
                         {/* Email */}
                         <div className="mb-4">
-                            <label className="block text-sm font-medium mb-1">Email</label>
+                            <label className="block text-sm font-medium mb-1">{lang[languageContent].email}</label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Your Email"
+                                placeholder={lang[languageContent].email}
                                 className="block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
                                 required
                             />
                             <p className="text-xs mt-1 flex items-center">
                                 <span className="inline-block w-4 h-4 bg-gray-800 rounded-full flex items-center justify-center text-white text-xs mr-1">i</span>
-                                You'll receive new updates on your appointment and vehicle status
+                                {lang[languageContent].youWillReceiveUpdates}
                             </p>
                         </div>
                         
@@ -482,13 +489,13 @@ const Step3 = () => {
                             type="submit"
                             className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 shadow-md mt-4"
                         >
-                            BOOK APPOINTMENT
+                            {lang[languageContent].bookAppointment}
                         </button>
                     </form>
                     
                     <div className="mt-4 text-xs text-gray-700">
-                        <p>By continuing you agree to the <a href="#" className="underline">Terms and Conditions</a> and <a href="#" className="underline">Privacy Policy</a></p>
-                        <p className="mt-1">This site is protected by reCAPTCHA and the Google <a href="#" className="underline">Privacy Policy</a> and <a href="#" className="underline">Terms and Conditions</a> apply.</p>
+                        <p>{lang[languageContent].byContinuingYouAgreeToThe} <a href="#" className="underline">{lang[languageContent].termsAndConditions}</a> {lang[languageContent].and} <a href="#" className="underline">{lang[languageContent].privacyPolicy}</a></p>
+                        <p className="mt-1">{lang[languageContent].thisSiteIsProtectedByReCaptchaAndTheGoogle} <a href="#" className="underline">{lang[languageContent].privacyPolicy}</a> {lang[languageContent].and} <a href="#" className="underline">{lang[languageContent].termsAndConditions}</a> {lang[languageContent].apply}</p>
                     </div>
                 </div>
             </div>
@@ -626,15 +633,15 @@ const Step3 = () => {
             
             {/* Disclaimer */}
             <div className="mt-8 bg-white p-6 rounded-lg shadow-md text-sm text-gray-600">
-                <h3 className="font-bold mb-2">DISCLAIMER</h3>
-                <p className="mb-2">These are the assumptions we have made for your vehicle before going into an in-office valuation:</p>
+                <h3 className="font-bold mb-2">{lang[languageContent].disclaimer}</h3>
+                <p className="mb-2">{lang[languageContent].assumptions}</p>
                 <ol className="list-decimal pl-5 space-y-1">
-                    <li>It doesn't have major cosmetic or mechanical damage, or an accident history.</li>
-                    <li>It has a clean title with no liens or loans.</li>
-                    <li>It is in a marketable condition, including interior and mechanical.</li>
-                    <li>It isn't a non-runner.</li>
+                    <li>{lang[languageContent].assumption1}</li>
+                    <li>{lang[languageContent].assumption2}</li>
+                    <li>{lang[languageContent].assumption3}</li>
+                    <li>{lang[languageContent].assumption4}</li>
                 </ol>
-                <p className="mt-2">If our assumptions do not apply, this final offer might vary from your online valuation, but we may still buy your car! (Guaranteed)</p>
+                <p className="mt-2">{lang[languageContent].assumption5}</p>
             </div>
         </div>
     );

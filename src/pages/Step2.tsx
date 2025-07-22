@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Check } from 'lucide-react';
 import axiosInstance from '../services/axiosInstance';
+import { useLanguage } from '../contexts/LanguageContext';
+import lang  from '../locale';
 
 const Step2 = () => {
     const [bodyType, setBodyType] = useState('');
@@ -12,6 +14,11 @@ const Step2 = () => {
     const [option, setOption] = useState('');
     const [paint, setPaint] = useState('');
     const [gccSpecs, setGccSpecs] = useState('');
+
+    const { language } = useLanguage();
+    const languageContent = language === 'ar' ? 'ar' : 'en';
+
+    
     
     // State for car details from Step1
     const [carDetails, setCarDetails] = useState<{ make: string; model: string; year: string }>({ make: '', model: '', year: '' });
@@ -148,19 +155,19 @@ const Step2 = () => {
                             <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
                                 <Check className="h-6 w-6 text-white" />
                             </div>
-                            <div className="mt-2 font-medium text-[#f78f37]">SELECT</div>
+                            <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].select}</div>
                         </div>
                         <div className="text-center">
                             <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
                                 <div className="h-3 w-3 bg-white rounded-full"></div>
                             </div>
-                            <div className="mt-2 font-medium text-[#f78f37]">CONDITION</div>
+                            <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].condition}</div>
                         </div>
                         <div className="text-center">
                             <div className="w-10 h-10 mx-auto rounded-full bg-gray-300 flex items-center justify-center">
                                 <div className="h-3 w-3 bg-white rounded-full"></div>
                             </div>
-                            <div className="mt-2 font-medium text-gray-500">BOOK</div>
+                            <div className="mt-2 font-medium text-gray-500">{lang[languageContent].book}</div>
                         </div>
                     </div>
                 </div>
@@ -169,14 +176,14 @@ const Step2 = () => {
             <div className="bg-white rounded-xl shadow-xl overflow-hidden">
                 <div className="bg-[#3d3d40] px-6 py-4 text-white">
                     <h2 className="text-xl font-semibold">{carDetails.make} {carDetails.model} {carDetails.year}</h2>
-                    <p className="text-blue-100 text-sm">Please enter the following information to see your car valuation</p>
+                    <p className="text-blue-100 text-sm">{lang[languageContent].enterInformation}</p>
                 </div>
                 
                 <form onSubmit={handleSubmit} className="p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         {/* Body Type */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Body Type</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{lang[languageContent].bodyType}</label>
                             <div className="relative">
                                 <select
                                     value={bodyType}
@@ -197,7 +204,7 @@ const Step2 = () => {
                                         <option value="">No body types available</option>
                                     )}
                                 </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <div className={`pointer-events-none absolute inset-y-0 ${language == "en" ? "right-0" : "left-0"} flex items-center px-2 text-gray-700`}>
                                     {loading.bodyTypes ? (
                                         <span className="animate-spin h-4 w-4 border-2 border-gray-500 rounded-full border-t-transparent"></span>
                                     ) : (
@@ -207,7 +214,7 @@ const Step2 = () => {
                                     )}
                                 </div>
                                 {bodyType && !loading.bodyTypes && (
-                                    <div className="absolute right-0 top-0 h-full flex items-center pr-10">
+                                    <div className={`absolute ${language == "en" ? "right-0" : "left-10"} top-0 h-full flex items-center pr-10`}>
                                         <Check className="h-5 w-5 text-green-500" />
                                     </div>
                                 )}
@@ -219,7 +226,7 @@ const Step2 = () => {
                         
                         {/* Engine */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Engine</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{lang[languageContent].engine}</label>
                             <div className="relative">
                                 <select
                                     value={engineSize}
@@ -240,7 +247,7 @@ const Step2 = () => {
                                         <option value="">No engine sizes available</option>
                                     )}
                                 </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <div className={`pointer-events-none absolute inset-y-0 ${language == "en" ? "right-0" : "left-0"} flex items-center px-2 text-gray-700`}>
                                     {loading.engineSizes ? (
                                         <span className="animate-spin h-4 w-4 border-2 border-gray-500 rounded-full border-t-transparent"></span>
                                     ) : (
@@ -250,7 +257,7 @@ const Step2 = () => {
                                     )}
                                 </div>
                                 {engineSize && !loading.engineSizes && (
-                                    <div className="absolute right-0 top-0 h-full flex items-center pr-10">
+                                    <div className={`absolute ${language == "en" ? "right-0" : "left-10"} top-0 h-full flex items-center pr-10`}>
                                         <Check className="h-5 w-5 text-green-500" />
                                     </div>
                                 )}
@@ -262,7 +269,7 @@ const Step2 = () => {
                         
                         {/* Mileage */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Mileage</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{lang[languageContent].mileage}</label>
                             <div className="relative">
                                 <select
                                     value={mileage}
@@ -283,7 +290,7 @@ const Step2 = () => {
                                         <option value="">No mileage options available</option>
                                     )}
                                 </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <div className={`pointer-events-none absolute inset-y-0 ${language == "en" ? "right-0" : "left-0"} flex items-center px-2 text-gray-700`}>
                                     {loading.mileage ? (
                                         <span className="animate-spin h-4 w-4 border-2 border-gray-500 rounded-full border-t-transparent"></span>
                                     ) : (
@@ -293,7 +300,7 @@ const Step2 = () => {
                                     )}
                                 </div>
                                 {mileage && !loading.mileage && (
-                                    <div className="absolute right-0 top-0 h-full flex items-center pr-10">
+                                    <div className={`absolute ${language == "en" ? "right-0" : "left-10"} top-0 h-full flex items-center pr-10`}>
                                         <Check className="h-5 w-5 text-green-500" />
                                     </div>
                                 )}
@@ -306,7 +313,7 @@ const Step2 = () => {
                     
                     {/* Option */}
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Option</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">{lang[languageContent].option}</label>
                         <div className="flex flex-wrap gap-2">
                             <button 
                                 type="button" 
@@ -341,7 +348,7 @@ const Step2 = () => {
                     
                     {/* Paint */}
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Paint</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">{lang[languageContent].paint}</label>
                         <div className="flex flex-wrap gap-2">
                             <button 
                                 type="button" 
@@ -376,7 +383,7 @@ const Step2 = () => {
                     
                     {/* GCC Specs */}
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">GCC Specs?</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">{lang[languageContent].gccSpecs}</label>
                         <div className="flex flex-wrap gap-2">
                             <button 
                                 type="button" 
@@ -408,14 +415,14 @@ const Step2 = () => {
                             type="submit"
                             className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 shadow-md flex items-center justify-center"
                         >
-                            CONTINUE
+                            {lang[languageContent].continue}
                         </button>
                     </div>
                 </form>
                 
                 <div className="bg-gray-50 px-6 py-4 text-xs text-gray-500 border-t border-gray-100">
-                    <p>By continuing you agree to the <a href="#" className="text-blue-600 hover:underline">Terms and Conditions</a> and <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a></p>
-                    <p className="mt-1">This site is protected by reCAPTCHA and the Google <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a> and <a href="#" className="text-blue-600 hover:underline">Terms and Conditions</a> apply.</p>
+                    <p>{lang[languageContent].byContinuingYouAgreeToThe} <a href="#" className="text-blue-600 hover:underline">{lang[languageContent].termsAndConditions}</a> {lang[languageContent].and} <a href="#" className="text-blue-600 hover:underline">{lang[languageContent].privacyPolicy}</a></p>
+                    <p className="mt-1">{lang[languageContent].thisSiteIsProtectedByReCaptchaAndTheGoogle} <a href="#" className="text-blue-600 hover:underline">{lang[languageContent].privacyPolicy}</a> {lang[languageContent].and} <a href="#" className="text-blue-600 hover:underline">{lang[languageContent].termsAndConditions}</a> {lang[languageContent].apply}.</p>
                 </div>
             </div>
         </div>
