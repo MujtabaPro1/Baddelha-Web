@@ -341,7 +341,7 @@ const Step3 = () => {
                                         <option value="">{lang[languageContent].selectBranch}</option>
                                         {branches.map((branchItem) => (
                                             <option key={branchItem.id} value={branchItem.id}>
-                                                {branchItem.name}
+                                                {language == "en" ? branchItem.enName : branchItem.arName}
                                             </option>
                                         ))}
                                     </select>
@@ -359,9 +359,10 @@ const Step3 = () => {
                             <label className="block text-sm font-medium mb-2">{lang[languageContent].selectDayTime}</label>
                             
                             {loadingTimings ? (
-                                <div className="text-center py-4">
+                                <div className="text-center py-4" >
                                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f78f37] mx-auto"></div>
-                                    <p className="mt-2 text-sm text-gray-600">{lang[languageContent].loadingTimeSlots}</p>
+                                    <p 
+                                    className="mt-2 text-sm text-gray-600">{lang[languageContent].loadingTimeSlots}</p>
                                 </div>
                             ) : timingsError ? (
                                 <div className="text-red-500 text-sm py-2">{timingsError}</div>
@@ -403,6 +404,7 @@ const Step3 = () => {
                                                     ?.slots.map((slot, index) => (
                                                         <button
                                                             key={index}
+                                                            dir={'ltr'}
                                                             type="button"
                                                             onClick={() => setSelectedTimeSlot(slot.label)}
                                                             className={`px-3 py-2 text-sm rounded-lg border ${

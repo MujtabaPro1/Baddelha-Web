@@ -226,7 +226,7 @@ const Step2 = () => {
                         
                         {/* Engine */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{lang[languageContent].engine}</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{lang[languageContent].engineSize}</label>
                             <div className="relative">
                                 <select
                                     value={engineSize}

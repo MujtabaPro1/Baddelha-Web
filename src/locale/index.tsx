@@ -146,6 +146,25 @@ const lang = {
         "assumption3": "It is in a marketable condition, including interior and mechanical.",
         "assumption4": "It isn't a non-runner.",
         "assumption5": "If our assumptions do not apply, this final offer might vary from your online valuation, but we may still buy your car! (Guaranteed)",
+        "loadingBookingDetails": "Loading Booking Details",
+        "bookingConfirmed": "Booking Confirmed!",
+        "bookingDetails": "Booking Details",
+        "bookingId": "Booking ID",
+        "arrival": "Arrival",
+        "pleaseArrive10MinutesBeforeYourScheduledAppointmentBringYourVehicleRegistrationAndID": "Please arrive 10 minutes before your scheduled appointment. Bring your vehicle registration and ID.",
+        "inspection": "Inspection",
+        "ourExpertsWillConductAComprehensiveInspectionOfYourVehicleWhichTakesApproximately3045Minutes": "Our experts will conduct a comprehensive inspection of your vehicle, which takes approximately 30-45 minutes.",
+        "results": "Results",
+        "youllReceiveADetailedReportAndOurFinalOfferForYourVehicleWithNoObligationToSell": "You'll receive a detailed report and our final offer for your vehicle, with no obligation to sell.",
+        "confirmationEmailSent": "Confirmation Email Sent",
+        "rescheduleCancelAppointment": "Reschedule or Cancel Appointment",
+        "returnToHome": "Return to Home",
+        "whatToExpect": "What to Expect",
+        "name": "Name",
+        "appointmentDetails": "Appointment Details",
+        "branch": "Branch",
+        "date": "Date",
+        "time": "Time"
         
 
 
@@ -302,8 +321,26 @@ const lang = {
         "assumption2": "تحمل ملكية نظيفة بدون أية رهونات أو قروض.",
         "assumption3": "في حالة قابلة للبيع، بما في ذلك الحالة الداخلية والميكانيكية.",
         "assumption4": "ليست غير قابلة للتشغيل.",
-        "assumption5": "إذا لم تنطبق هذه الافتراضات، فقد يختلف العرض النهائي عن التقييم عبر الإنترنت، ولكن قد نشتري سيارتك رغم ذلك! (مضمون)"
-        
+        "assumption5": "إذا لم تنطبق هذه الافتراضات، فقد يختلف العرض النهائي عن التقييم عبر الإنترنت، ولكن قد نشتري سيارتك رغم ذلك! (مضمون)",
+        "loadingBookingDetails": "جارٍ تحميل تفاصيل الحجز",
+        "bookingConfirmed": "تم تأكيد الحجز!",
+        "bookingDetails": "تفاصيل الحجز",
+        "arrival": "الوصول",
+        "pleaseArrive10MinutesBeforeYourScheduledAppointmentBringYourVehicleRegistrationAndID": "يرجى الوصول 10 دقائق قبل الموعد المحدد. احضار بطاقة التسجيل للسيارة ورقم الهوية.",
+        "inspection": "التحقق",
+        "ourExpertsWillConductAComprehensiveInspectionOfYourVehicleWhichTakesApproximately3045Minutes": "يقوم خبراؤنا بإجراء فحص شامل لسيارتك، يستغرق الأمر حوالي 30-45 دقيقة.",
+        "results": "النتائج",
+        "youllReceiveADetailedReportAndOurFinalOfferForYourVehicleWithNoObligationToSell": "ستتلقى تقريرًا مفصلًا وعرضنا النهائي لسيارتك، بدون أي إلتزام ببيع.",
+        "confirmationEmailSent": "تم إرسال رسالة تأكيد",
+        "rescheduleCancelAppointment": "إعادة التخطيط أو إلغاء الموعد",
+        "whatToExpect": "ماذا تنتظر؟",
+        "returnToHome": "العودة إلى الصفحة الرئيسية",
+        "name": "الاسم",
+        "appointmentDetails": "تفاصيل الموعد",
+        "branch": "الفرع",
+        "date": "التاريخ",
+        "time": "الوقت"
+
 
        } 
     }
