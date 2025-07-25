@@ -164,7 +164,8 @@ const lang = {
         "appointmentDetails": "Appointment Details",
         "branch": "Branch",
         "date": "Date",
-        "time": "Time"
+        "time": "Time",
+        "option": "Option"
         
 
 
@@ -339,7 +340,8 @@ const lang = {
         "appointmentDetails": "تفاصيل الموعد",
         "branch": "الفرع",
         "date": "التاريخ",
-        "time": "الوقت"
+        "time": "الوقت",
+        "option": "الخيار"
 
 
        } 
