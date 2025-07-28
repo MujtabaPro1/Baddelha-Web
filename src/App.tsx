@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import Step2 from './pages/Step2';
@@ -13,6 +13,10 @@ import CarDetail from './pages/CarDetails';
 import Purchase from './pages/Purchase';
 import TradeIn from './pages/TradeIn';
 import Auction from './pages/Auction';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import AboutUs from './pages/AboutUs';
+import ContactUs from './pages/ContactUs';
 
 function App() {
   useEffect(() => {
@@ -59,6 +63,22 @@ function App() {
     {
       path: '/auction',
       element: <Auction />,
+    },
+    {
+      path: '/terms',
+      element: <Terms />,
+    },
+    {
+      path: '/privacy',
+      element: <Privacy />,
+    },
+    {
+      path: '/about-us',
+      element: <AboutUs />,
+    },
+    {
+      path: '/contact-us',
+      element: <ContactUs />,
     },
   ]);
 

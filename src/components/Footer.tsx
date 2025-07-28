@@ -49,11 +49,11 @@ const Footer: React.FC = () => {
           </div>
           
           <div>
-            <h3 className="font-semibold text-lg mb-4">{lang[languageContent].aboutUs}</h3>
+            <h3 className="font-semibold text-lg mb-4">{lang[languageContent].legal}</h3>
             <ul className="space-y-3">
-              {[lang[languageContent].ourStory, lang[languageContent].howItWorks, lang[languageContent].testimonials].map((link, index) => (
+              {[lang[languageContent].aboutUs, lang[languageContent].contactUs, lang[languageContent].privacyPolicy, lang[languageContent].termsOfService].map((link, index) => (
                 <li key={index}>
-                  <a href="#" className="text-gray-400 hover:text-amber-500 transition">
+                  <a href={index == 0 ? "/about-us" : index == 1 ? "/contact-us" : index == 2 ? "/privacy" : "/terms"} className="text-gray-400 hover:text-amber-500 transition">
                     {link}
                   </a>
                 </li>
@@ -89,10 +89,8 @@ const Footer: React.FC = () => {
 بدلها. All rights reserved.
             </p>
             <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-              <a href="#" className="hover:text-amber-500 transition">{lang[languageContent].termsOfService}</a>
-              <a href="#" className="hover:text-amber-500 transition">{lang[languageContent].privacyPolicy}</a>
-              <a href="#" className="hover:text-amber-500 transition">{lang[languageContent].cookiePolicy}</a>
-              <a href="#" className="hover:text-amber-500 transition">{lang[languageContent].sitemap}</a>
+              <a href="/terms" className="hover:text-amber-500 transition">{lang[languageContent].termsOfService}</a>
+              <a href="/privacy" className="hover:text-amber-500 transition">{lang[languageContent].privacyPolicy}</a>
             </div>
           </div>
         </div>

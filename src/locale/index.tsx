@@ -165,7 +165,9 @@ const lang = {
         "branch": "Branch",
         "date": "Date",
         "time": "Time",
-        "option": "Option"
+        "option": "Option",
+        "termsOfService": "Terms & Conditions",
+        "legal": "Legal"
         
 
 
@@ -341,7 +343,9 @@ const lang = {
         "branch": "الفرع",
         "date": "التاريخ",
         "time": "الوقت",
-        "option": "الخيار"
+        "option": "الخيار",
+        "termsOfService": "الشروط والأحكام",
+        "legal": "قانوني"
 
 
        } 
