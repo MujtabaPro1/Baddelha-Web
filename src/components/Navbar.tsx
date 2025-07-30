@@ -26,6 +26,52 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userDetails');
+    window.location.href = '/';
+  };
+
+  const profileView = () => {
+    return (
+      <div className='relative'>
+        <div 
+          className='flex items-center gap-2 cursor-pointer' 
+          onClick={() => setShowProfileMenu(!showProfileMenu)}
+        >
+          <img 
+            className='w-12 h-12 rounded-full'
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+            alt="Profile" 
+          />
+          <div>
+            <p className='font-medium text-white'>Test Dev</p>
+          </div>
+        </div>
+        
+        {showProfileMenu && (
+          <div className='absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50'>
+            <a 
+              href="/appointments" 
+              className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+            >
+              My Appointments
+            </a>
+            <button 
+              onClick={handleLogout}
+              className='w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+            >
+              Logout
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -72,11 +118,11 @@ const Navbar: React.FC = () => {
               <Globe className="h-4 w-4 mr-1" />&nbsp;
               <span>{language === 'en' ? 'العربية' : 'English'}</span>
             </button>
-            <button
+            {!localStorage.getItem('authToken') ? <button
             onClick={() => window.location.href = '/login'}
             className="bg-[#f78f37] hover:bg-[#f78f37] text-white px-5 py-2 rounded-full transition transform hover:scale-105">
               {lang[languageContent].signIn}
-            </button>
+            </button> : profileView()}
           </div>
           
           <button 
@@ -116,9 +162,12 @@ const Navbar: React.FC = () => {
               <Globe className="h-4 w-4 mr-1" />
               <span>{language === 'en' ? 'العربية' : 'English'}</span>
             </button>
-            <button className="mt-4 w-full bg-blue-800 hover:bg-blue-700 text-white px-5 py-2 rounded-full transition transform hover:scale-105">
+            {!localStorage.getItem('authToken') && <button className="mt-4 w-full bg-blue-800 hover:bg-blue-700 text-white px-5 py-2 rounded-full transition transform hover:scale-105">
               {language === 'ar' ? 'تسجيل الدخول' : 'Sign In'}
-            </button>
+            </button>}
+            {localStorage.getItem('authToken') && <button onClick={() => localStorage.removeItem('authToken')} className="mt-4 w-full bg-blue-800 hover:bg-blue-700 text-white px-5 py-2 rounded-full transition transform hover:scale-105">
+              {language === 'ar' ? 'تسجيل الخروج' : 'Sign Out'}
+            </button>}
           </div>
         </div>
       )}

@@ -17,6 +17,7 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
+import Appointments from './pages/Appointments';
 
 function App() {
   useEffect(() => {
@@ -79,6 +80,10 @@ function App() {
     {
       path: '/contact-us',
       element: <ContactUs />,
+    },
+    {
+      path: '/appointments',
+      element: <Appointments />,
     },
   ]);
 

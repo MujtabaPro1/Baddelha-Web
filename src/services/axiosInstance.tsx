@@ -1,22 +1,39 @@
-import axios from "axios";
+import axios from 'axios';
 
-const BASE_URL = "https://stg-service.bddelha.com";
+const BASE_URL = 'https://stg-service.bddelha.com';
 
-
-export default axios.create({
+const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  timeout: 100000, // 10 seconds
 });
 
-export const axiosAuth = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+// Request interceptor
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // Get token from storage
+    const token = localStorage.getItem('token');
+    
+    // If token exists, add it to headers
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-export const setToken = (token: string) => {
-  axiosAuth.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-};
+    return config;
+  },
+  (error) => {
+    console.log('Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor
+axiosInstance.interceptors.response.use(
+    response => {
+      return response;
+    },
+    error => {
+      return Promise.reject(error);
+    },
+  );
+  
+export default axiosInstance;
