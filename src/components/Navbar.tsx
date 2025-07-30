@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
             alt="Profile" 
           />
           <div>
-            <p className='font-medium text-white'>Test Dev</p>
+            <p className='font-medium text-white'>{JSON.parse(localStorage.getItem('userDetails') || '{}').firstName}</p>
           </div>
         </div>
         
@@ -58,13 +58,13 @@ const Navbar: React.FC = () => {
               href="/appointments" 
               className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
             >
-              My Appointments
+             {language === 'ar' ? 'المواعيد' : 'My Appointments'}
             </a>
             <button 
               onClick={handleLogout}
               className='w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
             >
-              Logout
+             {language === 'ar' ? 'تسجيل الخروج' : 'Logout'}
             </button>
           </div>
         )}
