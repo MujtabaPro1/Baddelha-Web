@@ -121,31 +121,71 @@ const Step3 = () => {
         e.preventDefault();
         
         try {
+            // Validate all required fields
+            const validationErrors = [];
+            
+            if (!branch) {
+                validationErrors.push('Please select a branch');
+            }
+            
+            // Validate day and time slot
+            const selectedDayObj = branchTimings.find(day => day.day === selectedDay);
+            if (!selectedDayObj) {
+                validationErrors.push('Please select a day');
+            }
+            
+            if (!selectedTimeSlot) {
+                validationErrors.push('Please select a time slot');
+            }
+            
+            // Validate personal information
+            if (!firstName.trim()) {
+                validationErrors.push('Please enter your first name');
+            }
+            
+            if (!lastName.trim()) {
+                validationErrors.push('Please enter your last name');
+            }
+            
+            if (!phone.trim()) {
+                validationErrors.push('Please enter your phone number');
+            }
+            
+            if (!email.trim()) {
+                validationErrors.push('Please enter your email address');
+            } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+                validationErrors.push('Please enter a valid email address');
+            }
+            
+            // If there are validation errors, show them and stop form submission
+            if (validationErrors.length > 0) {
+                alert(validationErrors.join('\n'));
+                return;
+            }
+            
             // Get step1 data from sessionStorage if available
             const storedStep1Data = sessionStorage.getItem('carDetails');
             const step1Data = storedStep1Data ? JSON.parse(storedStep1Data) : {};
             
             // Format the appointment date and time
-            // Find the selected day's date from branchTimings
-            const selectedDayObj = branchTimings.find(day => day.day === selectedDay);
-            
-            if (!selectedDayObj || !selectedTimeSlot) {
-                throw new Error('Please select both a day and time slot');
-            }
-            
             // Extract date parts from the selectedDayObj.date (format: "Jun 30")
-            const [month, day] = selectedDayObj.date.split(' ');
+            // We've already validated selectedDayObj exists above, but add a safety check
+            const [month, day] = selectedDayObj?.date?.split(' ') || [];
             const currentYear = new Date().getFullYear();
             
             // Create a date string in ISO format
+            // Make sure we have valid date parts before creating the date
+            if (!month || !day) {
+                throw new Error('Invalid date format');
+            }
             const appointmentDate = new Date(`${month} ${day}, ${currentYear}`).toISOString();
             
             // Combine all car details from step1 and step2
             const carDetail = JSON.stringify({
                 ...step1Data,
                 ...step2Data,
-                engineSize: step2Data.engineSizeName,
-                mileage: step2Data.mileageName,
+                engineSize: step2Data?.engineSizeName,
+                mileage: step2Data?.mileageName,
                 carPrice: carPrice ? carPrice : 0,
             });
             

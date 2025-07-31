@@ -5,6 +5,7 @@ import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Checkbox } from '../components/ui/checkbox';
 import { Car, Mail, Lock, Facebook, Chrome, Apple } from 'lucide-react';
+import axiosInstance from '../services/axiosInstance';
 
 interface LoginFormProps {
   onForgotPassword: () => void;
@@ -58,45 +59,49 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
     setIsLoading(true);
     
     if (!showOtpField) {
-      // First step: Email verification
-      setTimeout(() => {
+    
+      axiosInstance.post('/api/auth/seller/sign-in', {
+        email: formData.email,
+      }) 
+      .then(response => {
+        console.log('Login successful:', response.data);
+        setTimeout(() => {
+          setIsLoading(false);
+          setShowOtpField(true);
+          console.log('Email verification successful, showing OTP field');
+        }, 1000);
+      })
+      .catch(error => {
+        console.error('Login failed:', error);
         setIsLoading(false);
-        setShowOtpField(true);
-        console.log('Email verification successful, showing OTP field');
-      }, 1000);
+        setErrors({ email: error.response.data.message });
+      });
+
+      // First step: Email verification
+ 
     } else {
       // Second step: OTP verification
       setTimeout(() => {
         setIsLoading(false);
-        
-        // Check if OTP is 11111
-        if (formData.otp === '11111') {
-          // Save the JWT token
-          const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiaW5zcGVjdG9yX3Rlc3RAZ21haWwuY29tIiwicGVybWlzc2lvbnMiOnsibmFtZSI6Ikluc3BlY3RvciIsIlBlcm1pc3Npb24iOlt7InJvbGVJZCI6MywiYXBwTW9kdWxlSWQiOjEsImNyZWF0ZSI6ZmFsc2UsInJlYWQiOnRydWUsInVwZGF0ZSI6dHJ1ZSwiZGVsZXRlIjpmYWxzZSwibW9kdWxlIjp7Im5hbWUiOiJDYXJzIiwicGF0aCI6Ii9kYXNoYm9hcmQvY2FycyJ9fSx7InJvbGVJZCI6MywiYXBwTW9kdWxlSWQiOjIsImNyZWF0ZSI6ZmFsc2UsInJlYWQiOmZhbHNlLCJ1cGRhdGUiOmZhbHNlLCJkZWxldGUiOmZhbHNlLCJtb2R1bGUiOnsibmFtZSI6IlVzZXJzIiwicGF0aCI6Ii9kYXNoYm9hcmQvdXNlcnMifX0seyJyb2xlSWQiOjMsImFwcE1vZHVsZUlkIjozLCJjcmVhdGUiOmZhbHNlLCJyZWFkIjpmYWxzZSwidXBkYXRlIjpmYWxzZSwiZGVsZXRlIjpmYWxzZSwibW9kdWxlIjp7Im5hbWUiOiJSb2xlcyAmIFBlcm1pc3Npb24iLCJwYXRoIjoiL2Rhc2hib2FyZC9yb2xlcy1wZXJtaXNzaW9uIn19LHsicm9sZUlkIjozLCJhcHBNb2R1bGVJZCI6NCwiY3JlYXRlIjpmYWxzZSwicmVhZCI6ZmFsc2UsInVwZGF0ZSI6ZmFsc2UsImRlbGV0ZSI6ZmFsc2UsIm1vZHVsZSI6eyJuYW1lIjoiSW5zcGVjdG9yIiwicGF0aCI6Ii9kYXNoYm9hcmQvaW5zcGVjdG9yIn19LHsicm9sZUlkIjozLCJhcHBNb2R1bGVJZCI6NSwiY3JlYXRlIjp0cnVlLCJyZWFkIjp0cnVlLCJ1cGRhdGUiOnRydWUsImRlbGV0ZSI6dHJ1ZSwibW9kdWxlIjp7Im5hbWUiOiJJbnNwZWN0aW9ucyIsInBhdGgiOiIvZGFzaGJvYXJkL2luc3BlY3Rpb25zIn19LHsicm9sZUlkIjozLCJhcHBNb2R1bGVJZCI6NiwiY3JlYXRlIjpmYWxzZSwicmVhZCI6ZmFsc2UsInVwZGF0ZSI6ZmFsc2UsImRlbGV0ZSI6ZmFsc2UsIm1vZHVsZSI6eyJuYW1lIjoiTm90aWZpY2F0aW9ucyIsInBhdGgiOiIvZGFzaGJvYXJkL25vdGlmaWNhdGlvbnMifX0seyJyb2xlSWQiOjMsImFwcE1vZHVsZUlkIjo3LCJjcmVhdGUiOnRydWUsInJlYWQiOnRydWUsInVwZGF0ZSI6dHJ1ZSwiZGVsZXRlIjp0cnVlLCJtb2R1bGUiOnsibmFtZSI6IkJvb2sgQXBwb2ludG1lbnRzIiwicGF0aCI6Ii9kYXNoYm9hcmQvYm9vay1hcHBvaW50bWVudCJ9fV19LCJpYXQiOjE3NTM4MDg0ODAsImV4cCI6MTc1Mzg5NDg4MH0.AMK9r6eLk_WJjmsOJMwS-T_xOefmcn4HeQoYi6PYjYs';
-          setAuthToken(token);
-          
-          // Save user details
-          const userData = {
-            firstName: 'Test',
-            lastName: 'Dev',
-            email: 'testdev@gmail.com'
-          };
-          setUserDetails(userData);
-          
-          // Store in localStorage for persistence
-          localStorage.setItem('authToken', token);
-          localStorage.setItem('userDetails', JSON.stringify(userData));
-          
-          console.log('Login successful!');
-          console.log('Auth Token:', token);
-          console.log('User Details:', userData);
 
+        axiosInstance.post('/api/auth/verify-otp', {
+          target: formData.email,
+          otp: formData.otp,
+        })
+        .then(response => {
+
+          // Store token in localStorage
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('authToken', response.data.token);
+          localStorage.setItem('userDetails', JSON.stringify(response.data.user));
           window.location.href = '/';
-          
-          // Here you would typically redirect to dashboard or home page
-        } else {
-          setErrors({ otp: 'Invalid OTP. Please try again.' });
-        }
+
+        })
+        .catch(error => {
+          console.error('Login failed:', error);
+          // Handle error (e.g., show error message)
+        });
+     
       }, 1000);
     }
   };
