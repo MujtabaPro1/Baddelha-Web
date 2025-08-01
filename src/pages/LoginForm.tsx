@@ -91,9 +91,16 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
         .then(response => {
 
           // Store token in localStorage
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('authToken', response.data.token);
-          localStorage.setItem('userDetails', JSON.stringify(response.data.user));
+          localStorage.setItem('token', response.data.access_token);
+          localStorage.setItem('authToken', response.data.access_token);
+          localStorage.setItem('userDetails', JSON.stringify({
+            id: response.data.id,
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            email: response.data.email,
+            avatar: response.data.avatar,
+            phone: '+966' + response.data.phone,
+          }));
           window.location.href = '/';
 
         })
@@ -181,7 +188,7 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
               {errors.otp && (
                 <p className="text-sm text-red-600 mt-1">{errors.otp}</p>
               )}
-              <p className="text-xs text-gray-500 mt-1">For testing, use OTP: 11111</p>
+              <p className="text-xs text-gray-500 mt-1">For testing, use OTP</p>
             </div>
           )}
 
