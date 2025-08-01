@@ -312,7 +312,7 @@ const Step3 = () => {
                                             const response = await axiosInstance.post('/api/1.0/core/evaluate/car', carData);
                                             
                                             if (response.data) {
-                                                setCarPrice(response.data.estimatedPriceSAR);
+                                                setCarPrice(response.data.priceEstimate?.valueRange?.high);
                                                 if (response.data.sampleImageUrl) {
                                                     setCarImage('https://images.unsplash.com/photo-1550355291-bbee04a92027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=6');
                                                 }
