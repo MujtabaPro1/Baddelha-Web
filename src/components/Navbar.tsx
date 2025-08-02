@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
             alt="Profile" 
           />
           <div>
-            <p className={`font-medium text-white ${isScrolled ? 'text-[#000]' : 'text-white'}`}>{JSON.parse(localStorage.getItem('userDetails') || '{}').firstName}</p>
+            <p className={`font-medium ${isScrolled ? 'text-[#000]' : 'text-white'}`}>{JSON.parse(localStorage.getItem('userDetails') || '{}').firstName}</p>
           </div>
         </div>
         
