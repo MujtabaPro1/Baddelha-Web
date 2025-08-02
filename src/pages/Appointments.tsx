@@ -20,6 +20,7 @@ interface Appointment {
     year: string;
     plateNumber: string;
   };
+  Branch?: any;
 }
 
 const Appointments = () => {
@@ -207,7 +208,8 @@ const Appointments = () => {
                       <div>
                         <p className="text-xs text-gray-500">Location</p>
                         <p className="text-sm font-medium text-gray-900">
-                          {appointment.location || 'Location not specified'}
+                         
+                          {appointment?.Branch?.enName || 'Location not specified'}
                         </p>
                       </div>
                     </div>
