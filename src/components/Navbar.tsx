@@ -48,11 +48,11 @@ const Navbar: React.FC = () => {
             alt="Profile" 
           />
           <div>
-            <p className={`font-medium text-white ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>{JSON.parse(localStorage.getItem('userDetails') || '{}').firstName}</p>
+            <p className={`font-medium text-white ${isScrolled ? 'text-[#000]' : 'text-white'}`}>{JSON.parse(localStorage.getItem('userDetails') || '{}').firstName}</p>
           </div>
         </div>
         
-        
+
         {showProfileMenu && (
           <div className='absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50'>
             <a 
