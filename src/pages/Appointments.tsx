@@ -296,7 +296,7 @@ const Appointments = () => {
                         </span>
                       </div>
                       <p className="text-sm font-medium text-gray-900">
-                        {selectedAppointment.location || 'Not specified'}
+                        {selectedAppointment.Branch?.enName || 'Not specified'}
                       </p>
                     </div>
                   </div>
