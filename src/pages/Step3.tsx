@@ -22,6 +22,7 @@ const Step3 = () => {
     const [otp, setOtp] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
     const [otpError, setOtpError] = useState('');
+    const [autoFill, setAutoFill] = useState(false);
     
     // State for branches from API
     const [branches, setBranches] = useState<{id: string; name: string; address: string}[]>([]);
@@ -66,6 +67,32 @@ const Step3 = () => {
             setStep2Data(JSON.parse(storedStep2Data));
         }
     }, []);
+
+    useEffect(()=>{
+              prefilUserData();
+    },[])
+
+    const prefilUserData = async () => {
+        let user: any = localStorage.getItem('userDetails');
+        if (user) {
+            user = JSON.parse(user);
+            if(user.firstName){
+            setFirstName(user.firstName);
+            }
+            if(user.lastName){
+            setLastName(user.lastName);
+            }
+            if(user.phone){
+            setPhone(user.phone);
+            }
+            if(user.email){
+            setEmail(user.email);
+            }
+            setAutoFill(true);
+
+        }
+    };
+
     
     // Fetch branches from API
     useEffect(() => {
@@ -471,10 +498,11 @@ const Step3 = () => {
                                 <label className="block text-sm font-medium mb-1">{lang[languageContent].firstName}</label>
                                 <input
                                     type="text"
+                                    disabled={autoFill}
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
                                     placeholder={lang[languageContent].firstName}
-                                    className="block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
+                                    className={`block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 ${autoFill ? 'bg-gray-100' : 'bg-white'}`}
                                     required
                                 />
                             </div>
@@ -482,10 +510,11 @@ const Step3 = () => {
                                 <label className="block text-sm font-medium mb-1">{lang[languageContent].lastName}</label>
                                 <input
                                     type="text"
+                                    disabled={autoFill}
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
                                     placeholder={lang[languageContent].lastName}
-                                    className="block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
+                                    className={`block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 ${autoFill ? 'bg-gray-100' : 'bg-white'}`}
                                     required
                                 />
                             </div>
@@ -500,10 +529,11 @@ const Step3 = () => {
                                 </span>
                                 <input
                                     type="tel"
+                                    disabled={autoFill}
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
                                     placeholder={lang[languageContent].mobile}
-                                    className="block w-full rounded-r-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
+                                    className={`block w-full rounded-r-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 ${autoFill ? 'bg-gray-100' : 'bg-white'}`}
                                     required
                                 />
                             </div>
@@ -514,10 +544,11 @@ const Step3 = () => {
                             <label className="block text-sm font-medium mb-1">{lang[languageContent].email}</label>
                             <input
                                 type="email"
+                                disabled={autoFill}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder={lang[languageContent].email}
-                                className="block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 bg-white"
+                                className={`block w-full rounded-lg border-gray-300 py-3 px-4 focus:border-blue-500 focus:ring-blue-500 ${autoFill ? 'bg-gray-100' : 'bg-white'}`}
                                 required
                             />
                             <p className="text-xs mt-1 flex items-center">
