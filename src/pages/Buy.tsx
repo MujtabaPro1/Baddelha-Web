@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, Filter, Grid, List, Heart, MapPin, Fuel, Calendar, Settings, ChevronDown, X, SlidersHorizontal } from 'lucide-react';
+import axiosInstance from '../services/axiosInstance';
 
 interface Car {
   id: number;
@@ -151,9 +152,10 @@ function Buy() {
   const [sortBy, setSortBy] = useState('price-low');
   const [showFilters, setShowFilters] = useState(false);
   const [likedCars, setLikedCars] = useState<Set<number>>(new Set());
+  const [carList,setCarList]: any = useState([]);
 
   const filteredAndSortedCars = useMemo(() => {
-    let filtered = cars.filter(car => {
+    let filtered = carList.filter(car => {
       const matchesSearch = car.make.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            car.model.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesMake = selectedMake === 'All Makes' || car.make === selectedMake;
@@ -226,6 +228,206 @@ function Buy() {
     mileageRange[0] !== 0 || mileageRange[1] !== 50000
   ].filter(Boolean).length;
 
+  const FilterView = (isShowFilter: boolean) => {
+
+    if(!isShowFilter){
+      return null;
+    }
+
+    return  <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
+    <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold flex items-center">
+          <SlidersHorizontal className="h-5 w-5 mr-2" />
+          Filters
+          {activeFiltersCount > 0 && (
+            <span className="ml-2 bg-[#f78f37] text-white text-xs px-2 py-1 rounded-full">
+              {activeFiltersCount}
+            </span>
+          )}
+        </h3>
+        {activeFiltersCount > 0 && (
+          <button
+            onClick={clearFilters}
+            className="text-sm text-gray-500 hover:text-gray-700 flex items-center"
+          >
+            <X className="h-4 w-4 mr-1" />
+            Clear All
+          </button>
+        )}
+      </div>
+
+      <div className="space-y-6">
+        {/* Make Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Make</label>
+          <select
+            value={selectedMake}
+            onChange={(e) => setSelectedMake(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
+          >
+            {makes.map(make => (
+              <option key={make} value={make}>{make}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Body Type Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Body Type</label>
+          <select
+            value={selectedBodyType}
+            onChange={(e) => setSelectedBodyType(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
+          >
+            {bodyTypes.map(type => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Condition Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Condition</label>
+          <select
+            value={selectedCondition}
+            onChange={(e) => setSelectedCondition(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
+          >
+            {conditions.map(condition => (
+              <option key={condition} value={condition}>{condition}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Fuel Type Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Fuel Type</label>
+          <select
+            value={selectedFuelType}
+            onChange={(e) => setSelectedFuelType(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
+          >
+            {fuelTypes.map(fuel => (
+              <option key={fuel} value={fuel}>{fuel}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Location Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
+          >
+            {locations.map(location => (
+              <option key={location} value={location}>{location}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Price Range */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Price Range: SAR {priceRange[0].toLocaleString()} - SAR {priceRange[1].toLocaleString()}
+          </label>
+          <div className="space-y-2">
+            <input
+              type="range"
+              min="0"
+              max="300000"
+              step="5000"
+              value={priceRange[0]}
+              onChange={(e) => setPriceRange([parseInt(e.target.value), priceRange[1]])}
+              className="w-full"
+            />
+            <input
+              type="range"
+              min="0"
+              max="300000"
+              step="5000"
+              value={priceRange[1]}
+              onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+              className="w-full"
+            />
+          </div>
+        </div>
+
+        {/* Year Range */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Year: {yearRange[0]} - {yearRange[1]}
+          </label>
+          <div className="space-y-2">
+            <input
+              type="range"
+              min="2015"
+              max="2024"
+              value={yearRange[0]}
+              onChange={(e) => setYearRange([parseInt(e.target.value), yearRange[1]])}
+              className="w-full"
+            />
+            <input
+              type="range"
+              min="2015"
+              max="2024"
+              value={yearRange[1]}
+              onChange={(e) => setYearRange([yearRange[0], parseInt(e.target.value)])}
+              className="w-full"
+            />
+          </div>
+        </div>
+
+        {/* Mileage Range */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Mileage: {mileageRange[0].toLocaleString()} - {mileageRange[1].toLocaleString()} km
+          </label>
+          <div className="space-y-2">
+            <input
+              type="range"
+              min="0"
+              max="100000"
+              step="1000"
+              value={mileageRange[0]}
+              onChange={(e) => setMileageRange([parseInt(e.target.value), mileageRange[1]])}
+              className="w-full"
+            />
+            <input
+              type="range"
+              min="0"
+              max="100000"
+              step="1000"
+              value={mileageRange[1]}
+              onChange={(e) => setMileageRange([mileageRange[0], parseInt(e.target.value)])}
+              className="w-full"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  }
+
+  useEffect(() => {
+     getCars();
+  }, []);
+
+  const getCars = () => {
+    axiosInstance.get('/api/1.0/car/get-all?page=1&limit=12')
+    .then(response => {
+      setCarList(response.data?.data);
+    })
+    .catch(error => {
+      console.error('Error fetching cars:', error);
+    }); 
+  }
+
+
+
   return (
     <div className="min-h-screen bg-gray-50 pt-[60px]">
       {/* Hero Section */}
@@ -254,184 +456,11 @@ function Buy() {
         </div>
       </div>
 
-      <div className="container mx-auto px-2 py-4">
+      <div className="container mx-auto px-2 py-4 pb-[200px]">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
-          <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold flex items-center">
-                  <SlidersHorizontal className="h-5 w-5 mr-2" />
-                  Filters
-                  {activeFiltersCount > 0 && (
-                    <span className="ml-2 bg-[#f78f37] text-white text-xs px-2 py-1 rounded-full">
-                      {activeFiltersCount}
-                    </span>
-                  )}
-                </h3>
-                {activeFiltersCount > 0 && (
-                  <button
-                    onClick={clearFilters}
-                    className="text-sm text-gray-500 hover:text-gray-700 flex items-center"
-                  >
-                    <X className="h-4 w-4 mr-1" />
-                    Clear All
-                  </button>
-                )}
-              </div>
+          {FilterView(false)}
 
-              <div className="space-y-6">
-                {/* Make Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Make</label>
-                  <select
-                    value={selectedMake}
-                    onChange={(e) => setSelectedMake(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
-                  >
-                    {makes.map(make => (
-                      <option key={make} value={make}>{make}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Body Type Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Body Type</label>
-                  <select
-                    value={selectedBodyType}
-                    onChange={(e) => setSelectedBodyType(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
-                  >
-                    {bodyTypes.map(type => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Condition Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Condition</label>
-                  <select
-                    value={selectedCondition}
-                    onChange={(e) => setSelectedCondition(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
-                  >
-                    {conditions.map(condition => (
-                      <option key={condition} value={condition}>{condition}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Fuel Type Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Fuel Type</label>
-                  <select
-                    value={selectedFuelType}
-                    onChange={(e) => setSelectedFuelType(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
-                  >
-                    {fuelTypes.map(fuel => (
-                      <option key={fuel} value={fuel}>{fuel}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Location Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-                  <select
-                    value={selectedLocation}
-                    onChange={(e) => setSelectedLocation(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
-                  >
-                    {locations.map(location => (
-                      <option key={location} value={location}>{location}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Price Range */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Price Range: SAR {priceRange[0].toLocaleString()} - SAR {priceRange[1].toLocaleString()}
-                  </label>
-                  <div className="space-y-2">
-                    <input
-                      type="range"
-                      min="0"
-                      max="300000"
-                      step="5000"
-                      value={priceRange[0]}
-                      onChange={(e) => setPriceRange([parseInt(e.target.value), priceRange[1]])}
-                      className="w-full"
-                    />
-                    <input
-                      type="range"
-                      min="0"
-                      max="300000"
-                      step="5000"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-
-                {/* Year Range */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Year: {yearRange[0]} - {yearRange[1]}
-                  </label>
-                  <div className="space-y-2">
-                    <input
-                      type="range"
-                      min="2015"
-                      max="2024"
-                      value={yearRange[0]}
-                      onChange={(e) => setYearRange([parseInt(e.target.value), yearRange[1]])}
-                      className="w-full"
-                    />
-                    <input
-                      type="range"
-                      min="2015"
-                      max="2024"
-                      value={yearRange[1]}
-                      onChange={(e) => setYearRange([yearRange[0], parseInt(e.target.value)])}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-
-                {/* Mileage Range */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Mileage: {mileageRange[0].toLocaleString()} - {mileageRange[1].toLocaleString()} km
-                  </label>
-                  <div className="space-y-2">
-                    <input
-                      type="range"
-                      min="0"
-                      max="100000"
-                      step="1000"
-                      value={mileageRange[0]}
-                      onChange={(e) => setMileageRange([parseInt(e.target.value), mileageRange[1]])}
-                      className="w-full"
-                    />
-                    <input
-                      type="range"
-                      min="0"
-                      max="100000"
-                      step="1000"
-                      value={mileageRange[1]}
-                      onChange={(e) => setMileageRange([mileageRange[0], parseInt(e.target.value)])}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
           {/* Main Content */}
           <div className="flex-1">
@@ -440,7 +469,7 @@ function Buy() {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <h2 className="text-xl font-semibold">
-                    {filteredAndSortedCars.length} Cars Found
+                    {carList.length} Cars Found
                   </h2>
                   <button
                     onClick={() => setShowFilters(!showFilters)}
@@ -498,7 +527,7 @@ function Buy() {
             </div>
 
             {/* Car Listings */}
-            {filteredAndSortedCars.length === 0 ? (
+            {carList.length === 0 ? (
               <div className="bg-white rounded-xl shadow-md p-12 text-center">
                 <div className="text-gray-400 mb-4">
                   <Search className="h-16 w-16 mx-auto" />
@@ -517,7 +546,7 @@ function Buy() {
                 ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6' 
                 : 'space-y-4'
               }>
-                {filteredAndSortedCars.map(car => (
+                {carList.map((car: any) => (
                   <CarCard 
                     key={car.id} 
                     car={car} 
@@ -535,22 +564,17 @@ function Buy() {
   );
 }
 
-interface CarCardProps {
-  car: Car;
-  viewMode: 'grid' | 'list';
-  isLiked: boolean;
-  onToggleLike: () => void;
-}
 
-const CarCard: React.FC<CarCardProps> = ({ car, viewMode, isLiked, onToggleLike }) => {
+
+const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
   if (viewMode === 'list') {
     return (
       <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-80 relative">
             <img 
-              src={car.image} 
-              alt={`${car.year} ${car.make} ${car.model}`}
+              src={car.coverImage?.url} 
+              alt={`${car.modelYear} ${car.make} ${car.model}`}
               className="w-full h-48 md:h-full object-cover"
             />
             <button
@@ -559,72 +583,48 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode, isLiked, onToggleLike 
             >
               <Heart className={`h-5 w-5 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
             </button>
-            {car.condition === 'New' && (
-              <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                New
-              </div>
-            )}
-            {car.discount && (
-              <div className="absolute bottom-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                {car.discount}% OFF
-              </div>
-            )}
+
           </div>
           
           <div className="flex-1 p-6">
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h3 className="text-xl font-bold text-gray-900">
-                  {car.year} {car.make} {car.model}
+                  {car.modelYear} {car.make} {car.model}
                 </h3>
-                <p className="text-gray-600">{car.condition} • {car.bodyType}</p>
+                <p className="text-gray-600">{car.bodyType}</p>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-[#3d3d40]">
-                  SAR {car.price.toLocaleString()}
-                </div>
-                {car.originalPrice && (
-                  <div className="text-sm text-gray-500 line-through">
-                    SAR {car.originalPrice.toLocaleString()}
+                {car.bookValue && (
+                  <div className="text-xl font-bold">
+                    SAR {car.bookValue}
                   </div>
                 )}
-                <div className="text-sm text-gray-600">Est. SAR 2,500/mo</div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm h-[60px]">
               <div className="flex items-center text-gray-600">
                 <Settings className="h-4 w-4 mr-2" />
-                <span>{car.mileage.toLocaleString()} km</span>
+                <span>{car.exactMileage || '0'} km</span>
               </div>
               <div className="flex items-center text-gray-600">
                 <Fuel className="h-4 w-4 mr-2" />
-                <span>{car.fuelType}</span>
+                <span>{car.fuelType || 'Petrol'}</span>
               </div>
               <div className="flex items-center text-gray-600">
                 <Calendar className="h-4 w-4 mr-2" />
-                <span>{car.transmission}</span>
+                <span>{car.transmission || 'Automatic'}</span>
               </div>
               <div className="flex items-center text-gray-600">
                 <MapPin className="h-4 w-4 mr-2" />
-                <span>{car.location}</span>
+                <span>{car.location || 'Saudi Arabia'}</span>
               </div>
-            </div>
-
-            <div className="flex flex-wrap gap-2 mb-4">
-              {car.features.slice(0, 3).map((feature, index) => (
-                <span key={index} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
-                  {feature}
-                </span>
-              ))}
-              {car.features.length > 3 && (
-                <span className="text-gray-500 text-xs">+{car.features.length - 3} more</span>
-              )}
             </div>
 
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-600">
-                Sold by: <span className="font-medium">{car.dealer}</span>
+                Sold by: <span className="font-medium">{'Owner'}</span>
               </div>
               <div className="flex gap-2">
                 <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition text-sm">
@@ -645,7 +645,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode, isLiked, onToggleLike 
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       <div className="relative">
         <img 
-          src={car.image} 
+          src={car.coverImage?.url} 
           alt={`${car.year} ${car.make} ${car.model}`}
           className="w-full h-48 object-cover"
         />
@@ -656,16 +656,6 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode, isLiked, onToggleLike 
           <Heart className={`h-5 w-5 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
         </button>
         
-        {car.condition === 'New' && (
-          <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-            New
-          </div>
-        )}
-        {car.discount && (
-          <div className="absolute bottom-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-            {car.discount}% OFF
-          </div>
-        )}
       </div>
       
       <div className="p-5">
@@ -674,7 +664,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode, isLiked, onToggleLike 
             <h3 className="font-bold text-lg text-gray-900">
               {car.year} {car.make} {car.model}
             </h3>
-            <p className="text-gray-600 text-sm">{car.condition} • {car.bodyType}</p>
+            <p className="text-gray-600 text-sm">{car.bodyType}</p>
           </div>
       
         </div>
@@ -682,19 +672,19 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode, isLiked, onToggleLike 
         <div className="grid grid-cols-2 gap-y-3 mb-4 text-sm">
           <div className="flex items-center text-gray-600">
             <Settings className="h-4 w-4 mr-2" />
-            <span>{car.mileage.toLocaleString()} km</span>
+            <span>{car.exactMileage || '0'} km</span>
           </div>
           <div className="flex items-center text-gray-600">
             <Fuel className="h-4 w-4 mr-2" />
-            <span>{car.fuelType}</span>
+            <span>{car.fuelType || 'Petrol'}</span>
           </div>
           <div className="flex items-center text-gray-600">
             <Calendar className="h-4 w-4 mr-2" />
-            <span>{car.transmission}</span>
+            <span>{car.transmission || 'Automatic'}</span>
           </div>
           <div className="flex items-center text-gray-600">
             <MapPin className="h-4 w-4 mr-2" />
-            <span>{car.location}</span>
+            <span>{car.location || 'Saudi Arabia'}</span>
           </div>
         </div>
 
@@ -718,14 +708,9 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode, isLiked, onToggleLike 
 
         <div className="flex justify-between items-center mb-4">
             <div className="font-bold text-md text-[#3d3d40]">
-              SAR {car.price.toLocaleString()}
+              SAR {car.bookValue}
             </div>
-            {/* {car.originalPrice && (
-              <div className="text-xs text-gray-500 line-through">
-                SAR {car.originalPrice.toLocaleString()}
-              </div>
-            )} */}
-            <div className="text-xs text-gray-600">Est. SAR {(car.price / 50).toFixed(0).toLocaleString()}/mo</div>
+            <div className="text-xs text-gray-600">Est. SAR {(car.bookValue / 50).toFixed(0).toLocaleString()}/mo</div>
           </div>
 
         <div className="flex gap-2">
@@ -733,7 +718,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode, isLiked, onToggleLike 
             View Details
           </a>
           <a href="#" className="flex-1 bg-[#f78f37] hover:bg-[#e67d26] text-white py-2 px-3 rounded-lg transition text-sm text-center">
-            Contact
+            Inquire
           </a>
         </div>
       </div>
