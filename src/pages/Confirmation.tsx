@@ -37,6 +37,10 @@ interface ApiBookingResponse {
     status: string;
 }
 
+const numberWithCommas = (x: string) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
 const Confirmation = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -172,31 +176,18 @@ const Confirmation = () => {
                                 <div className="flex justify-between items-center">
                                     <div>
                                         <p className="text-sm">{lang[languageContent].yourVehicleMarketPrice}</p>
-                                        <h3 className="text-3xl font-bold">SAR {carDetails.price || 'N/A'}</h3>
+                                        <h3 className="text-3xl font-bold">SAR {carDetails.price && carDetails.price != '0' ? numberWithCommas(carDetails.price) : 'N/A'}</h3>
                                     </div>
                                 </div>
                             </div>
                             
                             <div className="bg-white p-4 rounded-b-lg shadow-md">
-                                {carDetails.image ? (
-                                    <img 
-                                        src={carDetails.image} 
-                                        alt={`${carDetails.make} ${carDetails.model}`} 
-                                        className="w-full h-48 object-cover rounded-md mb-4"
-                                    />
-                                ) : (
-                                    <div className="w-full h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
-                                        <Car className="h-12 w-12 text-gray-400" />
-                                    </div>
-                                )}
-                                <div className="flex items-center mb-2">
-                                    <Car className="h-5 w-5 mr-2 text-gray-500" />
-                                    <span className="font-medium">
-                                        {carDetails.year ? `${carDetails.year} ` : ''}
+                            <div className="w-full h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center overflow-hidden text-center">
+                            {carDetails.year ? `${carDetails.year} ` : ''}
                                         {carDetails.make ? `${carDetails.make} ` : ''}
                                         {carDetails.model || 'Vehicle'}
-                                    </span>
-                                </div>
+                            </div>
+                             
                             </div>
                         </div>
 
@@ -267,9 +258,8 @@ const Confirmation = () => {
                                 </div>
                             </div>
 
-                            <div className="mt-6">
-                                <p className="text-sm text-gray-600 mb-2">{lang[languageContent].confirmationEmailSent}</p>
-                                <p className="text-sm text-gray-600">{lang[languageContent].rescheduleCancelAppointment}</p>
+                            <div className="mt-6 flex">
+                                <p className="text-sm text-gray-600 mb-2 mr-1">{lang[languageContent].confirmationEmailSent}</p>
                             </div>
 
                             <div className="mt-6 flex justify-center">
