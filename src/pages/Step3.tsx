@@ -334,7 +334,8 @@ const Step3 = () => {
                                                 bodyType: step2Data.bodyTypeName,
                                                 engineType: 'Petrol',
                                                 engineSize: step2Data.engineSizeName,
-                                                gearType: 'Manual',
+                                                gearType: 'Automatic',
+                                                specs: step2Data.gccSpecs,
                                             };
                                             const response = await axiosInstance.post('/api/1.0/core/evaluate/car', carData);
                                             
