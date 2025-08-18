@@ -132,6 +132,10 @@ const cars: Car[] = [
   }
 ];
 
+const numberWithCommas = (x: number) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
 const makes = ['All Makes', 'BMW', 'Mercedes-Benz', 'Audi', 'Lexus', 'Tesla', 'Toyota'];
 const bodyTypes = ['All Types', 'Sedan', 'SUV', 'Hatchback', 'Coupe', 'Convertible'];
 const fuelTypes = ['All Fuel Types', 'Gasoline', 'Hybrid', 'Electric', 'Diesel'];
@@ -590,7 +594,7 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h3 className="text-xl font-bold text-gray-900">
-                  {car.modelYear} {car.make} {car.model}
+                {car.make} {car.model} {car.modelYear} 
                 </h3>
                 <p className="text-gray-600">{car.bodyType}</p>
               </div>
@@ -604,27 +608,39 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm h-[60px]">
-              <div className="flex items-center text-gray-600">
-                <Settings className="h-4 w-4 mr-2" />
-                <span>{car.exactMileage || '0'} km</span>
+              <div className="flex items-start flex-col text-gray-600">
+                <p className="font-medium">Mileage &nbsp;</p>
+                <div className="flex items-center">
+                  <Settings className="h-4 w-4 mr-2 text-[#f78f37]" />
+                  <span className="font-bold">{car.exactMileage || '0'} km</span>
+                </div>
               </div>
-              <div className="flex items-center text-gray-600">
-                <Fuel className="h-4 w-4 mr-2" />
-                <span>{car.fuelType || 'Petrol'}</span>
+              <div className="flex items-start flex-col text-gray-600">
+                <p className="font-medium">Fuel Type &nbsp;</p>
+                <div className="flex items-center">
+                  <Fuel className="h-4 w-4 mr-2 text-[#f78f37]" />
+                  <span className="font-bold">{car.fuelType || 'Petrol'}</span>
+                </div>
               </div>
-              <div className="flex items-center text-gray-600">
-                <Calendar className="h-4 w-4 mr-2" />
-                <span>{car.transmission || 'Automatic'}</span>
+              <div className="flex items-start flex-col text-gray-600">
+                <p className="font-medium">Transmission &nbsp;</p>
+                <div className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-2 text-[#f78f37]" />
+                  <span className="font-bold">{car.transmission || 'Automatic'}</span>
+                </div>
               </div>
-              <div className="flex items-center text-gray-600">
-                <MapPin className="h-4 w-4 mr-2" />
-                <span>{car.location || 'Saudi Arabia'}</span>
+              <div className="flex flex-col items-start text-gray-600">
+                <p className="font-medium">Location &nbsp;</p>
+                <div className="flex items-center">
+                  <MapPin className="h-4 w-4 mr-2 text-[#f78f37]" />
+                  <span className="font-bold">{car.location || 'Saudi Arabia'}</span>
+                </div>
               </div>
             </div>
 
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-600">
-                Sold by: <span className="font-medium">{'Owner'}</span>
+                Sold by: <span className="font-medium">{car?.organizationId ? 'Company' : 'Private'}</span>
               </div>
               <div className="flex gap-2">
                 <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition text-sm">
@@ -646,8 +662,8 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
       <div className="relative">
         <img 
           src={car.coverImage?.url} 
-          alt={`${car.year} ${car.make} ${car.model}`}
-          className="w-full h-48 object-cover"
+          alt={`${car.modelYear} ${car.make} ${car.model}`}
+          className="w-full h-[280px] object-cover"
         />
         <button
           onClick={onToggleLike}
@@ -662,7 +678,7 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
         <div className="flex justify-between items-start mb-3">
           <div>
             <h3 className="font-bold text-lg text-gray-900">
-              {car.year} {car.make} {car.model}
+            {car.make} {car.model} {car.modelYear}
             </h3>
             <p className="text-gray-600 text-sm">{car.bodyType}</p>
           </div>
@@ -671,44 +687,37 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
         
         <div className="grid grid-cols-2 gap-y-3 mb-4 text-sm">
           <div className="flex items-center text-gray-600">
-            <Settings className="h-4 w-4 mr-2" />
-            <span>{car.exactMileage || '0'} km</span>
+            <p className="font-medium">Mileage &nbsp;</p>
+            <Settings className="h-4 w-4 mr-2 text-[#f78f37]" />
+            <span className="font-bold">{car.exactMileage || '0'} km</span>
           </div>
           <div className="flex items-center text-gray-600">
-            <Fuel className="h-4 w-4 mr-2" />
-            <span>{car.fuelType || 'Petrol'}</span>
+            <p className="font-medium">Fuel Type &nbsp;</p>
+            <Fuel className="h-4 w-4 mr-2 text-[#f78f37]" />
+            <span className="font-bold">{car.fuelType || 'Petrol'}</span>
           </div>
           <div className="flex items-center text-gray-600">
-            <Calendar className="h-4 w-4 mr-2" />
-            <span>{car.transmission || 'Automatic'}</span>
+            <p className="font-medium">Transmission &nbsp;</p>
+            <Calendar className="h-4 w-4 mr-2 text-[#f78f37]" />
+            <span className="font-bold">{car.transmission || 'Automatic'}</span>
           </div>
           <div className="flex items-center text-gray-600">
-            <MapPin className="h-4 w-4 mr-2" />
-            <span>{car.location || 'Saudi Arabia'}</span>
+            <p className="font-medium">Location &nbsp;</p>
+            <MapPin className="h-4 w-4 mr-2 text-[#f78f37]" />
+            <span className="font-bold">{car.location || 'Saudi Arabia'}</span>
           </div>
         </div>
 
-        {car.features && car.features.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {car.features.slice(0, 2).map((feature, index) => (
-              <span key={index} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
-                {feature}
-              </span>
-            ))}
-            {/* {car.features.length > 2 && (
-              <span className="text-gray-500 text-xs flex items-center">+{car.features.length - 2}</span>
-            )} */}
-          </div>
-        )}
+       
 
         <div className="text-xs text-gray-600 mb-4">
-          Sold by: <span className="font-medium">{car.dealer}</span>
+          Sold by: <span className="font-medium"><span className="font-medium">{car?.organizationId ? 'Company' : 'Private'}</span></span>
         </div>
         
 
         <div className="flex justify-between items-center mb-4">
             <div className="font-bold text-md text-[#3d3d40]">
-              SAR {car.bookValue}
+              SAR {numberWithCommas(car.bookValue)}
             </div>
             <div className="text-xs text-gray-600">Est. SAR {(car.bookValue / 50).toFixed(0).toLocaleString()}/mo</div>
           </div>
