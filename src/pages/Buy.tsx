@@ -687,22 +687,18 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
         
         <div className="grid grid-cols-2 gap-y-3 mb-4 text-sm">
           <div className="flex items-center text-gray-600">
-            <p className="font-medium">Mileage &nbsp;</p>
             <Settings className="h-4 w-4 mr-2 text-[#f78f37]" />
             <span className="font-bold">{car.exactMileage || '0'} km</span>
           </div>
           <div className="flex items-center text-gray-600">
-            <p className="font-medium">Fuel Type &nbsp;</p>
             <Fuel className="h-4 w-4 mr-2 text-[#f78f37]" />
             <span className="font-bold">{car.fuelType || 'Petrol'}</span>
           </div>
           <div className="flex items-center text-gray-600">
-            <p className="font-medium">Transmission &nbsp;</p>
             <Calendar className="h-4 w-4 mr-2 text-[#f78f37]" />
             <span className="font-bold">{car.transmission || 'Automatic'}</span>
           </div>
           <div className="flex items-center text-gray-600">
-            <p className="font-medium">Location &nbsp;</p>
             <MapPin className="h-4 w-4 mr-2 text-[#f78f37]" />
             <span className="font-bold">{car.location || 'Saudi Arabia'}</span>
           </div>
