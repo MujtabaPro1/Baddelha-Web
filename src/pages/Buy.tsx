@@ -23,114 +23,6 @@ interface Car {
   discount?: number;
 }
 
-const cars: Car[] = [
-  {
-    id: 1,
-    make: 'Hyundai',
-    model: 'Tucson',
-    year: 2023,
-    price: 185000,
-    originalPrice: 195000,
-    image: 'https://images.carswitch.com/674674hyundai/1834616745255781.jpeg?fit=crop&w=305&h=228&auto=format,compress&q=30',
-    mileage: 5000,
-    fuelType: 'Gasoline',
-    transmission: 'Automatic',
-    location: 'Riyadh',
-    condition: 'Certified Pre-Owned',
-    bodyType: 'Sedan',
-    engine: '2.0L Turbo',
-    features: ['Leather Seats', 'Sunroof', 'Navigation', 'Backup Camera'],
-    dealer: 'BMW Riyadh',
-    discount: 5
-  },
-  {
-    id: 2,
-    make: 'Mercedes-Benz',
-    model: 'C-Class',
-    year: 2024,
-    price: 220000,
-    image: 'https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    mileage: 0,
-    fuelType: 'Hybrid',
-    transmission: 'Automatic',
-    location: 'Jeddah',
-    condition: 'New',
-    bodyType: 'Sedan',
-    engine: '2.0L Hybrid',
-    features: ['Premium Sound', 'Heated Seats', 'Wireless Charging', 'Lane Assist'],
-    dealer: 'Mercedes Jeddah'
-  },
-  {
-    id: 3,
-    make: 'Audi',
-    model: 'Q5',
-    year: 2022,
-    price: 165000,
-    originalPrice: 175000,
-    image: 'https://images.carswitch.com/666243audi/1832076984183556.jpeg?fit=crop&w=611&h=456&auto=format,compress&sat=30&vib=10&q=46',
-    mileage: 15000,
-    fuelType: 'Gasoline',
-    transmission: 'Automatic',
-    location: 'Dammam',
-    condition: 'Used',
-    bodyType: 'SUV',
-    engine: '2.0L TFSI',
-    features: ['Quattro AWD', 'Virtual Cockpit', 'Panoramic Roof'],
-    dealer: 'Audi Dammam',
-    discount: 6
-  },
-  {
-    id: 4,
-    make: 'Lexus',
-    model: 'ES',
-    year: 2023,
-    price: 195000,
-    image: 'https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    mileage: 8000,
-    fuelType: 'Hybrid',
-    transmission: 'CVT',
-    location: 'Riyadh',
-    condition: 'Certified Pre-Owned',
-    bodyType: 'Sedan',
-    engine: '2.5L Hybrid',
-    features: ['Lexus Safety+', 'Mark Levinson Audio', 'Heated/Cooled Seats'],
-    dealer: 'Lexus Riyadh'
-  },
-  {
-    id: 5,
-    make: 'Changan',
-    model: 'CS75',
-    year: 2024,
-    price: 175000,
-    image: 'https://images.carswitch.com/659337changan/1833913078922593.jpeg?fit=crop&w=611&h=456&auto=format,compress&sat=30&vib=10&q=46',
-    mileage: 2000,
-    fuelType: 'Gasoline',
-    transmission: 'Single Speed',
-    location: 'Riyadh',
-    condition: 'Used',
-    bodyType: 'Sedan',
-    engine: 'Electric Motor',
-    features: ['Autopilot', 'Supercharging', 'Over-the-Air Updates', 'Glass Roof'],
-    dealer: 'Tesla Riyadh'
-  },
-  {
-    id: 6,
-    make: 'Toyota',
-    model: 'Camry',
-    year: 2023,
-    price: 125000,
-    image: 'https://images.carswitch.com/669440toyota/1832837275591336.jpg?fit=crop&w=611&h=456&auto=format,compress&sat=30&vib=10&q=46',
-    mileage: 12000,
-    fuelType: 'Gasoline',
-    transmission: 'Automatic',
-    location: 'Jeddah',
-    condition: 'Used',
-    bodyType: 'Sedan',
-    engine: '2.5L',
-    features: ['Toyota Safety Sense', 'Apple CarPlay', 'Wireless Charging'],
-    dealer: 'Toyota Jeddah'
-  }
-];
 
 const numberWithCommas = (x: number) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -643,7 +535,11 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
                 Sold by: <span className="font-medium">{car?.organizationId ? 'Company' : 'Private'}</span>
               </div>
               <div className="flex gap-2">
-                <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition text-sm">
+                <button
+                onClick={()=>{
+                  window.location.href = '/cars/' + car?.id;
+                }}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition text-sm">
                   View Details
                 </button>
                 <button className="bg-[#f78f37] hover:bg-[#e67d26] text-white px-4 py-2 rounded-lg transition text-sm">

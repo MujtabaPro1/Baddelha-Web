@@ -8,193 +8,123 @@ import {
   Calendar, 
   Fuel, 
   Settings, 
-  Users, 
-  Shield, 
-  CheckCircle, 
-  XCircle, 
-  AlertTriangle,
-  Phone,
-  Mail,
-  MessageCircle,
+  Shield,
   Star,
-  Clock,
   Car,
   Zap,
-  Award,
   FileText,
-  Camera,
-  Play
+  Check
 } from 'lucide-react';
+import axiosInstance from '../services/axiosInstance';
+import { inspectionData, numberWithCommas } from '../lib/utils';
+import CarBodySvgView from '../components/CarBodyView';
 
-interface CarData {
-  id: number;
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  originalPrice?: number;
-  images: string[];
-  mileage: number;
-  fuelType: string;
-  transmission: string;
-  location: string;
-  condition: 'New' | 'Used' | 'Certified Pre-Owned';
-  bodyType: string;
-  engine: string;
-  exteriorColor: string;
-  interiorColor: string;
-  drivetrain: string;
-  features: string[];
-  safetyFeatures: string[];
-  dealer: {
-    name: string;
-    rating: number;
-    reviews: number;
-    phone: string;
-    email: string;
-    address: string;
-  };
-  inspectionReport: {
-    overall: 'Excellent' | 'Good' | 'Fair' | 'Poor';
-    engine: 'Excellent' | 'Good' | 'Fair' | 'Poor';
-    transmission: 'Excellent' | 'Good' | 'Fair' | 'Poor';
-    brakes: 'Excellent' | 'Good' | 'Fair' | 'Poor';
-    tires: 'Excellent' | 'Good' | 'Fair' | 'Poor';
-    interior: 'Excellent' | 'Good' | 'Fair' | 'Poor';
-    exterior: 'Excellent' | 'Good' | 'Fair' | 'Poor';
-    lastInspected: string;
-    inspectorNotes: string;
-  };
-  specifications: {
-    [key: string]: string;
-  };
-  description: string;
-  vin: string;
-  warranty: string;
-  financing: {
-    monthlyPayment: number;
-    downPayment: number;
-    apr: number;
-    term: number;
-  };
-}
+
+
 
 const CarDetail: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'features' | 'inspection' | 'financing'>('overview');
   const [showContactForm, setShowContactForm] = useState(false);
+  const [car, setCar] = useState<any>(null);
+  const [images, setImages] = useState<string[]>([]);
+  const [inspectionDetails,setInspectionDetails] = useState(null);
+  const [inspectionSchema,setInspectionSchema] = useState(null);
 
-  // Sample car data - in real app this would come from API/props
-  const carData: CarData = {
-    id: 1,
-    make: 'BMW',
-    model: '3 Series',
-    year: 2023,
-    price: 185000,
-    originalPrice: 195000,
-    images: [
-      'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-    ],
-    mileage: 5000,
-    fuelType: 'Gasoline',
-    transmission: 'Automatic',
-    location: 'Riyadh, Saudi Arabia',
-    condition: 'Certified Pre-Owned',
-    bodyType: 'Sedan',
-    engine: '2.0L Turbo I4',
-    exteriorColor: 'Mineral Grey Metallic',
-    interiorColor: 'Black Leather',
-    drivetrain: 'Rear-Wheel Drive',
-    features: [
-      'Premium Sound System', 'Leather Seats', 'Sunroof', 'Navigation System',
-      'Backup Camera', 'Heated Seats', 'Bluetooth Connectivity', 'USB Ports',
-      'Keyless Entry', 'Push Button Start', 'Cruise Control', 'Power Windows',
-      'Air Conditioning', 'Alloy Wheels', 'LED Headlights', 'Fog Lights'
-    ],
-    safetyFeatures: [
-      'Anti-lock Braking System (ABS)', 'Electronic Stability Control',
-      'Traction Control', 'Multiple Airbags', 'Blind Spot Monitoring',
-      'Lane Departure Warning', 'Forward Collision Warning', 'Parking Sensors'
-    ],
-    dealer: {
-      name: 'BMW Riyadh',
-      rating: 4.8,
-      reviews: 342,
-      phone: '+966 11 123 4567',
-      email: 'sales@bmwriyadh.com',
-      address: 'King Fahd Road, Riyadh 12345'
-    },
-    inspectionReport: {
-      overall: 'Excellent',
-      engine: 'Excellent',
-      transmission: 'Good',
-      brakes: 'Excellent',
-      tires: 'Good',
-      interior: 'Excellent',
-      exterior: 'Good',
-      lastInspected: '2024-01-15',
-      inspectorNotes: 'Vehicle is in excellent condition with minimal wear. All systems functioning properly. Minor paint touch-ups on rear bumper.'
-    },
-    specifications: {
-      'Engine': '2.0L Turbo I4',
-      'Horsepower': '255 hp',
-      'Torque': '295 lb-ft',
-      'Transmission': '8-Speed Automatic',
-      'Drivetrain': 'Rear-Wheel Drive',
-      'Fuel Economy': '12.5L/100km',
-      'Top Speed': '250 km/h',
-      'Acceleration': '5.8 seconds (0-100 km/h)',
-      'Seating Capacity': '5 passengers',
-      'Cargo Space': '480 liters',
-      'Curb Weight': '1,540 kg',
-      'Length': '4,709 mm',
-      'Width': '1,827 mm',
-      'Height': '1,442 mm',
-      'Wheelbase': '2,851 mm'
-    },
-    description: 'This stunning BMW 3 Series represents the perfect blend of luxury, performance, and efficiency. With its turbocharged engine and refined interior, this vehicle offers an exceptional driving experience. The car has been meticulously maintained and comes with a comprehensive service history.',
-    vin: 'WBA8E9G50KNU12345',
-    warranty: '2 years / 100,000 km remaining',
-    financing: {
-      monthlyPayment: 2850,
-      downPayment: 37000,
-      apr: 3.9,
-      term: 60
-    }
-  };
+
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % carData.images.length);
+    const imagesArray = images.length > 0 ? images : [];
+    setCurrentImageIndex((prev) => (prev + 1) % imagesArray.length);
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + carData.images.length) % carData.images.length);
+    const imagesArray = images.length > 0 ? images : [];
+    setCurrentImageIndex((prev) => (prev - 1 + imagesArray.length) % imagesArray.length);
   };
 
-  const getConditionColor = (condition: string) => {
-    switch (condition) {
-      case 'Excellent': return 'text-green-600 bg-green-100';
-      case 'Good': return 'text-blue-600 bg-blue-100';
-      case 'Fair': return 'text-yellow-600 bg-yellow-100';
-      case 'Poor': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
 
-  const getConditionIcon = (condition: string) => {
-    switch (condition) {
-      case 'Excellent': return <CheckCircle className="h-4 w-4" />;
-      case 'Good': return <CheckCircle className="h-4 w-4" />;
-      case 'Fair': return <AlertTriangle className="h-4 w-4" />;
-      case 'Poor': return <XCircle className="h-4 w-4" />;
-      default: return <AlertTriangle className="h-4 w-4" />;
-    }
-  };
+
+   useEffect(()=>{
+      // Extract car ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id') || window.location.pathname.split('/').pop();
+      
+      if (id) {
+         carDetails(id);
+      }
+   },[]);
+
+   const carDetails = (id: any) => {
+          axiosInstance.get('/api/1.0/car/car-details/' + id).then((res)=>{
+              // Process car data
+              let _car = res?.data?.car;
+              let _inspectionData = inspectionData;
+              
+              // Process inspection data if available
+              if(_car['Inspection']){
+                  _car['InspectionData'] = _car?.Inspection?.[0]?.inspectionJson;
+                  _inspectionData.map((i)=>{
+                      i.fields.map((_i: any)=>{
+                          Object.keys(_car['InspectionData']).map((cKey)=>{
+                              if(cKey.replace(/_/g, " ") == _i.fieldName){
+                                  if(cKey == 'Warranty_Valid_Till'){
+                                      _i.value = _car['InspectionData'][cKey] ? new Date(_car['InspectionData'][cKey]).toDateString() : 'N/A';
+                                  }
+                                  else if(cKey == 'Service_Plan_Valid_Till'){
+                                      _i.value = _car['InspectionData'][cKey] ? new Date(_car['InspectionData'][cKey]).toDateString(): 'N/A';
+                                  }
+                                  else{
+                                      _i.value = _car['InspectionData'][cKey] ;
+                                  }
+                              }
+                          })
+                      })
+                      i['isHidden'] = i.name != 'General Information';
+  
+                      if(_car['InspectionData'].overview){
+                          i['overview'] = _car['InspectionData'].overview[i.name];
+                      }
+                  })
+              }
+              _car['InspectionData'] = _inspectionData;
+              
+              // Set car data
+              setCar(_car);
+
+              setInspectionDetails(res?.data?.car?.Inspection?.[0]);
+              setInspectionSchema(res?.data?.car?.Inspection?.[0]?.inspectionJson);
+              
+              // Process images
+              if (res?.data?.images && res.data.images.length > 0) {
+                  // Reorder images if needed
+                  const imageUrls = res.data.images.map((img: any) => img.url || img.imageUrl || img);
+                  setImages(imageUrls);
+              } else if (_car.images && _car.images.length > 0) {
+                  // Use car images if available
+                  setImages(_car.images);
+              }
+              
+              // Process car videos if available
+              if (res?.data?.carImages) {
+                  const videos = res.data.carImages.filter((i: any) => i.fileType && i.fileType.includes('video'));
+                  if (videos.length > 0) {
+                      // Handle videos if needed
+                      console.log('Videos available:', videos.length);
+                  }
+              }
+          }).catch((err)=>{
+              console.log('err',err);
+          })
+      };
+
+
+ 
+      if(!car || !inspectionDetails || !inspectionSchema){
+        return <div>Loading...</div>
+      }
+
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -204,9 +134,9 @@ const CarDetail: React.FC = () => {
           <div className="flex items-center space-x-2 text-sm text-gray-600">
             <a href="/buy" className="hover:text-[#f78f37] transition">Cars for Sale</a>
             <ChevronRight className="h-4 w-4" />
-            <a href="/buy" className="hover:text-[#f78f37] transition">{carData.make}</a>
+            <a href="/buy" className="hover:text-[#f78f37] transition">{car?.make}</a>
             <ChevronRight className="h-4 w-4" />
-            <span className="text-gray-900">{carData.model}</span>
+            <span className="text-gray-900">{car?.model}</span>
           </div>
         </nav>
 
@@ -217,8 +147,8 @@ const CarDetail: React.FC = () => {
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
               <div className="relative">
                 <img
-                  src={carData.images[currentImageIndex]}
-                  alt={`${carData.year} ${carData.make} ${carData.model}`}
+                  src={images.length > 0 ? images[currentImageIndex] : car?.images[currentImageIndex]}
+                  alt={car ? `${car.year || ''} ${car.make || ''} ${car.model || ''}` : `${car?.year} ${car?.make} ${car?.model}`}
                   className="w-full h-96 object-cover"
                 />
                 
@@ -238,7 +168,7 @@ const CarDetail: React.FC = () => {
 
                 {/* Image Counter */}
                 <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-                  {currentImageIndex + 1} / {carData.images.length}
+                  {currentImageIndex + 1} / {images.length > 0 ? images.length : 0}
                 </div>
 
                 {/* Action Buttons */}
@@ -258,7 +188,7 @@ const CarDetail: React.FC = () => {
               {/* Thumbnail Strip */}
               <div className="p-4">
                 <div className="flex space-x-2 overflow-x-auto">
-                  {carData.images.map((image, index) => (
+                  {(images.length > 0 ? images : []).map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
@@ -278,31 +208,24 @@ const CarDetail: React.FC = () => {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900">
-                    {carData.year} {carData.make} {carData.model}
+                    {car ? `${car.year || ''} ${car.make || ''} ${car.model || ''}` : `${car?.year} ${car?.make} ${car?.model}`}
                   </h1>
                   <div className="flex items-center space-x-4 mt-2 text-gray-600">
                     <span className="flex items-center">
                       <MapPin className="h-4 w-4 mr-1" />
-                      {carData.location}
+                      {car?.location || car?.location}
                     </span>
                     <span className="flex items-center">
                       <Calendar className="h-4 w-4 mr-1" />
-                      {carData.condition}
+                      {car?.condition || car?.condition}
                     </span>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-[#3d3d40]">
-                    SAR {carData.price.toLocaleString()}
+                    SAR {numberWithCommas(car?.bookValue)}
                   </div>
-                  {carData.originalPrice && (
-                    <div className="text-lg text-gray-500 line-through">
-                      SAR {carData.originalPrice.toLocaleString()}
-                    </div>
-                  )}
-                  <div className="text-sm text-gray-600 mt-1">
-                    Est. SAR {carData.financing.monthlyPayment}/mo
-                  </div>
+    
                 </div>
               </div>
 
@@ -310,22 +233,22 @@ const CarDetail: React.FC = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
                 <div className="text-center">
                   <Settings className="h-6 w-6 mx-auto text-gray-600 mb-1" />
-                  <div className="font-semibold">{carData.mileage.toLocaleString()} km</div>
+                  <div className="font-semibold">{car?.mileage ? car.mileage.toLocaleString() : '0'} km</div>
                   <div className="text-sm text-gray-600">Mileage</div>
                 </div>
                 <div className="text-center">
                   <Fuel className="h-6 w-6 mx-auto text-gray-600 mb-1" />
-                  <div className="font-semibold">{carData.fuelType}</div>
+                  <div className="font-semibold">{car?.fuelType || 'Petrol'}</div>
                   <div className="text-sm text-gray-600">Fuel Type</div>
                 </div>
                 <div className="text-center">
                   <Zap className="h-6 w-6 mx-auto text-gray-600 mb-1" />
-                  <div className="font-semibold">{carData.transmission}</div>
+                  <div className="font-semibold">{car?.transmission || 'Automatic'}</div>
                   <div className="text-sm text-gray-600">Transmission</div>
                 </div>
                 <div className="text-center">
                   <Car className="h-6 w-6 mx-auto text-gray-600 mb-1" />
-                  <div className="font-semibold">{carData.bodyType}</div>
+                  <div className="font-semibold">{car?.bodyType}</div>
                   <div className="text-sm text-gray-600">Body Type</div>
                 </div>
               </div>
@@ -339,7 +262,6 @@ const CarDetail: React.FC = () => {
                     { id: 'overview', label: 'Overview', icon: FileText },
                     { id: 'features', label: 'Features', icon: Star },
                     { id: 'inspection', label: 'Inspection', icon: Shield },
-                    { id: 'financing', label: 'Financing', icon: Award }
                   ].map(({ id, label, icon: Icon }) => (
                     <button
                       key={id}
@@ -363,19 +285,12 @@ const CarDetail: React.FC = () => {
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-lg font-semibold mb-3">Description</h3>
-                      <p className="text-gray-700 leading-relaxed">{carData.description}</p>
+                      <p className="text-gray-700 leading-relaxed">{car?.description || ""}</p>
                     </div>
 
                     <div>
                       <h3 className="text-lg font-semibold mb-3">Specifications</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {Object.entries(carData.specifications).map(([key, value]) => (
-                          <div key={key} className="flex justify-between py-2 border-b border-gray-100">
-                            <span className="font-medium text-gray-600">{key}</span>
-                            <span className="text-gray-900">{value}</span>
-                          </div>
-                        ))}
-                      </div>
+
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -384,25 +299,25 @@ const CarDetail: React.FC = () => {
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between">
                             <span>VIN:</span>
-                            <span className="font-mono">{carData.vin}</span>
+                            <span className="font-mono">{car?.vin}</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Exterior Color:</span>
-                            <span>{carData.exteriorColor}</span>
+                            <span>{car?.exteriorColor}</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Interior Color:</span>
-                            <span>{carData.interiorColor}</span>
+                            <span>{car?.interiorColor}</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Drivetrain:</span>
-                            <span>{carData.drivetrain}</span>
+                            <span>{car?.drivetrain}</span>
                           </div>
                         </div>
                       </div>
                       <div>
                         <h4 className="font-semibold mb-2">Warranty</h4>
-                        <p className="text-sm text-gray-700">{carData.warranty}</p>
+                        <p className="text-sm text-gray-700">{car?.warranty}</p>
                       </div>
                     </div>
                   </div>
@@ -413,25 +328,43 @@ const CarDetail: React.FC = () => {
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-lg font-semibold mb-4">Comfort & Convenience</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {carData.features.map((feature, index) => (
-                          <div key={index} className="flex items-center">
-                            <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                            <span className="text-gray-700">{feature}</span>
-                          </div>
-                        ))}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {car?.features?.comfort && Array.isArray(car.features.comfort) ? (
+                          car.features.comfort.map((feature: string, index: number) => (
+                            <div key={index} className="flex items-center">
+                              <Check className="h-4 w-4 text-green-600 mr-2" />
+                              <span className="text-sm">{feature}</span>
+                            </div>
+                          ))
+                        ) : <></>}
                       </div>
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-semibold mb-4">Safety Features</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {carData.safetyFeatures.map((feature, index) => (
-                          <div key={index} className="flex items-center">
-                            <Shield className="h-4 w-4 text-blue-500 mr-2" />
-                            <span className="text-gray-700">{feature}</span>
-                          </div>
-                        ))}
+                      <h3 className="text-lg font-semibold mb-4">Safety & Security</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {car?.features?.safety && Array.isArray(car.features.safety) ? (
+                          car.features.safety.map((feature: string, index: number) => (
+                            <div key={index} className="flex items-center">
+                              <Check className="h-4 w-4 text-green-600 mr-2" />
+                              <span className="text-sm">{feature}</span>
+                            </div>
+                          ))
+                        ) : <></>}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Technology</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {car?.features?.technology && Array.isArray(car.features.technology) ? (
+                          car.features.technology.map((feature: string, index: number) => (
+                            <div key={index} className="flex items-center">
+                              <Check className="h-4 w-4 text-green-600 mr-2" />
+                              <span className="text-sm">{feature}</span>
+                            </div>
+                          ))
+                        ) : <></>}
                       </div>
                     </div>
                   </div>
@@ -439,79 +372,89 @@ const CarDetail: React.FC = () => {
 
                 {/* Inspection Tab */}
                 {activeTab === 'inspection' && (
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">Inspection Report</h3>
-                      <div className="text-sm text-gray-600">
-                        Last inspected: {new Date(carData.inspectionReport.lastInspected).toLocaleDateString()}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {Object.entries(carData.inspectionReport).map(([key, value]) => {
-                        if (key === 'lastInspected' || key === 'inspectorNotes') return null;
-                        return (
-                          <div key={key} className="bg-gray-50 rounded-lg p-4">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="font-medium capitalize">{key}</span>
-                              {getConditionIcon(value)}
-                            </div>
-                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getConditionColor(value)}`}>
-                              {value}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <h4 className="font-semibold mb-2 flex items-center">
-                        <FileText className="h-4 w-4 mr-2" />
-                        Inspector Notes
-                      </h4>
-                      <p className="text-gray-700 text-sm">{carData.inspectionReport.inspectorNotes}</p>
-                    </div>
-                  </div>
+                   <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+                   <div className="px-4 py-5 sm:px-6">
+                     <h3 className="text-lg leading-6 font-medium text-gray-900">Inspection Report</h3>
+                     <p className="mt-1 max-w-2xl text-sm text-gray-500">Detailed inspection information.</p>
+                   </div>
+                   
+                   {!inspectionDetails?.inspectionJson ? (
+                     <div className="px-4 py-5 sm:px-6 text-center">
+                       <p className="text-gray-500">No inspection report available for this car.</p>
+                     </div>
+                   ) : !inspectionSchema ? (
+                     <div className="px-4 py-5 sm:px-6 flex justify-center">
+                       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-900"></div>
+                     </div>
+                   ) : (
+                     <div className="border-t border-gray-200">
+                       {/* Inspection Progress Overview */}
+                       <div className="px-4 py-5 sm:px-6">
+                         <h4 className="text-md font-medium text-gray-900 mb-4">Inspection Overview</h4>
+                     
+                         <div className={"grid grid-cols-1 gap-4 bg-white p-2"}>
+                     <div >
+                       <div className={"w-full p-4 rounded-md bg-[#F6F9FC] font-bold  mt-2 mb-2 text-[#000] flex justify-between items-center"}>
+                         <h1>Information</h1>
+                       </div>
+         
+                       {inspectionDetails ?
+                       Object.keys(inspectionDetails?.inspectionJson).map((i, index) => {
+         
+         
+                         if(i == 'overview'){
+                           return <></>;
+                         }
+         
+                         return (
+                             <div key={i + index} >
+                               <div className={'w-full'}>
+                                 <div className={"m-2  border-b border-b-[#F7F7F7] flex items-center justify-between"} key={i + index}>
+                                   <p className={"font-bold text-[#000] mt-1 mb-1"}>{i.replace(/_/g, " ")}</p>
+                                   <p className={"mt-1 mb-1"}>{typeof inspectionDetails?.inspectionJson[i] == 'object' && inspectionDetails?.inspectionJson[i]?.length ? inspectionDetails?.inspectionJson[i][0].value : typeof inspectionDetails?.inspectionJson[i] == 'object' && !inspectionDetails?.inspectionJson[i]?.length ?  inspectionDetails?.inspectionJson[i]?.value : inspectionDetails?.inspectionJson[i] == "" ? "N/A" : inspectionDetails?.inspectionJson[i]}</p>
+                                 </div>
+                               </div>
+                             </div>
+                           );
+                         }) : <>
+                         <p className="text-center mt-10 text-gray-500 text-lg">Loading Inspection Preview Soon .. </p>
+                         </>}
+                     </div>
+         
+                     <div >
+                       <div className={"w-full p-4 rounded-md bg-[#F6F9FC] font-bold  mt-2 mb-2 text-[#000] "}>Images</div>
+                       <div className="flex flex-wrap">
+                         {images?.length && images?.map((img: any, index: number) => {
+                           return (
+                             <div key={img.caption + index}>
+                               <div className={"flex flex-wrap cursor-pointer items-start justify-start"}>
+                                 <div
+                                   onClick={() => {
+                                    
+                                   }}
+                                   className={"w-[120px] text-center ml-2 mr-2"}
+                                 >
+                                   <img className={"w-[120px] h-[100px] m-2 rounded-lg"} src={img} />
+                                   <small>{img.caption}</small>
+                                 </div>
+                               </div>
+                             </div>
+                           )
+                         })}
+                       </div>
+                       <p className="w-full p-4 rounded-md bg-[#F6F9FC] font-bold  mt-2 mb-2 text-[#000] text-lg">Car Body Condition</p>
+                       {inspectionDetails?.carBodyConditionJson && <CarBodySvgView data={inspectionDetails?.carBodyConditionJson}/>}
+                     </div>
+                   </div>
+                   </div>
+                       
+                      
+                     </div>
+                   )}
+                 </div>
                 )}
 
-                {/* Financing Tab */}
-                {activeTab === 'financing' && (
-                  <div className="space-y-6">
-                    <div className="bg-gradient-to-r from-[#3d3d40] to-gray-700 text-white rounded-lg p-6">
-                      <h3 className="text-xl font-semibold mb-4">Financing Options</h3>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div>
-                          <div className="text-2xl font-bold">SAR {carData.financing.monthlyPayment}</div>
-                          <div className="text-sm opacity-90">Monthly Payment</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold">SAR {carData.financing.downPayment.toLocaleString()}</div>
-                          <div className="text-sm opacity-90">Down Payment</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold">{carData.financing.apr}%</div>
-                          <div className="text-sm opacity-90">APR</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold">{carData.financing.term}</div>
-                          <div className="text-sm opacity-90">Months</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                      <div className="flex items-start">
-                        <AlertTriangle className="h-5 w-5 text-yellow-600 mr-2 mt-0.5" />
-                        <div>
-                          <h4 className="font-semibold text-yellow-800">Pre-approval Available</h4>
-                          <p className="text-sm text-yellow-700 mt-1">
-                            Get pre-approved for financing in minutes. Subject to credit approval.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
+            
               </div>
             </div>
           </div>
@@ -522,30 +465,18 @@ const CarDetail: React.FC = () => {
             <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
               <div className="text-center mb-6">
                 <div className="text-3xl font-bold text-[#3d3d40] mb-2">
-                  SAR {carData.price.toLocaleString()}
+                  SAR {numberWithCommas(car?.bookValue)}
                 </div>
-                {carData.originalPrice && (
-                  <div className="text-lg text-gray-500 line-through mb-2">
-                    SAR {carData.originalPrice.toLocaleString()}
-                  </div>
-                )}
-                <div className="text-sm text-gray-600">
-                  Est. SAR {carData.financing.monthlyPayment}/mo
-                </div>
+      
+        
               </div>
 
               <div className="space-y-3">
                 <button 
-                  onClick={() => window.location.href = `/purchase/${carData.id}`}
+                  onClick={() => window.location.href = `/purchase/${car.id}`}
                   className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
                 >
                   Purchase Now
-                </button>
-                <button 
-                  onClick={() => window.location.href = '/step3'}
-                  className="w-full bg-[#3d3d40] hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition"
-                >
-                  Book Inspection
                 </button>
                 <button 
                   onClick={() => setShowContactForm(!showContactForm)}
@@ -555,74 +486,10 @@ const CarDetail: React.FC = () => {
                 </button>
               </div>
 
-              {showContactForm && (
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <div className="space-y-3">
-                    <a 
-                      href={`tel:${carData.dealer.phone}`}
-                      className="flex items-center justify-center w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition"
-                    >
-                      <Phone className="h-4 w-4 mr-2" />
-                      Call Now
-                    </a>
-                    <a 
-                      href={`mailto:${carData.dealer.email}`}
-                      className="flex items-center justify-center w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition"
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Email
-                    </a>
-                    <button className="flex items-center justify-center w-full bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition">
-                      <MessageCircle className="h-4 w-4 mr-2" />
-                      WhatsApp
-                    </button>
-                  </div>
-                </div>
-              )}
+         
             </div>
 
-            {/* Dealer Information */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-4">Dealer Information</h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-lg">{carData.dealer.name}</h4>
-                  <div className="flex items-center mt-1">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className={`h-4 w-4 ${i < Math.floor(carData.dealer.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
-                        />
-                      ))}
-                    </div>
-                    <span className="ml-2 text-sm text-gray-600">
-                      {carData.dealer.rating} ({carData.dealer.reviews} reviews)
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center">
-                    <MapPin className="h-4 w-4 text-gray-400 mr-2" />
-                    <span>{carData.dealer.address}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Phone className="h-4 w-4 text-gray-400 mr-2" />
-                    <span>{carData.dealer.phone}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Mail className="h-4 w-4 text-gray-400 mr-2" />
-                    <span>{carData.dealer.email}</span>
-                  </div>
-                </div>
-
-                <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg transition text-sm">
-                  View All Dealer Cars
-                </button>
-              </div>
-            </div>
+           
 
             {/* Quick Facts */}
             <div className="bg-white rounded-xl shadow-md p-6">
@@ -630,23 +497,23 @@ const CarDetail: React.FC = () => {
               <div className="space-y-3 text-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Condition</span>
-                  <span className="font-medium">{carData.condition}</span>
+                  <span className="font-medium">{car?.condition}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Body Type</span>
-                  <span className="font-medium">{carData.bodyType}</span>
+                  <span className="font-medium">{car?.bodyType}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Engine</span>
-                  <span className="font-medium">{carData.engine}</span>
+                  <span className="font-medium">{car?.engine}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Drivetrain</span>
-                  <span className="font-medium">{carData.drivetrain}</span>
+                  <span className="font-medium">{car?.drivetrain}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Fuel Type</span>
-                  <span className="font-medium">{carData.fuelType}</span>
+                  <span className="font-medium">{car?.fuelType}</span>
                 </div>
               </div>
             </div>
