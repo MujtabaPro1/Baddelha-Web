@@ -260,7 +260,6 @@ const CarDetail: React.FC = () => {
                 <nav className="flex space-x-8 px-6">
                   {[
                     { id: 'overview', label: 'Overview', icon: FileText },
-                    { id: 'features', label: 'Features', icon: Star },
                     { id: 'inspection', label: 'Inspection', icon: Shield },
                   ].map(({ id, label, icon: Icon }) => (
                     <button
@@ -283,92 +282,33 @@ const CarDetail: React.FC = () => {
                 {/* Overview Tab */}
                 {activeTab === 'overview' && (
                   <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3">Description</h3>
-                      <p className="text-gray-700 leading-relaxed">{car?.description || ""}</p>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3">Specifications</h3>
-
-                    </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <h4 className="font-semibold mb-2">Vehicle Details</h4>
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between">
                             <span>VIN:</span>
-                            <span className="font-mono">{car?.vin}</span>
+                            <span className="font-mono">100 100 100 100</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Exterior Color:</span>
-                            <span>{car?.exteriorColor}</span>
+                            <span>Black</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Interior Color:</span>
-                            <span>{car?.interiorColor}</span>
+                            <span>Black</span>
                           </div>
                           <div className="flex justify-between">
-                            <span>Drivetrain:</span>
-                            <span>{car?.drivetrain}</span>
+                            <span>Drive Type:</span>
+                            <span>4WD</span>
                           </div>
                         </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold mb-2">Warranty</h4>
-                        <p className="text-sm text-gray-700">{car?.warranty}</p>
-                      </div>
                     </div>
                   </div>
                 )}
 
-                {/* Features Tab */}
-                {activeTab === 'features' && (
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Comfort & Convenience</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {car?.features?.comfort && Array.isArray(car.features.comfort) ? (
-                          car.features.comfort.map((feature: string, index: number) => (
-                            <div key={index} className="flex items-center">
-                              <Check className="h-4 w-4 text-green-600 mr-2" />
-                              <span className="text-sm">{feature}</span>
-                            </div>
-                          ))
-                        ) : <></>}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Safety & Security</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {car?.features?.safety && Array.isArray(car.features.safety) ? (
-                          car.features.safety.map((feature: string, index: number) => (
-                            <div key={index} className="flex items-center">
-                              <Check className="h-4 w-4 text-green-600 mr-2" />
-                              <span className="text-sm">{feature}</span>
-                            </div>
-                          ))
-                        ) : <></>}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Technology</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {car?.features?.technology && Array.isArray(car.features.technology) ? (
-                          car.features.technology.map((feature: string, index: number) => (
-                            <div key={index} className="flex items-center">
-                              <Check className="h-4 w-4 text-green-600 mr-2" />
-                              <span className="text-sm">{feature}</span>
-                            </div>
-                          ))
-                        ) : <></>}
-                      </div>
-                    </div>
-                  </div>
-                )}
+          
 
                 {/* Inspection Tab */}
                 {activeTab === 'inspection' && (
@@ -390,9 +330,8 @@ const CarDetail: React.FC = () => {
                      <div className="border-t border-gray-200">
                        {/* Inspection Progress Overview */}
                        <div className="px-4 py-5 sm:px-6">
-                         <h4 className="text-md font-medium text-gray-900 mb-4">Inspection Overview</h4>
-                     
-                         <div className={"grid grid-cols-1 gap-4 bg-white p-2"}>
+                         
+                         <div className={"grid grid-cols-1 gap-2 bg-white"}>
                      <div >
                        <div className={"w-full p-4 rounded-md bg-[#F6F9FC] font-bold  mt-2 mb-2 text-[#000] flex justify-between items-center"}>
                          <h1>Information</h1>
@@ -497,7 +436,7 @@ const CarDetail: React.FC = () => {
               <div className="space-y-3 text-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Condition</span>
-                  <span className="font-medium">{car?.condition}</span>
+                  <span className="font-medium">Good</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Body Type</span>
@@ -508,12 +447,12 @@ const CarDetail: React.FC = () => {
                   <span className="font-medium">{car?.engine}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Drivetrain</span>
-                  <span className="font-medium">{car?.drivetrain}</span>
+                  <span className="text-gray-600">Drive Type</span>
+                  <span className="font-medium">4WD</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Fuel Type</span>
-                  <span className="font-medium">{car?.fuelType}</span>
+                  <span className="font-medium">Petrol</span>
                 </div>
               </div>
             </div>
