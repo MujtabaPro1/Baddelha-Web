@@ -1323,8 +1323,8 @@ const CarDetail: React.FC = () => {
                               </div>
                             </div>
                             <div className="p-4">
-                              <h4 className="font-bold text-gray-800 mb-1 text-truncate">2020 BMW 3 Series</h4>
-                              <p className="text-sm text-gray-500 mb-3 text-truncate">330i M Sport</p>
+                              <h4 className="font-bold text-gray-800 mb-1 truncate text-ellipsis">2020 BMW 3 Series</h4>
+                              <p className="text-sm text-gray-500 mb-3 truncate text-ellipsis">330i M Sport</p>
                               <div className="flex justify-between items-center mb-3">
                                 <span className="font-bold text-[#f78f37]">SAR 119,500</span>
                                 <span className="text-xs text-gray-500">45,600 km</span>
@@ -1357,8 +1357,8 @@ const CarDetail: React.FC = () => {
                                 className="w-full h-48 object-cover" />
                             </div>
                             <div className="p-4">
-                              <h4 className="font-bold text-gray-800 mb-1 text-truncate">2021 Audi A4</h4>
-                              <p className="text-sm text-gray-500 mb-3 text-truncate">40 TFSI S Line</p>
+                              <h4 className="font-bold text-gray-800 mb-1 truncate text-ellipsis">2021 Audi A4</h4>
+                              <p className="text-sm text-gray-500 mb-3 truncate text-ellipsis">40 TFSI S Line</p>
                               <div className="flex justify-between items-center mb-3">
                                 <span className="font-bold text-[#f78f37]">SAR 124,750</span>
                                 <span className="text-xs text-gray-500">32,100 km</span>
