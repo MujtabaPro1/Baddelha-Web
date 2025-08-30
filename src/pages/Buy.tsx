@@ -315,7 +315,7 @@ function Buy() {
   const getCars = () => {
     axiosInstance.get('/api/1.0/car/get-all?page=1&limit=12')
     .then(response => {
-      let cars: any [] = response.data?.data.filter((car: any) => car.carStatus != 'push_to_auction');
+      let cars: any [] = response.data?.data.filter((car: any) => car.carStatus != 'push_to_auction' || car?.carStatus != 'pending_inspection');
       setCarList(cars);
     })
     .catch(error => {
