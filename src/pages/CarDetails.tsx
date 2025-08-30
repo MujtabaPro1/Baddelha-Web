@@ -1286,8 +1286,8 @@ const CarDetail: React.FC = () => {
                               </div>
                             </div>
                             <div className="p-4">
-                              <h4 className="font-bold text-gray-800 mb-1 text-truncate">2021 Mercedes-Benz C-Class</h4>
-                              <p className="text-sm text-gray-500 mb-3 text-truncate">C 200 AMG Line</p>
+                              <h4 className="font-bold text-gray-800 mb-1 truncate text-ellipsis">2021 Mercedes-Benz C-Class</h4>
+                              <p className="text-sm text-gray-500 mb-3 truncate text-ellipsis">C 200 AMG Line</p>
                               <div className="flex justify-between items-center mb-3">
                                 <span className="font-bold text-[#f78f37]">SAR 129,900</span>
                                 <span className="text-xs text-gray-500">38,200 km</span>
