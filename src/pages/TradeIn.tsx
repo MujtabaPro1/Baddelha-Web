@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ArrowRight, 
   ArrowLeft,
@@ -22,6 +22,7 @@ import {
   Settings,
   Eye
 } from 'lucide-react';
+import axiosInstance from '../services/axiosInstance';
 
 interface DesiredVehicle {
   make: string;
@@ -62,9 +63,21 @@ interface DealerCar {
   dealershipId: string;
 }
 
+interface CarMake {
+  id: string;
+  name: string;
+}
+
+interface CarModel {
+  id: string;
+  name: string;
+}
+
 interface TradeInVehicle {
   make: string;
+  makeId: string;
   model: string;
+  modelId: string;
   year: string;
   mileage: string;
   condition: string;
@@ -103,14 +116,72 @@ const TradeIn: React.FC = () => {
 
   const [selectedDealership, setSelectedDealership] = useState<string>('');
   const [selectedCar, setSelectedCar] = useState<DealerCar | null>(null);
+  const [makes, setMakes] = useState<CarMake[]>([]);
+  const [models, setModels] = useState<CarModel[]>([]);
+  const [loading, setLoading] = useState({
+    makes: false,
+    models: false
+  });
+  const [error, setError] = useState({
+    makes: '',
+    models: ''
+  });
+  
   const [tradeInVehicle, setTradeInVehicle] = useState<TradeInVehicle>({
     make: '',
+    makeId: '',
     model: '',
+    modelId: '',
     year: '',
     mileage: '',
     condition: '',
     estimatedValue: 0
   });
+
+  // Fetch car makes on component mount
+  useEffect(() => {
+    const fetchCarMakes = async () => {
+      setLoading(prev => ({ ...prev, makes: true }));
+      setError(prev => ({ ...prev, makes: '' }));
+      
+      try {
+        const response = await axiosInstance.get('/api/1.0/car-options/car-make');
+        setMakes(response?.data?.data);
+      } catch (err) {
+        console.error('Error fetching car makes:', err);
+        setError(prev => ({ ...prev, makes: 'Failed to load car makes' }));
+      } finally {
+        setLoading(prev => ({ ...prev, makes: false }));
+      }
+    };
+    
+    fetchCarMakes();
+  }, []);
+  
+  // Fetch car models when make changes
+  useEffect(() => {
+    if (!tradeInVehicle.makeId) {
+      setModels([]);
+      return;
+    }
+    
+    const fetchCarModels = async () => {
+      setLoading(prev => ({ ...prev, models: true }));
+      setError(prev => ({ ...prev, models: '' }));
+      
+      try {
+        const response = await axiosInstance.get(`/api/1.0/car-options/car-model/${tradeInVehicle.makeId}`);
+        setModels(response?.data);
+      } catch (err) {
+        console.error('Error fetching car models:', err);
+        setError(prev => ({ ...prev, models: 'Failed to load car models' }));
+      } finally {
+        setLoading(prev => ({ ...prev, models: false }));
+      }
+    };
+    
+    fetchCarModels();
+  }, [tradeInVehicle.makeId]);
 
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
     firstName: '',
@@ -595,53 +666,96 @@ const TradeIn: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Make *</label>
-                    <select
-                      required
-                      value={tradeInVehicle.make}
-                      onChange={(e) => setTradeInVehicle({...tradeInVehicle, make: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
-                    >
-                      <option value="">Select Make</option>
-                      <option value="Toyota">Toyota</option>
-                      <option value="Honda">Honda</option>
-                      <option value="BMW">BMW</option>
-                      <option value="Mercedes">Mercedes</option>
-                      <option value="Audi">Audi</option>
-                      <option value="Lexus">Lexus</option>
-                      <option value="Nissan">Nissan</option>
-                      <option value="Hyundai">Hyundai</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        required
+                        value={tradeInVehicle.makeId}
+                        onChange={(e) => {
+                          setTradeInVehicle({
+                            ...tradeInVehicle, 
+                            makeId: e.target.value,
+                            make: e.target.options[e.target.selectedIndex].text,
+                            model: '',
+                            modelId: ''
+                          });
+                        }}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent appearance-none"
+                        disabled={loading.makes}
+                      >
+                        <option value="">Select Make</option>
+                        {makes?.map(makeItem => (
+                          <option key={makeItem.id} value={makeItem.id}>{makeItem.name}</option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        {loading.makes ? (
+                          <span className="animate-spin h-4 w-4 border-2 border-gray-500 rounded-full border-t-transparent"></span>
+                        ) : (
+                          <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                    {error.makes && (
+                      <p className="mt-1 text-sm text-red-600">{error.makes}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Model *</label>
-                    <select
-                      required
-                      value={tradeInVehicle.model}
-                      onChange={(e) => setTradeInVehicle({...tradeInVehicle, model: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
-                    >
-                      <option value="">Select Model</option>
-                      <option value="Camry">Camry</option>
-                      <option value="Corolla">Corolla</option>
-                      <option value="Accord">Accord</option>
-                      <option value="Civic">Civic</option>
-                      <option value="3 Series">3 Series</option>
-                      <option value="C-Class">C-Class</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        required
+                        value={tradeInVehicle.modelId}
+                        onChange={(e) => {
+                          setTradeInVehicle({
+                            ...tradeInVehicle, 
+                            modelId: e.target.value,
+                            model: e.target.options[e.target.selectedIndex].text
+                          });
+                        }}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent appearance-none"
+                        disabled={loading.models || !tradeInVehicle.makeId}
+                      >
+                        <option value="">Select Model</option>
+                        {models.map(modelItem => (
+                          <option key={modelItem.id} value={modelItem.id}>{modelItem.name}</option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        {loading.models ? (
+                          <span className="animate-spin h-4 w-4 border-2 border-gray-500 rounded-full border-t-transparent"></span>
+                        ) : (
+                          <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                    {error.models && (
+                      <p className="mt-1 text-sm text-red-600">{error.models}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Year *</label>
-                    <select
-                      required
-                      value={tradeInVehicle.year}
-                      onChange={(e) => setTradeInVehicle({...tradeInVehicle, year: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
-                    >
-                      <option value="">Select Year</option>
-                      {Array.from({ length: 20 }, (_, i) => (
-                        <option key={i} value={2024 - i}>{2024 - i}</option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        required
+                        value={tradeInVehicle.year}
+                        onChange={(e) => setTradeInVehicle({...tradeInVehicle, year: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent appearance-none"
+                      >
+                        <option value="">Select Year</option>
+                        {Array.from({ length: 20 }, (_, i) => (
+                          <option key={i} value={2024 - i}>{2024 - i}</option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
@@ -1048,18 +1162,17 @@ const TradeIn: React.FC = () => {
                   <select
                     required
                     value={desiredVehicle.make}
-                    onChange={(e) => setDesiredVehicle({...desiredVehicle, make: e.target.value})}
+                    onChange={(e) => {
+
+                      setDesiredVehicle({...desiredVehicle, make: e.target.value});
+                      setTradeInVehicle({...tradeInVehicle, makeId: e.target.value});
+                    }}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
                     <option value="">Select Make</option>
-                    <option value="BMW">BMW</option>
-                    <option value="Mercedes">Mercedes</option>
-                    <option value="Audi">Audi</option>
-                    <option value="Lexus">Lexus</option>
-                    <option value="Toyota">Toyota</option>
-                    <option value="Honda">Honda</option>
-                    <option value="Nissan">Nissan</option>
-                    <option value="Hyundai">Hyundai</option>
+                    {makes?.map(make => (
+                      <option key={make.id} value={make.id}>{make.name}</option>
+                    ))}
                   </select>
                 </div>
                 
@@ -1072,14 +1185,10 @@ const TradeIn: React.FC = () => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
                     <option value="">Select Model</option>
-                    <option value="X5">X5</option>
-                    <option value="3 Series">3 Series</option>
-                    <option value="C-Class">C-Class</option>
-                    <option value="Q7">Q7</option>
-                    <option value="ES">ES</option>
-                    <option value="Land Cruiser">Land Cruiser</option>
-                    <option value="Camry">Camry</option>
-                    <option value="Accord">Accord</option>
+                    {models?.map(model => (
+                      <option key={model.id} value={model.id}>{model.name}</option>
+                    ))}
+      
                   </select>
                 </div>
                 
@@ -1092,7 +1201,7 @@ const TradeIn: React.FC = () => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
                     <option value="">Select Year</option>
-                    {Array.from({ length: 5 }, (_, i) => (
+                    {Array.from({ length: 50 }, (_, i) => (
                       <option key={i} value={2024 - i}>{2024 - i}</option>
                     ))}
                   </select>

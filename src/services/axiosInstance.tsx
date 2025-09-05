@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const BASE_URL = 'https://stg-service.bddelha.com';
 
+
+
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 100000, // 10 seconds
