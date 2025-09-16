@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { 
   ArrowRight, 
   ArrowLeft,
-  Plus, 
   Car, 
   Building2, 
   User, 
@@ -11,13 +10,11 @@ import {
   Phone, 
   Clock, 
   CheckCircle, 
-  X,
   Calculator,
   Shield,
   Zap,
   Calendar,
   Mail,
-  Heart,
   Fuel,
   Settings,
   Eye
@@ -33,19 +30,39 @@ interface DesiredVehicle {
   transmission: string;
 }
 
+interface DealershipLogo {
+  id: string;
+  url: string;
+  caption: string;
+  fileType: string;
+}
+
 interface Dealership {
   id: string;
   name: string;
-  address: string;
-  phone: string;
   email: string;
-  rating: number;
-  reviews: number;
-  image: string;
-  specialties: string[];
-  tradeInBonus: number;
-  processingTime: string;
-  services: string[];
+  phone: string;
+  location: string;
+  website: string;
+  createdAt: string;
+  updatedAt: string;
+  logo: DealershipLogo;
+  // Keep these fields for UI compatibility
+  address?: string;
+  rating?: number;
+  reviews?: number;
+  image?: string;
+  specialties?: string[];
+  tradeInBonus?: number;
+  processingTime?: string;
+  services?: string[];
+}
+
+interface CarImage {
+  id: string;
+  url: string;
+  caption: string;
+  fileType: string;
 }
 
 interface DealerCar {
@@ -53,14 +70,21 @@ interface DealerCar {
   make: string;
   model: string;
   year: number;
-  price: number;
-  image: string;
-  mileage: number;
-  fuelType: string;
-  transmission: string;
-  condition: string;
-  features: string[];
+  exactModel?: string;
+  sellingPrice: string;
   dealershipId: string;
+  createdAt: string;
+  updatedAt: string;
+  dealership?: Dealership;
+  images: CarImage[];
+  // Keep these fields for UI compatibility
+  price?: number;
+  image?: string;
+  mileage?: number;
+  fuelType?: string;
+  transmission?: string;
+  condition?: string;
+  features?: string[];
 }
 
 interface CarMake {
@@ -120,11 +144,15 @@ const TradeIn: React.FC = () => {
   const [models, setModels] = useState<CarModel[]>([]);
   const [loading, setLoading] = useState({
     makes: false,
-    models: false
+    models: false,
+    dealerships: false,
+    dealerCars: false
   });
   const [error, setError] = useState({
     makes: '',
-    models: ''
+    models: '',
+    dealerships: '',
+    dealerCars: ''
   });
   
   const [tradeInVehicle, setTradeInVehicle] = useState<TradeInVehicle>({
@@ -200,135 +228,218 @@ const TradeIn: React.FC = () => {
     time: ''
   });
 
-  const dealerships: Dealership[] = [
-    {
-      id: '1',
-      name: 'Premium Exchange',
-      address: 'King Fahd Road, Riyadh 12345',
-      phone: '+966 11 123 4567',
-      email: 'tradein@premiumauto.com',
-      rating: 4.8,
-      reviews: 342,
-      image: 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      specialties: ['Luxury Cars', 'SUVs', 'Electric Vehicles'],
-      tradeInBonus: 5000,
-      processingTime: '24 hours',
-      services: ['Free Inspection', 'Instant Valuation', 'Same Day Payment', 'Document Handling']
-    },
-    {
-      id: '2',
-      name: 'Elite Motors Trading',
-      address: 'Olaya Street, Riyadh 11564',
-      phone: '+966 11 234 5678',
-      email: 'info@elitemotors.com',
-      rating: 4.6,
-      reviews: 256,
-      image: 'https://images.pexels.com/photos/2244746/pexels-photo-2244746.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      specialties: ['German Cars', 'Sports Cars', 'Vintage Classics'],
-      tradeInBonus: 3500,
-      processingTime: '48 hours',
-      services: ['Expert Appraisal', 'Market Analysis', 'Flexible Payment', 'Trade-In Guarantee']
-    },
-    {
-      id: '3',
-      name: 'Royal Car Center',
-      address: 'Riyadh 12244',
-      phone: '+966 11 345 6789',
-      email: 'tradein@royalcars.com',
-      rating: 4.9,
-      reviews: 428,
-      image: 'https://images.pexels.com/photos/1164778/pexels-photo-1164778.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      specialties: ['German Cars', 'Hybrid Vehicles', 'Commercial Fleet'],
-      tradeInBonus: 4200,
-      processingTime: '12 hours',
-      services: ['Fleet Evaluation', 'Bulk Processing', 'Corporate Rates', 'Priority Service']
-    }
-  ];
+  const [dealerships, setDealerships] = useState<Dealership[]>([]);
+  
+  // Fetch dealerships from API
+  useEffect(() => {
+    const fetchDealerships = async () => {
+      setLoading(prev => ({ ...prev, dealerships: true }));
+      setError(prev => ({ ...prev, dealerships: '' }));
+      
+      try {
+        const response = await axiosInstance.get('https://stg-service.bddelha.com/api/1.0/dealership/find-all');
+        const dealershipData = response?.data?.data || [];
+        
+        // Map API response to include UI compatibility fields
+        const mappedDealerships = dealershipData.map((dealer: Dealership) => ({
+          ...dealer,
+          address: dealer.location || '',
+          image: dealer.logo?.url || 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+          rating: 4.8,
+          reviews: 300,
+          specialties: ['Luxury Cars', 'SUVs', 'Electric Vehicles'],
+          tradeInBonus: 5000,
+          processingTime: '24 hours',
+          services: ['Free Inspection', 'Instant Valuation', 'Same Day Payment', 'Document Handling']
+        }));
+        
+        setDealerships(mappedDealerships);
+      } catch (err) {
+        console.error('Error fetching dealerships:', err);
+        setError(prev => ({ ...prev, dealerships: 'Failed to load dealerships' }));
+        
+        // Fallback to default dealerships if API fails
+        setDealerships([
+          {
+            id: '1',
+            name: 'Premium Exchange',
+            location: 'Riyadh',
+            address: 'King Fahd Road, Riyadh 12345',
+            phone: '+966 11 123 4567',
+            email: 'tradein@premiumauto.com',
+            website: 'www.example.com',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            logo: {
+              id: '1',
+              url: 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              caption: 'logo',
+              fileType: 'image/jpeg'
+            },
+            rating: 4.8,
+            reviews: 342,
+            image: 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            specialties: ['Luxury Cars', 'SUVs', 'Electric Vehicles'],
+            tradeInBonus: 5000,
+            processingTime: '24 hours',
+            services: ['Free Inspection', 'Instant Valuation', 'Same Day Payment', 'Document Handling']
+          }
+        ]);
+      } finally {
+        setLoading(prev => ({ ...prev, dealerships: false }));
+      }
+    };
+    
+    fetchDealerships();
+  }, []);
 
+  const [dealerCars, setDealerCars] = useState<DealerCar[]>([]);
+  
+  // Fallback inventory in case API fails
   const dealerInventory: DealerCar[] = [
     {
       id: '1',
       make: 'BMW',
       model: 'X5',
       year: 2023,
+      sellingPrice: '285000',
+      dealershipId: '1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      images: [{
+        id: '1',
+        url: 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        caption: 'BMW X5',
+        fileType: 'image/jpeg'
+      }],
+      // UI compatibility fields
       price: 285000,
       image: 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       mileage: 15000,
       fuelType: 'Gasoline',
       transmission: 'Automatic',
       condition: 'Excellent',
-      features: ['Leather Seats', 'Sunroof', 'Navigation', 'Premium Sound'],
-      dealershipId: '1'
+      features: ['Leather Seats', 'Sunroof', 'Navigation', 'Premium Sound']
     },
     {
       id: '2',
       make: 'Mercedes',
       model: 'C-Class',
       year: 2022,
+      sellingPrice: '195000',
+      dealershipId: '1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      images: [{
+        id: '2',
+        url: 'https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        caption: 'Mercedes C-Class',
+        fileType: 'image/jpeg'
+      }],
+      // UI compatibility fields
       price: 195000,
       image: 'https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       mileage: 25000,
       fuelType: 'Hybrid',
       transmission: 'Automatic',
       condition: 'Excellent',
-      features: ['AMG Package', 'Premium Sound', 'Heated Seats', 'Wireless Charging'],
-      dealershipId: '1'
+      features: ['AMG Package', 'Premium Sound', 'Heated Seats', 'Wireless Charging']
     },
     {
       id: '3',
       make: 'Audi',
       model: 'Q7',
       year: 2023,
+      sellingPrice: '320000',
+      dealershipId: '2',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      images: [{
+        id: '3',
+        url: 'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        caption: 'Audi Q7',
+        fileType: 'image/jpeg'
+      }],
+      // UI compatibility fields
       price: 320000,
       image: 'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       mileage: 8000,
       fuelType: 'Gasoline',
       transmission: 'Automatic',
       condition: 'Like New',
-      features: ['Quattro AWD', 'Virtual Cockpit', 'Premium Plus', 'Panoramic Roof'],
-      dealershipId: '2'
+      features: ['Quattro AWD', 'Virtual Cockpit', 'Premium Plus', 'Panoramic Roof']
     },
     {
       id: '4',
       make: 'Lexus',
       model: 'ES',
       year: 2022,
+      sellingPrice: '165000',
+      dealershipId: '2',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      images: [{
+        id: '4',
+        url: 'https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        caption: 'Lexus ES',
+        fileType: 'image/jpeg'
+      }],
+      // UI compatibility fields
       price: 165000,
       image: 'https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       mileage: 18000,
       fuelType: 'Hybrid',
       transmission: 'CVT',
       condition: 'Excellent',
-      features: ['Lexus Safety+', 'Mark Levinson Audio', 'Heated/Cooled Seats', 'Wireless Charging'],
-      dealershipId: '2'
+      features: ['Lexus Safety+', 'Mark Levinson Audio', 'Heated/Cooled Seats', 'Wireless Charging']
     },
     {
       id: '5',
       make: 'Toyota',
       model: 'Land Cruiser',
       year: 2023,
+      sellingPrice: '425000',
+      dealershipId: '3',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      images: [{
+        id: '5',
+        url: 'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        caption: 'Toyota Land Cruiser',
+        fileType: 'image/jpeg'
+      }],
+      // UI compatibility fields
       price: 425000,
       image: 'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       mileage: 5000,
       fuelType: 'Gasoline',
       transmission: 'Automatic',
       condition: 'Like New',
-      features: ['4WD', 'Off-Road Package', 'Premium Interior', 'Advanced Safety'],
-      dealershipId: '3'
+      features: ['4WD', 'Off-Road Package', 'Premium Interior', 'Advanced Safety']
     },
     {
       id: '6',
       make: 'BMW',
       model: '3 Series',
       year: 2022,
+      sellingPrice: '175000',
+      dealershipId: '3',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      images: [{
+        id: '6',
+        url: 'https://images.carswitch.com/674674hyundai/1834616745255781.jpeg?fit=crop&w=305&h=228&auto=format,compress&q=30',
+        caption: 'BMW 3 Series',
+        fileType: 'image/jpeg'
+      }],
+      // UI compatibility fields
       price: 175000,
       image: 'https://images.carswitch.com/674674hyundai/1834616745255781.jpeg?fit=crop&w=305&h=228&auto=format,compress&q=30',
       mileage: 22000,
       fuelType: 'Gasoline',
       transmission: 'Automatic',
       condition: 'Good',
-      features: ['Sport Package', 'Navigation', 'Heated Seats', 'Backup Camera'],
-      dealershipId: '3'
+      features: ['Sport Package', 'Navigation', 'Heated Seats', 'Backup Camera']
     }
   ];
 
@@ -350,6 +461,10 @@ const TradeIn: React.FC = () => {
   };
 
   const getFilteredInventory = () => {
+    // If we have fetched cars from API, use those, otherwise use fallback
+    if (dealerCars.length > 0) {
+      return dealerCars;
+    }
     return dealerInventory.filter(car => car.dealershipId === selectedDealership);
   };
 
@@ -358,9 +473,37 @@ const TradeIn: React.FC = () => {
     setCurrentStep('dealerships');
   };
 
-  const handleDealershipSelect = (dealershipId: string) => {
+  const handleDealershipSelect = async (dealershipId: string) => {
     setSelectedDealership(dealershipId);
-    setCurrentStep('inventory');
+    setLoading(prev => ({ ...prev, dealerCars: true }));
+    setError(prev => ({ ...prev, dealerCars: '' }));
+    setDealerCars([]);
+    
+    try {
+      const response = await axiosInstance.get(`/api/1.0/dealership-car/find-all?dealershipId=${dealershipId}`);
+      const carsData = response?.data?.data || [];
+      
+      // Map API response to include UI compatibility fields
+      const mappedCars = carsData.map((car: any) => ({
+        ...car,
+        price: parseInt(car.sellingPrice) || 0,
+        image: car.images && car.images.length > 0 ? car.images[0].url : 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        mileage: 15000, // Default value as it's not in the API
+        fuelType: 'Gasoline', // Default value as it's not in the API
+        transmission: 'Automatic', // Default value as it's not in the API
+        condition: 'Excellent', // Default value as it's not in the API
+        features: ['Leather Seats', 'Navigation', 'Bluetooth'] // Default value as it's not in the API
+      }));
+      
+      setDealerCars(mappedCars);
+    } catch (err) {
+      console.error('Error fetching dealership cars:', err);
+      setError(prev => ({ ...prev, dealerCars: 'Failed to load dealership cars' }));
+      // We'll use the fallback inventory in getFilteredInventory
+    } finally {
+      setLoading(prev => ({ ...prev, dealerCars: false }));
+      setCurrentStep('inventory');
+    }
   };
 
   const handleCarSelect = (car: DealerCar) => {
@@ -412,7 +555,7 @@ const TradeIn: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Mileage:</span>
-                      <span className="font-semibold">{parseInt(tradeInVehicle.mileage).toLocaleString()} km</span>
+                      <span className="font-semibold">{parseInt(tradeInVehicle.mileage || '0').toLocaleString()} km</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Condition:</span>
@@ -420,7 +563,7 @@ const TradeIn: React.FC = () => {
                     </div>
                     <div className="flex justify-between border-t pt-3">
                       <span className="text-gray-600">Trade-In Value:</span>
-                      <span className="font-bold text-green-600 text-lg">SAR {tradeInVehicle.estimatedValue.toLocaleString()}</span>
+                      <span className="font-bold text-green-600 text-lg">SAR {tradeInVehicle.estimatedValue?.toLocaleString() || '0'}</span>
                     </div>
                   </div>
                 </div>
@@ -444,7 +587,7 @@ const TradeIn: React.FC = () => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Mileage:</span>
-                        <span className="font-semibold">{selectedCar.mileage.toLocaleString()} km</span>
+                        <span className="font-semibold">{selectedCar.mileage?.toLocaleString() || '0'} km</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Condition:</span>
@@ -452,7 +595,7 @@ const TradeIn: React.FC = () => {
                       </div>
                       <div className="flex justify-between border-t pt-3">
                         <span className="text-gray-600">Vehicle Price:</span>
-                        <span className="font-bold text-blue-600 text-lg">SAR {selectedCar.price.toLocaleString()}</span>
+                        <span className="font-bold text-blue-600 text-lg">SAR {selectedCar.price?.toLocaleString() || parseInt(selectedCar.sellingPrice || '0').toLocaleString()}</span>
                       </div>
                     </div>
                   )}
@@ -464,7 +607,7 @@ const TradeIn: React.FC = () => {
                 <h3 className="text-xl font-bold mb-4">Financial Summary</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-400">SAR {selectedCar?.price.toLocaleString()}</div>
+                    <div className="text-2xl font-bold text-blue-400">SAR {selectedCar?.price?.toLocaleString() || parseInt(selectedCar?.sellingPrice || '0').toLocaleString()}</div>
                     <div className="text-sm opacity-90">Vehicle Price</div>
                   </div>
                   <div className="text-center">
@@ -472,7 +615,7 @@ const TradeIn: React.FC = () => {
                     <div className="text-sm opacity-90">Trade-In Value</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-[#f78f37]">SAR {finalPrice.toLocaleString()}</div>
+                    <div className="text-3xl font-bold text-[#f78f37]">SAR {finalPrice?.toLocaleString() || '0'}</div>
                     <div className="text-sm opacity-90">Amount to Pay</div>
                   </div>
                 </div>
@@ -883,7 +1026,7 @@ const TradeIn: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <img 
-                    src={selectedDealer?.image} 
+                    src={selectedDealer?.image || selectedDealer?.logo?.url} 
                     alt={selectedDealer?.name}
                     className="w-16 h-16 object-cover rounded-lg mr-4"
                   />
@@ -891,22 +1034,40 @@ const TradeIn: React.FC = () => {
                     <h3 className="text-xl font-bold">{selectedDealer?.name}</h3>
                     <div className="flex items-center mt-1">
                       <Star className="h-4 w-4 text-yellow-400 fill-yellow-400 mr-1" />
-                      <span className="text-sm font-medium">{selectedDealer?.rating}</span>
-                      <span className="text-sm text-gray-500 ml-1">({selectedDealer?.reviews} reviews)</span>
+                      <span className="text-sm font-medium">{selectedDealer?.rating || 4.5}</span>
+                      <span className="text-sm text-gray-500 ml-1">({selectedDealer?.reviews || 0} reviews)</span>
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                    Trade-In Bonus: +SAR {selectedDealer?.tradeInBonus.toLocaleString()}
+                    Trade-In Bonus: +SAR {selectedDealer?.tradeInBonus?.toLocaleString() || '5,000'}
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Inventory Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {inventory.map(car => (
+            {loading.dealerCars ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#f78f37]"></div>
+                <span className="ml-3 text-lg text-gray-600">Loading inventory...</span>
+              </div>
+            ) : error.dealerCars ? (
+              <div className="text-center py-12 bg-red-50 rounded-xl">
+                <Car className="h-16 w-16 text-red-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-red-600 mb-2">Failed to load inventory</h3>
+                <p className="text-gray-600">{error.dealerCars}</p>
+                <button 
+                  onClick={() => handleDealershipSelect(selectedDealership)}
+                  className="mt-4 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg transition"
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {inventory.map(car => (
                 <div key={car.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative">
                     <img 
@@ -926,18 +1087,18 @@ const TradeIn: React.FC = () => {
                           {car.year} {car.make} {car.model}
                         </h3>
                         <p className="text-gray-600 text-sm">
-                          {car.mileage.toLocaleString()} km • {car.fuelType}
+                          {car.mileage?.toLocaleString() || '0'} km • {car.fuelType || 'N/A'}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-xl text-[#3d3d40]">SAR {car.price.toLocaleString()}</p>
+                        <p className="font-bold text-xl text-[#3d3d40]">SAR {car.price?.toLocaleString() || parseInt(car.sellingPrice || '0').toLocaleString()}</p>
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-y-3 mb-4 text-sm">
                       <div className="flex items-center text-gray-600">
                         <Settings className="h-4 w-4 mr-2" />
-                        <span>{car.mileage.toLocaleString()} km</span>
+                        <span>{car.mileage?.toLocaleString() || '0'} km</span>
                       </div>
                       <div className="flex items-center text-gray-600">
                         <Fuel className="h-4 w-4 mr-2" />
@@ -954,12 +1115,12 @@ const TradeIn: React.FC = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {car.features.slice(0, 2).map((feature, index) => (
+                      {car.features?.slice(0, 2).map((feature, index) => (
                         <span key={index} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
                           {feature}
                         </span>
                       ))}
-                      {car.features.length > 2 && (
+                      {car.features && car.features.length > 2 && (
                         <span className="text-gray-500 text-xs flex items-center">+{car.features.length - 2}</span>
                       )}
                     </div>
@@ -978,9 +1139,10 @@ const TradeIn: React.FC = () => {
                   </div>
                 </div>
               ))}
-            </div>
+              </div>
+            )}
 
-            {inventory.length === 0 && (
+            {inventory.length === 0 && !loading.dealerCars && !error.dealerCars && (
               <div className="text-center py-12">
                 <Car className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-600 mb-2">No vehicles available</h3>
@@ -1013,11 +1175,35 @@ const TradeIn: React.FC = () => {
               <p className="text-gray-600">Select the dealership where you'd like to complete your trade-in</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-              {dealerships.map(dealership => (
+            {loading.dealerships ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#f78f37]"></div>
+                <span className="ml-3 text-lg text-gray-600">Loading dealerships...</span>
+              </div>
+            ) : error.dealerships ? (
+              <div className="text-center py-12 bg-red-50 rounded-xl">
+                <Building2 className="h-16 w-16 text-red-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-red-600 mb-2">Failed to load dealerships</h3>
+                <p className="text-gray-600">{error.dealerships}</p>
+                <button 
+                  onClick={() => window.location.reload()}
+                  className="mt-4 bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-4 rounded-lg transition"
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : dealerships.length === 0 ? (
+              <div className="text-center py-12">
+                <Building2 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-600 mb-2">No dealerships available</h3>
+                <p className="text-gray-500">Please check back later for available dealerships</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                {dealerships.map(dealership => (
                 <div key={dealership.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                   <img 
-                    src={dealership.image} 
+                    src={dealership.image || dealership.logo?.url} 
                     alt={dealership.name}
                     className="w-full h-48 object-cover"
                   />
@@ -1035,7 +1221,7 @@ const TradeIn: React.FC = () => {
                     <div className="space-y-3 mb-4">
                       <div className="flex items-center text-sm text-gray-600">
                         <MapPin className="h-4 w-4 mr-2" />
-                        <span>{dealership.address}</span>
+                        <span>{dealership.address || dealership.location}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
                         <Phone className="h-4 w-4 mr-2" />
@@ -1050,11 +1236,15 @@ const TradeIn: React.FC = () => {
                     <div className="mb-4">
                       <h4 className="font-semibold text-sm mb-2">Specialties:</h4>
                       <div className="flex flex-wrap gap-1">
-                        {dealership.specialties.map((specialty, index) => (
+                        {dealership.specialties?.map((specialty, index) => (
                           <span key={index} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
                             {specialty}
                           </span>
-                        ))}
+                        )) || (
+                          <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                            Luxury Cars
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -1062,7 +1252,7 @@ const TradeIn: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-green-800">Trade-In Bonus</span>
                         <span className="text-lg font-bold text-green-600">
-                          +SAR {dealership.tradeInBonus.toLocaleString()}
+                          +SAR {dealership.tradeInBonus?.toLocaleString() || '5,000'}
                         </span>
                       </div>
                     </div>
@@ -1076,7 +1266,8 @@ const TradeIn: React.FC = () => {
                   </div>
                 </div>
               ))}
-            </div>
+              </div>
+            )}
 
             <div className="text-center">
               <button
@@ -1228,10 +1419,10 @@ const TradeIn: React.FC = () => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
                     <option value="">Any</option>
-                    <option value="Gasoline">Gasoline</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Diesel">Diesel</option>
                     <option value="Hybrid">Hybrid</option>
                     <option value="Electric">Electric</option>
-                    <option value="Diesel">Diesel</option>
                   </select>
                 </div>
                 
