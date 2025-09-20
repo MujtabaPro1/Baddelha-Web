@@ -18,6 +18,7 @@ import Privacy from './pages/Privacy';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import Appointments from './pages/Appointments';
+import { Toaster } from './components/ui/toaster';
 
 function App() {
   useEffect(() => {
@@ -95,6 +96,7 @@ function App() {
           <RouterProvider router={router} />
         </main>
         <Footer />
+        <Toaster />
       </div>
     </LanguageProvider>
   );

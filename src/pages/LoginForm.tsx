@@ -5,6 +5,7 @@ import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Checkbox } from '../components/ui/checkbox';
 import { Car, Mail, Lock, Facebook, Chrome, Apple } from 'lucide-react';
+import { useToast } from '../hooks/use-toast';
 import axiosInstance from '../services/axiosInstance';
 
 interface LoginFormProps {
@@ -19,6 +20,7 @@ interface UserDetails {
 }
 
 export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -68,13 +70,25 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
         setTimeout(() => {
           setIsLoading(false);
           setShowOtpField(true);
+          toast({
+            title: "Success",
+            description: "OTP sent to your email",
+            variant: "default",
+            className: "bg-green-50 border-green-200",
+          });
           console.log('Email verification successful, showing OTP field');
         }, 1000);
       })
       .catch(error => {
         console.error('Login failed:', error);
+        
         setIsLoading(false);
-        setErrors({ email: error.response.data.message });
+        setErrors({ email: error.response?.data?.message || 'Login failed' });
+        toast({
+          title: "Error",
+          description: error.response?.data?.message || "Failed to send OTP",
+          variant: "destructive",
+        });
       });
 
       // First step: Email verification
@@ -89,6 +103,12 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
           otp: formData.otp,
         })
         .then(response => {
+          toast({
+            title: "Success",
+            description: "Login successful",
+            variant: "default",
+            className: "bg-green-50 border-green-200",
+          });
 
           // Store token in localStorage
           localStorage.setItem('token', response.data.access_token);
@@ -101,12 +121,20 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
             avatar: response.data.avatar,
             phone: '+966' + response.data.phone,
           }));
-          window.location.href = '/';
-
+          
+          // Redirect after a short delay to allow the toast to be seen
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 1000);
         })
         .catch(error => {
           console.error('Login failed:', error);
-          // Handle error (e.g., show error message)
+          setErrors({ otp: error.response?.data?.message || 'Invalid OTP' });
+          toast({
+            title: "Error",
+            description: error.response?.data?.message || "Invalid OTP",
+            variant: "destructive",
+          });
         });
      
       }, 1000);
