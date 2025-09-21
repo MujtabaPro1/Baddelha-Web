@@ -245,8 +245,9 @@ const Step3 = () => {
                 lastName,
                 phone,
                 email,
-                bookingId: response.data?.id || '',
+                bookingId: response.data?.uid || '',
                 carPrice: carPrice,
+                id: response.data?.uid || '',
             }));
             
             // Store car details in localStorage
