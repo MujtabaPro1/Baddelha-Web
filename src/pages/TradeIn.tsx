@@ -28,6 +28,10 @@ interface DesiredVehicle {
   maxPrice: string;
   fuelType: string;
   transmission: string;
+  makeName: string;
+  modelName: string;
+  fuelTypeName: string;
+  transmissionName: string;
 }
 
 interface DealershipLogo {
@@ -130,6 +134,10 @@ const TradeIn: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<'desired-car' | 'dealerships' | 'inventory' | 'trade-details' | 'confirmation'>('desired-car');
   
   const [desiredVehicle, setDesiredVehicle] = useState<DesiredVehicle>({
+    makeName: '',
+    modelName: '',
+    fuelTypeName: '',
+    transmissionName: '',
     make: '',
     model: '',
     year: '',
@@ -165,6 +173,8 @@ const TradeIn: React.FC = () => {
     condition: '',
     estimatedValue: 0
   });
+
+  const [valueRevealed, setValueRevealed] = useState<boolean>(false);
 
   // Fetch car makes on component mount
   useEffect(() => {
@@ -230,68 +240,96 @@ const TradeIn: React.FC = () => {
 
   const [dealerships, setDealerships] = useState<Dealership[]>([]);
   
-  // Fetch dealerships from API
-  useEffect(() => {
-    const fetchDealerships = async () => {
-      setLoading(prev => ({ ...prev, dealerships: true }));
-      setError(prev => ({ ...prev, dealerships: '' }));
+
+  const fetchDealerships = async () => {
+    setLoading(prev => ({ ...prev, dealerships: true }));
+    setError(prev => ({ ...prev, dealerships: '' }));
+    
+    try {
+      // First try to get filtered dealerships based on desired vehicle
+      let dealershipData: any[] = [];
+      let response;
       
-      try {
-        const response = await axiosInstance.get('https://stg-service.bddelha.com/api/1.0/dealership/find-all');
-        const dealershipData = response?.data?.data || [];
+      if (desiredVehicle.make && desiredVehicle.model) {
+        // Build query parameters for filtered search
+        const queryParams = new URLSearchParams();
+        console.log('Desired vehicle:', desiredVehicle);
+        if (desiredVehicle.makeName) queryParams.append('make', desiredVehicle.makeName);
+        if (desiredVehicle.modelName) queryParams.append('model', desiredVehicle.modelName);
+        if (desiredVehicle.year) queryParams.append('year', desiredVehicle.year);
+        if (desiredVehicle.maxPrice) queryParams.append('maxPrice', desiredVehicle.maxPrice);
+        if (desiredVehicle.fuelTypeName) queryParams.append('fuelType', desiredVehicle.fuelTypeName);
+        if (desiredVehicle.transmissionName) queryParams.append('transmission', desiredVehicle.transmissionName);
         
-        // Map API response to include UI compatibility fields
-        const mappedDealerships = dealershipData.map((dealer: Dealership) => ({
-          ...dealer,
-          address: dealer.location || '',
-          image: dealer.logo?.url || 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        // Try filtered endpoint first
+        try {
+          response = await axiosInstance.get(`/api/1.0/trade/filtered-dealership?${queryParams.toString()}`);
+          dealershipData = response?.data?.data || [];
+          console.log('Filtered dealerships:', dealershipData);
+        } catch (filterErr) {
+          console.error('Error fetching filtered dealerships:', filterErr);
+          // If filtered search fails, we'll continue to the fallback
+        }
+      }
+      
+      // If no results from filtered search, fall back to getting all dealerships
+      if (dealershipData.length === 0) {
+        response = await axiosInstance.get('/api/1.0/dealership/find-all');
+        dealershipData = response?.data?.data || [];
+        console.log('All dealerships:', dealershipData);
+      }
+      
+      // Map API response to include UI compatibility fields
+      const mappedDealerships = dealershipData.map((dealer: Dealership) => ({
+        ...dealer,
+        address: dealer.location || '',
+        image: dealer.logo?.url || 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        rating: 4.8,
+        reviews: 300,
+        specialties: ['Luxury Cars', 'SUVs', 'Electric Vehicles'],
+        tradeInBonus: 5000,
+        processingTime: '24 hours',
+        services: ['Free Inspection', 'Instant Valuation', 'Same Day Payment', 'Document Handling']
+      }));
+      
+      setDealerships(mappedDealerships);
+      setCurrentStep('dealerships');  
+    } catch (err) {
+      console.error('Error fetching dealerships:', err);
+      setError(prev => ({ ...prev, dealerships: 'Failed to load dealerships' }));
+      
+      // Fallback to default dealerships if API fails
+      setDealerships([
+        {
+          id: '1',
+          name: 'Premium Exchange',
+          location: 'Riyadh',
+          address: 'King Fahd Road, Riyadh 12345',
+          phone: '+966 11 123 4567',
+          email: 'tradein@premiumauto.com',
+          website: 'www.example.com',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          logo: {
+            id: '1',
+            url: 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            caption: 'logo',
+            fileType: 'image/jpeg'
+          },
           rating: 4.8,
-          reviews: 300,
+          reviews: 342,
+          image: 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
           specialties: ['Luxury Cars', 'SUVs', 'Electric Vehicles'],
           tradeInBonus: 5000,
           processingTime: '24 hours',
           services: ['Free Inspection', 'Instant Valuation', 'Same Day Payment', 'Document Handling']
-        }));
-        
-        setDealerships(mappedDealerships);
-      } catch (err) {
-        console.error('Error fetching dealerships:', err);
-        setError(prev => ({ ...prev, dealerships: 'Failed to load dealerships' }));
-        
-        // Fallback to default dealerships if API fails
-        setDealerships([
-          {
-            id: '1',
-            name: 'Premium Exchange',
-            location: 'Riyadh',
-            address: 'King Fahd Road, Riyadh 12345',
-            phone: '+966 11 123 4567',
-            email: 'tradein@premiumauto.com',
-            website: 'www.example.com',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            logo: {
-              id: '1',
-              url: 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-              caption: 'logo',
-              fileType: 'image/jpeg'
-            },
-            rating: 4.8,
-            reviews: 342,
-            image: 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-            specialties: ['Luxury Cars', 'SUVs', 'Electric Vehicles'],
-            tradeInBonus: 5000,
-            processingTime: '24 hours',
-            services: ['Free Inspection', 'Instant Valuation', 'Same Day Payment', 'Document Handling']
-          }
-        ]);
-      } finally {
-        setLoading(prev => ({ ...prev, dealerships: false }));
-      }
-    };
-    
-    fetchDealerships();
-  }, []);
+        }
+      ]);
+    } finally {
+      setLoading(prev => ({ ...prev, dealerships: false }));
+    }
+  };
+
 
   const [dealerCars, setDealerCars] = useState<DealerCar[]>([]);
   
@@ -470,7 +508,7 @@ const TradeIn: React.FC = () => {
 
   const handleDesiredCarSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentStep('dealerships');
+    fetchDealerships();
   };
 
   const handleDealershipSelect = async (dealershipId: string) => {
@@ -480,8 +518,38 @@ const TradeIn: React.FC = () => {
     setDealerCars([]);
     
     try {
-      const response = await axiosInstance.get(`/api/1.0/dealership-car/find-all?dealershipId=${dealershipId}`);
-      const carsData = response?.data?.data || [];
+      // First try to get filtered dealership cars based on desired vehicle
+      let carsData: any[] = [];
+      let response;
+      
+      if (desiredVehicle.make || desiredVehicle.model) {
+        // Build query parameters for filtered search
+        const queryParams = new URLSearchParams();
+        if (desiredVehicle.make) queryParams.append('make', desiredVehicle.make);
+        if (desiredVehicle.model) queryParams.append('model', desiredVehicle.model);
+        if (desiredVehicle.year) queryParams.append('year', desiredVehicle.year);
+        if (desiredVehicle.maxPrice) queryParams.append('maxPrice', desiredVehicle.maxPrice);
+        if (desiredVehicle.fuelType) queryParams.append('fuelType', desiredVehicle.fuelType);
+        if (desiredVehicle.transmission) queryParams.append('transmission', desiredVehicle.transmission);
+        queryParams.append('dealershipId', dealershipId);
+        
+        // Try filtered endpoint first
+        try {
+          response = await axiosInstance.get(`/api/1.0/trade/filtered-dealership-cars?${queryParams.toString()}`);
+          carsData = response?.data?.data || [];
+          console.log('Filtered dealership cars:', carsData);
+        } catch (filterErr) {
+          console.error('Error fetching filtered dealership cars:', filterErr);
+          // If filtered search fails, we'll continue to the fallback
+        }
+      }
+      
+      // If no results from filtered search, fall back to getting all cars from the dealership
+      if (carsData.length === 0) {
+        response = await axiosInstance.get(`/api/1.0/dealership-car/find-all?dealershipId=${dealershipId}`);
+        carsData = response?.data?.data || [];
+        console.log('All dealership cars:', carsData);
+      }
       
       // Map API response to include UI compatibility fields
       const mappedCars = carsData.map((car: any) => ({
@@ -511,17 +579,102 @@ const TradeIn: React.FC = () => {
     setCurrentStep('trade-details');
   };
 
-  const handleTradeDetailsSubmit = (e: React.FormEvent) => {
+  const [appointmentStatus, setAppointmentStatus] = useState<{
+    loading: boolean;
+    error: string;
+    success: boolean;
+  }>({
+    loading: false,
+    error: '',
+    success: false
+  });
+
+  const createAppointment = async () => {
+    setAppointmentStatus({ loading: true, error: '', success: false });
+    
+    try {
+      if (!selectedCar) {
+        throw new Error('No car selected for trade-in');
+      }
+      
+      // Format the appointment time as ISO 8601 date string
+      const formatTimeToISO = (dateStr: string, timeStr: string) => {
+        // Parse the time string (e.g., "9:00 AM")
+        const [hourMinute, period] = timeStr.split(' ');
+        let [hours, minutes] = hourMinute.split(':').map(Number);
+        
+        // Convert to 24-hour format if PM
+        if (period === 'PM' && hours < 12) {
+          hours += 12;
+        }
+        // Convert 12 AM to 0 hours
+        if (period === 'AM' && hours === 12) {
+          hours = 0;
+        }
+        
+        // Create a new date with the combined date and time
+        const date = new Date(dateStr);
+        date.setHours(hours, minutes, 0, 0);
+        
+        // Return ISO string
+        return date.toISOString();
+      };
+      
+      // Format the data according to API requirements
+      const appointmentData = {
+        firstName: personalInfo.firstName,
+        lastName: personalInfo.lastName,
+        email: personalInfo.email,
+        phone: "+" + personalInfo.phone,
+        carDetails: {
+          id: selectedCar.id,
+          make: selectedCar.make,
+          model: selectedCar.model,
+          year: selectedCar.year,
+          sellingPrice: selectedCar.sellingPrice,
+          dealership: dealerships.find(d => d.id === selectedDealership),
+          tradeInVehicle: {
+            ...tradeInVehicle,
+            estimatedValue: calculateTradeInValue()
+          }
+        },
+        appointmentDate: appointmentDetails.date,
+        appointmentTime: formatTimeToISO(appointmentDetails.date, appointmentDetails.time)
+      };
+      
+      // Call the API to create the appointment
+      const response = await axiosInstance.post('/api/1.0/trade/appointment/create', appointmentData);
+      console.log('Appointment created successfully:', response.data);
+      setAppointmentStatus({ loading: false, error: '', success: true });
+      return true;
+    } catch (error: any) {
+      console.error('Error creating appointment:', error);
+      setAppointmentStatus({
+        loading: false, 
+        error: error.response?.data?.message || error.message || 'Failed to create appointment', 
+        success: false
+      });
+      return false;
+    }
+  };
+
+  const handleTradeDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const estimatedValue = calculateTradeInValue();
     setTradeInVehicle(prev => ({ ...prev, estimatedValue }));
-    setCurrentStep('confirmation');
+    
+    // Create the appointment
+    const appointmentCreated = await createAppointment();
+    if (appointmentCreated) {
+      setCurrentStep('confirmation');
+    }
+    // Error handling is now managed by appointmentStatus state
   };
 
   // Confirmation Screen
   if (currentStep === 'confirmation') {
     const selectedDealer = dealerships.find(d => d.id === selectedDealership);
-    const finalPrice = selectedCar ? selectedCar.price - tradeInVehicle.estimatedValue : 0;
+    const finalPrice = selectedCar ? (selectedCar.price || parseInt(selectedCar.sellingPrice || '0')) - tradeInVehicle.estimatedValue : 0;
     
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-20">
@@ -752,6 +905,20 @@ const TradeIn: React.FC = () => {
             )}
 
             <form onSubmit={handleTradeDetailsSubmit} className="space-y-8">
+              {/* Appointment Status Messages */}
+              {appointmentStatus.error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                  <p className="font-medium">Error</p>
+                  <p className="text-sm">{appointmentStatus.error}</p>
+                </div>
+              )}
+              
+              {appointmentStatus.success && (
+                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                  <p className="font-medium">Success</p>
+                  <p className="text-sm">Your appointment has been created successfully!</p>
+                </div>
+              )}
               {/* Personal Information */}
               <div className="bg-white rounded-xl shadow-md p-6">
                 <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
@@ -932,13 +1099,36 @@ const TradeIn: React.FC = () => {
                 </div>
 
                 {tradeInVehicle.make && tradeInVehicle.model && tradeInVehicle.year && (
-                  <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-green-800">Estimated Trade-In Value</span>
-                      <span className="text-lg font-bold text-green-600">
-                        SAR {calculateTradeInValue().toLocaleString()}
-                      </span>
-                    </div>
+                  <div className="mt-4">
+                    {!valueRevealed ? (
+                      <button 
+                        onClick={() => setValueRevealed(true)}
+                        className="w-full p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg shadow-lg transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl flex items-center justify-between"
+                      >
+                        <div className="flex items-center">
+                          <Calculator className="h-5 w-5 mr-2" />
+                          <span className="font-medium">Calculate Your Trade-In Value</span>
+                        </div>
+                        <div className="animate-pulse flex items-center">
+                          <span className="mr-2 font-semibold">Click to Reveal</span>
+                          <ArrowRight className="h-5 w-5" />
+                        </div>
+                      </button>
+                    ) : (
+                      <div 
+                        className="w-full p-4 bg-green-50 border border-green-200 rounded-lg transform transition-all duration-500 opacity-100 translate-y-0"
+                        style={{ animationName: 'fadeIn', animationDuration: '0.5s' }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-green-800">Estimated Trade-In Value</span>
+                          <span 
+                            className="text-xl font-bold text-green-600 animate-pulse"
+                          >
+                            SAR {calculateTradeInValue().toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -992,10 +1182,20 @@ const TradeIn: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
+                  disabled={appointmentStatus.loading}
+                  className={`flex-1 ${appointmentStatus.loading ? 'bg-[#f7a96b] cursor-not-allowed' : 'bg-[#f78f37] hover:bg-[#e67d26] transform hover:scale-105'} text-white font-semibold py-3 px-6 rounded-lg transition flex items-center justify-center`}
                 >
-                  Schedule Appointment
-                  <ArrowRight className="inline-block ml-2 h-5 w-5" />
+                  {appointmentStatus.loading ? (
+                    <>
+                      <span className="animate-spin h-5 w-5 mr-3 border-2 border-white border-t-transparent rounded-full"></span>
+                      Creating Appointment...
+                    </>
+                  ) : (
+                    <>
+                      Schedule Appointment
+                      <ArrowRight className="inline-block ml-2 h-5 w-5" />
+                    </>
+                  )}
                 </button>
               </div>
             </form>
@@ -1354,9 +1554,13 @@ const TradeIn: React.FC = () => {
                     required
                     value={desiredVehicle.make}
                     onChange={(e) => {
-
-                      setDesiredVehicle({...desiredVehicle, make: e.target.value});
-                      setTradeInVehicle({...tradeInVehicle, makeId: e.target.value});
+                      const make = makes.find((make) => make.id === e.target.value);
+                      setDesiredVehicle({...desiredVehicle, make: e.target.value,
+                        makeName: e.target.options[e.target.selectedIndex].text
+                      });
+                      setTradeInVehicle({...tradeInVehicle, 
+                        makeId: e.target.value,
+                      });
                     }}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
@@ -1372,7 +1576,9 @@ const TradeIn: React.FC = () => {
                   <select
                     required
                     value={desiredVehicle.model}
-                    onChange={(e) => setDesiredVehicle({...desiredVehicle, model: e.target.value})}
+                    onChange={(e) => setDesiredVehicle({...desiredVehicle, model: e.target.value,
+                      modelName: e.target.options[e.target.selectedIndex].text
+                    })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
                     <option value="">Select Model</option>
@@ -1415,7 +1621,8 @@ const TradeIn: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Fuel Type</label>
                   <select
                     value={desiredVehicle.fuelType}
-                    onChange={(e) => setDesiredVehicle({...desiredVehicle, fuelType: e.target.value})}
+                    onChange={(e) => setDesiredVehicle({...desiredVehicle, fuelType: e.target.value,
+                      fuelTypeName: e.target.options[e.target.selectedIndex].text})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
                     <option value="">Any</option>
@@ -1430,7 +1637,9 @@ const TradeIn: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Transmission</label>
                   <select
                     value={desiredVehicle.transmission}
-                    onChange={(e) => setDesiredVehicle({...desiredVehicle, transmission: e.target.value})}
+                    onChange={(e) => setDesiredVehicle({...desiredVehicle, transmission: e.target.value,
+                      transmissionName: e.target.options[e.target.selectedIndex].text
+                    })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
                   >
                     <option value="">Any</option>
