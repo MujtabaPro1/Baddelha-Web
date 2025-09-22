@@ -203,23 +203,35 @@ const TradeIn: React.FC = () => {
       return;
     }
     
-    const fetchCarModels = async () => {
-      setLoading(prev => ({ ...prev, models: true }));
-      setError(prev => ({ ...prev, models: '' }));
-      
-      try {
-        const response = await axiosInstance.get(`/api/1.0/car-options/car-model/${tradeInVehicle.makeId}`);
-        setModels(response?.data);
-      } catch (err) {
-        console.error('Error fetching car models:', err);
-        setError(prev => ({ ...prev, models: 'Failed to load car models' }));
-      } finally {
-        setLoading(prev => ({ ...prev, models: false }));
-      }
-    };
     
     fetchCarModels();
   }, [tradeInVehicle.makeId]);
+
+  const fetchCarModels = async () => {
+    setLoading(prev => ({ ...prev, models: true }));
+    setError(prev => ({ ...prev, models: '' }));
+    
+    try {
+      const response = await axiosInstance.get(`/api/1.0/car-options/car-model/${tradeInVehicle.makeId || desiredVehicle.make}`);
+      setModels(response?.data);
+    } catch (err) {
+      console.error('Error fetching car models:', err);
+      setError(prev => ({ ...prev, models: 'Failed to load car models' }));
+    } finally {
+      setLoading(prev => ({ ...prev, models: false }));
+    }
+  };
+
+  // Fetch car years when model changes
+  useEffect(() => {
+    if (!desiredVehicle.make) {
+      setModels([]);
+      return;
+    }
+
+    fetchCarModels();
+  
+  }, [desiredVehicle.make]);
 
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
     firstName: '',
@@ -625,17 +637,17 @@ const TradeIn: React.FC = () => {
         firstName: personalInfo.firstName,
         lastName: personalInfo.lastName,
         email: personalInfo.email,
-        phone: "+" + personalInfo.phone,
+        phone:'+' + personalInfo.phone,
         carDetails: {
           dealershipCarId: selectedCar.id,
           make: selectedCar.make,
           model: selectedCar.model,
           year: selectedCar.year,
           sellingPrice: selectedCar.sellingPrice,
-          dealership: dealerships.find(d => d.id === selectedDealership),
+          dealership: dealerships.find(d => d.id === selectedDealership)?.id,
           tradeInVehicle: {
             ...tradeInVehicle,
-            estimatedValue: calculateTradeInValue()
+            // estimatedValue: calculateTradeInValue()
           }
         },
         appointmentDate: formatTimeToISO(appointmentDetails.date, appointmentDetails.time),
@@ -1527,12 +1539,8 @@ const TradeIn: React.FC = () => {
                     required
                     value={desiredVehicle.make}
                     onChange={(e) => {
-                      const make = makes.find((make) => make.id === e.target.value);
                       setDesiredVehicle({...desiredVehicle, make: e.target.value,
                         makeName: e.target.options[e.target.selectedIndex].text
-                      });
-                      setTradeInVehicle({...tradeInVehicle, 
-                        makeId: e.target.value,
                       });
                     }}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f78f37] focus:border-transparent"
