@@ -1409,6 +1409,9 @@ const TradeIn: React.FC = () => {
                         <Clock className="h-4 w-4 mr-2" />
                         <span>Processing: {dealership.processingTime}</span>
                       </div>
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center text-sm text-gray-600">
+                        <span className="font-semibold text-green-600">Trade-in Bonus: SAR {dealership.tradeInBonus}</span>
+                      </div>
                     </div>
 
                     <div className="mb-4">
