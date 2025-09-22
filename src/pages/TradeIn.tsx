@@ -627,7 +627,7 @@ const TradeIn: React.FC = () => {
         email: personalInfo.email,
         phone: "+" + personalInfo.phone,
         carDetails: {
-          id: selectedCar.id,
+          dealershipCarId: selectedCar.id,
           make: selectedCar.make,
           model: selectedCar.model,
           year: selectedCar.year,
@@ -638,7 +638,7 @@ const TradeIn: React.FC = () => {
             estimatedValue: calculateTradeInValue()
           }
         },
-        appointmentDate: appointmentDetails.date,
+        appointmentDate: formatTimeToISO(appointmentDetails.date, appointmentDetails.time),
         appointmentTime: formatTimeToISO(appointmentDetails.date, appointmentDetails.time)
       };
       
@@ -714,10 +714,6 @@ const TradeIn: React.FC = () => {
                       <span className="text-gray-600">Condition:</span>
                       <span className="font-semibold capitalize">{tradeInVehicle.condition}</span>
                     </div>
-                    <div className="flex justify-between border-t pt-3">
-                      <span className="text-gray-600">Trade-In Value:</span>
-                      <span className="font-bold text-green-600 text-lg">SAR {tradeInVehicle.estimatedValue?.toLocaleString() || '0'}</span>
-                    </div>
                   </div>
                 </div>
 
@@ -732,7 +728,7 @@ const TradeIn: React.FC = () => {
                       <img 
                         src={selectedCar.image} 
                         alt={`${selectedCar.year} ${selectedCar.make} ${selectedCar.model}`}
-                        className="w-full h-32 object-cover rounded-lg mb-3"
+                        className="w-[120px] h-[120px] m-auto  object-cover rounded-lg mb-3"
                       />
                       <div className="flex justify-between">
                         <span className="text-gray-600">Vehicle:</span>
@@ -755,24 +751,6 @@ const TradeIn: React.FC = () => {
                 </div>
               </div>
 
-              {/* Financial Summary */}
-              <div className="bg-[#3d3d40] text-white rounded-xl p-6 mb-8">
-                <h3 className="text-xl font-bold mb-4">Financial Summary</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-400">SAR {selectedCar?.price?.toLocaleString() || parseInt(selectedCar?.sellingPrice || '0').toLocaleString()}</div>
-                    <div className="text-sm opacity-90">Vehicle Price</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-400">- SAR {tradeInVehicle.estimatedValue.toLocaleString()}</div>
-                    <div className="text-sm opacity-90">Trade-In Value</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-[#f78f37]">SAR {finalPrice?.toLocaleString() || '0'}</div>
-                    <div className="text-sm opacity-90">Amount to Pay</div>
-                  </div>
-                </div>
-              </div>
 
               {/* Appointment Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -1448,15 +1426,7 @@ const TradeIn: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-green-800">Trade-In Bonus</span>
-                        <span className="text-lg font-bold text-green-600">
-                          +SAR {dealership.tradeInBonus?.toLocaleString() || '5,000'}
-                        </span>
-                      </div>
-                    </div>
-
+                
                     <button
                       onClick={() => handleDealershipSelect(dealership.id)}
                       className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
