@@ -1088,37 +1088,28 @@ const TradeIn: React.FC = () => {
                   </div>
                 </div>
 
-                {tradeInVehicle.make && tradeInVehicle.model && tradeInVehicle.year && (
+                {tradeInVehicle.make && tradeInVehicle.model && tradeInVehicle.year && tradeInVehicle.mileage && tradeInVehicle.condition && (
                   <div className="mt-4">
-                    {!valueRevealed ? (
-                      <button 
-                        onClick={() => setValueRevealed(true)}
+                      <div 
                         className="w-full p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg shadow-lg transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl flex items-center justify-between"
                       >
                         <div className="flex items-center">
                           <Calculator className="h-5 w-5 mr-2" />
-                          <span className="font-medium">Calculate Your Trade-In Value</span>
+                          <span className="font-medium">Enter Your Trade-In Value</span>
                         </div>
-                        <div className="animate-pulse flex items-center">
-                          <span className="mr-2 font-semibold">Click to Reveal</span>
-                          <ArrowRight className="h-5 w-5" />
-                        </div>
-                      </button>
-                    ) : (
-                      <div 
-                        className="w-full p-4 bg-green-50 border border-green-200 rounded-lg transform transition-all duration-500 opacity-100 translate-y-0"
-                        style={{ animationName: 'fadeIn', animationDuration: '0.5s' }}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-green-800">Estimated Trade-In Value</span>
-                          <span 
-                            className="text-xl font-bold text-green-600 animate-pulse"
-                          >
-                            SAR {calculateTradeInValue().toLocaleString()}
-                          </span>
+                        <div className="flex items-center">
+                          <input
+                            type="number"
+                            placeholder="Enter car price"
+                            style={{
+                              color: 'black'
+                            }}
+                            className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-dark"
+                            onChange={(e) => setTradeInVehicle({...tradeInVehicle, estimatedValue: parseInt(e.target.value) || 0})}
+                          />
+                          <ArrowRight className="h-5 w-5 ml-2" />
                         </div>
                       </div>
-                    )}
                   </div>
                 )}
               </div>
