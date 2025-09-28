@@ -24,11 +24,11 @@ const CtaSection: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <div className="flex items-center bg-white/10 rounded-lg p-4 hover:bg-white/20 transition">
                   <Phone className="h-5 w-5 text-amber-400 mr-3 ml-2" />
-                  <span className="text-white font-medium">800-DRIVE-123</span>
+                  <span dir="ltr" className="text-white font-medium">+966-920032590</span>
                 </div>
                 <div className="flex items-center bg-white/10 rounded-lg p-4 hover:bg-white/20 transition">
                   <Mail className="h-5 w-5 text-amber-400 mr-3 ml-2" />
-                  <span className="text-white font-medium">support@drivemarket.com</span>
+                  <span className="text-white font-medium">info@baddelha.sa</span>
                 </div>
               </div>
               

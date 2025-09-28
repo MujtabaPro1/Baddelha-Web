@@ -108,9 +108,11 @@ const Navbar: React.FC = () => {
                 className="pl-10 pr-4 py-2 rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
-            <div className={`flex items-center ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>
+            <div 
+           dir="ltr"
+            className={`flex items-center ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>
               <Phone className="h-4 w-4  ml-2 mr-2" />
-              <span className="font-medium">800-DRIVE-123</span>
+              <span className="font-medium ml-2 mr-2">+966-920032590</span>
             </div>
             <button
               onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
@@ -152,9 +154,11 @@ const Navbar: React.FC = () => {
                 className="w-full pl-10 pr-4 py-2 rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
-            <div className="flex items-center text-[#3d3d40] hover:text-[#f78f37] mt-4">
+            <div 
+            dir="ltr"
+            className="flex items-center text-[#3d3d40] hover:text-[#f78f37] mt-4">
               <Phone className="h-4 w-4 mr-2" />
-              <span className="font-medium">800-DRIVE-123</span>
+              <span className="font-medium ml-2 mr-2">+966-920032590</span>
             </div>
             <button
               onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}

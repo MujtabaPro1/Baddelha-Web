@@ -25,7 +25,14 @@ const HeroSection: React.FC = () => {
           </p>
           
           <div className="flex flex-wrap gap-4 mb-12">
-            <button className="bg-[#f78f37] hover:bg-[#f78f37] text-[#FFF] font-semibold px-6 py-3 rounded-lg transition transform hover:scale-105 flex items-center">
+            <button 
+            onClick={() => {
+              document.scrollingElement?.scrollTo({
+                top: document.getElementById('valuation')?.offsetTop || 0,
+                behavior: 'smooth'
+              });
+            }}
+            className="bg-[#f78f37] hover:bg-[#f78f37] text-[#FFF] font-semibold px-6 py-3 rounded-lg transition transform hover:scale-105 flex items-center">
               {lang[languageContent].getStarted} <ArrowRight className="ml-2 h-5 w-5" />
             </button>
             <button className="bg-transparent border-2 border-white hover:bg-white/10 text-white font-semibold px-6 py-3 rounded-lg transition">
@@ -35,14 +42,14 @@ const HeroSection: React.FC = () => {
         </div>
         
         <div className="hidden md:flex justify-center mt-12">
-          <a href="#valuation" className="animate-bounce">
+          <div className="animate-bounce">
             <ChevronDown className="h-8 w-8 text-white" />
-          </a>
+          </div>
         </div>
       </div>
       
       {/* Valuation widget overlay */}
-      <div className="container mx-auto px-4 relative -mt-20 md:-mt-24 z-10">
+      <div  id="valuation" className="container mx-auto px-4 relative -mt-20 md:-mt-24 z-10">
         <ValuationWidget />
       </div>
     </div>

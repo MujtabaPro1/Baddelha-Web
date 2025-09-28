@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               {[lang[languageContent].buy, lang[languageContent].sell, lang[languageContent].tradeIn, lang[languageContent].carValuation].map((link, index) => (
                 <li key={index}>
-                  <a href="#" className="text-gray-400 hover:text-amber-500 transition">
+                  <a href={index == 0 ? "/buy" : index == 1 ? "/sell" : "/trade-in"} className="text-gray-400 hover:text-amber-500 transition">
                     {link}
                   </a>
                 </li>
@@ -65,17 +65,15 @@ const Footer: React.FC = () => {
             <h3 className="font-semibold text-lg mb-4">{lang[languageContent].contactUs}</h3>
             <address className="not-italic text-gray-400 space-y-3">
               <p>{lang[languageContent].address}</p>
-              <p>{lang[languageContent].address1}</p>
-              <p>{lang[languageContent].address2}</p>
               <p className="pt-2">
-                <a href="tel:+18003765432" className="hover:text-amber-500 transition">
-                  800-DRIVE-123
+                <a dir="ltr" href="tel:+966920032590" className="hover:text-amber-500 transition">
+                   +966-920032590
                 </a>
               </p>
               <p>
-                <a href="mailto:info@drivemarket.com" className="hover:text-amber-500 transition flex items-center">
+                <a href="mailto:info@baddelha.sa" className="hover:text-amber-500 transition flex items-center">
                   <Mail className="h-4 w-4 mr-2" />
-                  info@drivemarket.com
+                  info@baddelha.sa
                 </a>
               </p>
             </address>

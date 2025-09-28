@@ -86,7 +86,6 @@ const ContactUs: React.FC = () => {
                   <div>
                     <h3 className="font-medium text-gray-800 mb-1">Email Address</h3>
                     <p className="text-dark">info@baddelha.com</p>
-                    <p className="text-dark">support@baddelha.com</p>
                   </div>
                 </div>
 

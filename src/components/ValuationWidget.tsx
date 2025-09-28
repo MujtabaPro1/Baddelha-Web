@@ -101,7 +101,7 @@ const ValuationWidget: React.FC = () => {
   };
   
   return (
-    <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+    <div  className="bg-white rounded-xl shadow-xl overflow-hidden">
       <div className="bg-[#f78f37] px-6 py-4 text-white">
         <h2 className="text-xl font-semibold">{lang[languageContent].getYourCarsValue}</h2>
         <p className="text-blue-100 text-sm">{lang[languageContent].freeInstantAndAccurateValuation}</p>

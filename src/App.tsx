@@ -18,6 +18,7 @@ import Privacy from './pages/Privacy';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import Appointments from './pages/Appointments';
+import BankValuation from './pages/BankValuation';
 import { Toaster } from './components/ui/toaster';
 
 function App() {
@@ -65,6 +66,10 @@ function App() {
     {
       path: '/auction',
       element: <Auction />,
+    },
+    {
+      path: '/bank-valuation',
+      element: <BankValuation />,
     },
     {
       path: '/terms',

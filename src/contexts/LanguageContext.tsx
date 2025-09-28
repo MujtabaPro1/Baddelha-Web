@@ -15,7 +15,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [language, setLanguageState] = useState<Language>(() => {
     // Try to get the language from localStorage, default to 'en'
     const savedLanguage = localStorage.getItem('language');
-    return (savedLanguage === 'ar' ? 'ar' : 'en') as Language;
+    return (savedLanguage === 'en' ? 'en' : 'ar') as Language;
   });
 
   const direction: Direction = language === 'ar' ? 'rtl' : 'ltr';

@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import lang from '../locale';
+import RiyalIcon from './icons/RiyalIcon';
+import SteeringIcon from './icons/SteeringIcon';
 
 interface ServiceCardProps {
   icon: React.ReactNode;
@@ -20,6 +22,7 @@ interface ServiceCardProps {
   textColor: string;
   btnColor: string;
   btnText: string;
+  btnLink: string;
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ 
@@ -29,7 +32,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   bgColor, 
   textColor,
   btnColor,
-  btnText
+  btnText,
+  btnLink
 }) => {
   return (
     <div className={`${bgColor} rounded-xl p-6 transition-transform hover:scale-105 shadow-md`}>
@@ -38,7 +42,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       </div>
       <h3 className={`text-xl font-semibold mb-3 ${textColor}`}>{title}</h3>
       <p className={`mb-5 ${textColor} opacity-90`}>{description}</p>
-      <button className={`${btnColor} font-medium py-2 px-4 rounded-lg transition hover:opacity-90`}>
+      <button onClick={() => window.location.href = btnLink} className={`${btnColor} font-medium py-2 px-4 rounded-lg transition hover:opacity-90`}>
         {btnText}
       </button>
     </div>
@@ -56,21 +60,23 @@ const ServicesSection: React.FC = () => {
 
   const services = [
     {
-      icon: <ShoppingCart className="h-6 w-6" />,
+      icon: <SteeringIcon className="h-6 w-6" />,
       title: lang[languageContent].buyTitle,
       description: lang[languageContent].buyDesc,
       bgColor: "bg-[#3d3d40]",
       textColor: "text-white",
       btnColor: "bg-amber-400 text-blue-900",
+      btnLink: "/buy",
       btnText: lang[languageContent].browseCarsBtnText
     },
     {
-      icon: <DollarSign className="h-6 w-6" />,
+      icon: <RiyalIcon className="h-6 w-6" />,
       title: lang[languageContent].sellTitle,
       description: lang[languageContent].sellDesc,
       bgColor: "bg-amber-500",
-      textColor: "text-blue-900",
+      textColor: "text-white",
       btnColor: "bg-blue-800 text-white",
+      btnLink: "/",
       btnText: lang[languageContent].getOfferBtnText
     },
     {
@@ -80,6 +86,7 @@ const ServicesSection: React.FC = () => {
       bgColor: "bg-gray-800",
       textColor: "text-white",
       btnColor: "bg-amber-400 text-gray-900",
+      btnLink: "/trade-in",
       btnText: lang[languageContent].tradeNowBtnText
     },
     {
@@ -89,6 +96,7 @@ const ServicesSection: React.FC = () => {
       bgColor: "bg-[#3d3d40]",
       textColor: "text-white",
       btnColor: "bg-amber-400 text-blue-900",
+      btnLink: "/bank-valuation",
       btnText: lang[languageContent].getValuationBtnText
     }
   ];

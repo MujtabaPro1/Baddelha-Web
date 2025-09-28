@@ -1,7 +1,7 @@
 
 const lang = {
     en: {
-        "phone": "800-DRIVE-123",
+        "phone": "+966-920032590",
         "sell": "Sell",
         "buy": "Buy",
         "tradeIn": "Trade In",
@@ -30,8 +30,8 @@ const lang = {
         "getValuation": "Get Valuation",
         "ourServices": "Our Services",
         "everythingYouNeedForYourCar": "Everything You Need For Your Car",
-        "driveMarketProvidesComprehensiveAutomotiveServicesToMakeYourCarBuyingSellingAndOwnershipExperienceSeamlessAndEnjoyable": "DriveMarket provides comprehensive automotive services to make your car buying, selling, and ownership experience seamless and enjoyable.",
-        "whyChooseDriveMarket": "Why Choose DriveMarket?",
+        "driveMarketProvidesComprehensiveAutomotiveServicesToMakeYourCarBuyingSellingAndOwnershipExperienceSeamlessAndEnjoyable": "Badelha provides comprehensive automotive services to make your car buying, selling, and ownership experience seamless and enjoyable.",
+        "whyChooseDriveMarket": "Why Choose Badelha?",
         "experienceTheDifferenceWithOurPremiumCarServices": "Experience the difference with our premium car services",
         "fastProcess": "Fast Process",
         "completeTransactions": "Complete transactions in as little as 30 minutes",
@@ -47,7 +47,7 @@ const lang = {
         "buyDesc": "Find the perfect car for you with our comprehensive selection of new and used vehicles.",
         "sellDesc": "Get an instant offer for your car with our easy-to-use online valuation tool.",
         "tradeInDesc": "Compare trade-in offers and get the best value when upgrading to your next vehicle.",
-        "bankValuationDesc": "Get official bank-approved car valuation for financing, insurance, or legal requirements.",
+        "bankValuationDesc": "Bank-approved car valuation for financing, insurance, or legal requirements.",
         "getOfferBtnText": "Get an Offer",
         "tradeNowBtnText": "Trade Now",
         "getValuationBtnText": "Get Valuation",
@@ -85,7 +85,7 @@ const lang = {
         "fuelType": "Fuel Type",
         "testimonials": "Testimonials",
         "hearFromOurHappyCustomers": "Hear from Our Happy Customers",
-        "thousandsOfCarOwnersTrustDriveMarketForBuyingSellingAndValuatingTheirVehicles": "Thousands of car owners trust DriveMarket for buying, selling, and valuating their vehicles.",
+        "thousandsOfCarOwnersTrustDriveMarketForBuyingSellingAndValuatingTheirVehicles": "Thousands of car owners trust Badelha for buying, selling, and valuating their vehicles.",
         "hereIsWhatSomeOfThemHaveToSay": "Here's what some of them have to say.",
         "getFreeCarValuation": "Get a Free Car Valuation",
         "getFreeCarValuationDesc": "Discover your car's true value in under 2 minutes with our instant valuation tool.",
@@ -101,9 +101,7 @@ const lang = {
         "quickLinks": "Quick Links",
         "contactUs": "Contact Us",
         "footerText": "BADDELHA | بدلها is your trusted partner for all car-related services. From buying and selling to valuation and financing, we make the process simple, transparent, and enjoyable.",
-        "address": "Address",
-        "address1": "Address 1",
-        "address2": "Address 2",
+        "address": "Riyadh, Saudi Arabia",
         "select": "Select",
         "condition": "Condition",
         "book": "Book",
@@ -167,17 +165,13 @@ const lang = {
         "time": "Time",
         "option": "Option",
         "termsOfService": "Terms & Conditions",
-        "legal": "Legal"
-        
+        "legal": "Legal",
+        "premiumServicesDesc": "Ensuring fair and transparent competitive market value for your car based on expert inspection"
 
-
-        
-
-
-                    
+                 
        } ,
        ar: {
-        "phone": "800-DRIVE-123",
+        "phone": "+966-920032590",
         "sell": "بيع",
         "buy": "شراء",
         "tradeIn": "استبدال",
@@ -206,8 +200,8 @@ const lang = {
         "getValuation": "احصل على قيمة سيارتك",
         "ourServices": "خدماتنا",
         "everythingYouNeedForYourCar": "كل ما تحتاجه لسيارتك",
-        "driveMarketProvidesComprehensiveAutomotiveServicesToMakeYourCarBuyingSellingAndOwnershipExperienceSeamlessAndEnjoyable": "توفر DriveMarket خدمات سيارات شاملة لجعل تجربة شراء وبيع وامتلاك سيارتك سهلة وممتعة.",
-        "whyChooseDriveMarket": "لماذا تختار DriveMarket؟",
+        "driveMarketProvidesComprehensiveAutomotiveServicesToMakeYourCarBuyingSellingAndOwnershipExperienceSeamlessAndEnjoyable": "توفر Badelha خدمات سيارات شاملة لجعل تجربة شراء وبيع وامتلاك سيارتك سهلة وممتعة.",
+        "whyChooseDriveMarket": "لماذا تختار Badelha؟",
         "experienceTheDifferenceWithOurPremiumCarServices": "اختبر الفرق مع خدمات السيارات المتميزة لدينا",
         "fastProcess": "إجراءات سريعة",
         "completeTransactions": "أكمل المعاملات في غضون 30 دقيقة فقط",
@@ -215,7 +209,7 @@ const lang = {
         "bestValue": "أفضل قيمة",
         "satisfaction": "رضا 100٪",
         "premiumService": "خدمة متميزة",
-        "premiumServicesDesc": "أسعار تنافسية وخيارات تمويل حصرية",
+        "premiumServicesDesc": "إيجاد قيمة سوقية عادلة وشفافة لسيارتك بناءً على فحص خبراء",
         "buyTitle": "شراء",
         "sellTitle": "بيع",
         "tradeInTitle": "استبدال",
@@ -265,7 +259,7 @@ const lang = {
         "fuelType": "نوع الوقود",
         "testimonials": "الشهادات",
         "hearFromOurHappyCustomers": "سمع من عملائنا السعداء",
-        "thousandsOfCarOwnersTrustDriveMarketForBuyingSellingAndValuatingTheirVehicles": " آلاف أصحاب السيارات يثقون في DriveMarket لشراء وبيع وقييم السيارات",
+        "thousandsOfCarOwnersTrustDriveMarketForBuyingSellingAndValuatingTheirVehicles": " آلاف أصحاب السيارات يثقون في Badelha لشراء وبيع وقييم السيارات",
         "hereIsWhatSomeOfThemHaveToSay": "هنا ما يقول بعضهم",
         "getFreeCarValuation": "احصل على قيمة سيارتك في ثواني",
         "getFreeCarValuationDesc": "احصل على قيمة سيارتك في ثواني",
@@ -281,8 +275,6 @@ const lang = {
         "contactUs": "اتصل بنا",
         "footerText": "BADDELHA | بدلها هي شركتك الموثوقة لجميع خدمات السيارات. من شراء وبيع إلى تقييم وتمويل، نجعل العملية سهلة، مفتوحة، وممتعة.",
         "address": "العنوان",
-        "address1": "العنوان 1",
-        "address2": "العنوان 2",
         "select": "اختر",
         "condition": "الحالة",
         "book": "حجز",
@@ -345,7 +337,7 @@ const lang = {
         "time": "الوقت",
         "option": "الخيار",
         "termsOfService": "الشروط والأحكام",
-        "legal": "قانوني"
+        "legal": "قانوني",
 
 
        } 
