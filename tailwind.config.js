@@ -6,7 +6,7 @@ export default {
       fontFamily: {
         sans: [
           'SF Pro Display',
-          'Inter',
+          'Poppins',
           'system-ui',
           'sans-serif'
         ],
