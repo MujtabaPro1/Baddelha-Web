@@ -152,7 +152,7 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
     <Card className="w-full max-w-md mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border-0">
       <CardHeader className="space-y-4 pb-6">
         <div className="flex items-center justify-center mb-2">
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-3 rounded-full shadow-lg">
+          <div className="bg-gradient-to-br from-amber-500 to-amber-400 p-3 rounded-full shadow-lg">
             <Car className="w-8 h-8 text-white" />
           </div>
         </div>
@@ -216,7 +216,6 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
               {errors.otp && (
                 <p className="text-sm text-red-600 mt-1">{errors.otp}</p>
               )}
-              <p className="text-xs text-gray-500 mt-1">For testing, use OTP</p>
             </div>
           )}
 
@@ -226,7 +225,7 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
                 id="remember"
                 checked={formData.rememberMe}
                 onCheckedChange={(checked) => handleInputChange('rememberMe', checked as boolean)}
-                className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                className="data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500"
               />
               <Label 
                 htmlFor="remember" 
@@ -239,9 +238,9 @@ export function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
 
           <Button
             type="submit"
-            variant="orange"
+            variant="default"
             size="lg"
-            className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+            className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] bg-gradient-to-br from-amber-500 to-amber-400"
             disabled={isLoading}
           >
             {isLoading ? (
