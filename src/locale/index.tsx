@@ -1,7 +1,7 @@
 
 const lang = {
     en: {
-        "phone": "+966-920032590",
+        "phone": "920032590",
         "sell": "Sell",
         "buy": "Buy",
         "tradeIn": "Trade In",
@@ -171,7 +171,7 @@ const lang = {
                  
        } ,
        ar: {
-        "phone": "+966-920032590",
+        "phone": "920032590",
         "sell": "بيع",
         "buy": "شراء",
         "tradeIn": "استبدال",

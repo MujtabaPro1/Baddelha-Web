@@ -112,7 +112,7 @@ const Navbar: React.FC = () => {
            dir="ltr"
             className={`flex items-center ${isScrolled ? 'text-[#3d3d40]' : 'text-white'}`}>
               <Phone className="h-4 w-4  ml-2 mr-2" />
-              <span className="font-medium ml-2 mr-2">+966-920032590</span>
+              <span className="font-medium ml-2 mr-2">920032590</span>
             </div>
             <button
               onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
@@ -158,7 +158,7 @@ const Navbar: React.FC = () => {
             dir="ltr"
             className="flex items-center text-[#3d3d40] hover:text-[#f78f37] mt-4">
               <Phone className="h-4 w-4 mr-2" />
-              <span className="font-medium ml-2 mr-2">+966-920032590</span>
+              <span className="font-medium ml-2 mr-2">920032590</span>
             </div>
             <button
               onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
