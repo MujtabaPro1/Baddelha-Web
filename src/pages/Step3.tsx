@@ -276,23 +276,23 @@ const Step3 = () => {
             <div className="mb-8">
                 <div className="relative">
                     <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                        <div style={{ width: '100%' }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#f78f37]"></div>
+                        <div style={{ width: '100%' }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-amber-500 to-amber-400"></div>
                     </div>
                     <div className="flex justify-between">
                         <div className="text-center">
-                            <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
+                            <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-r from-amber-500 to-amber-400 flex items-center justify-center">
                                 <Check className="h-6 w-6 text-white" />
                             </div>
                             <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].select}</div>
                         </div>
                         <div className="text-center">
-                            <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
+                            <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-r from-amber-500 to-amber-400 flex items-center justify-center">
                                 <Check className="h-6 w-6 text-white" />
                             </div>
                             <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].condition}</div>
                         </div>
                         <div className="text-center">
-                            <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
+                            <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-r from-amber-500 to-amber-400 flex items-center justify-center">
                                 <div className="h-3 w-3 bg-white rounded-full"></div>
                             </div>
                             <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].book}</div>
@@ -355,7 +355,7 @@ const Step3 = () => {
                                         }
                                     
                                     }}
-                                    className="bg-[#f78f37] ml-2 mr-2 text-xs px-3 py-1 rounded hover:bg-yellow-600 transition w-[110px] mt-2 h-[40px] flex items-center justify-center">
+                                    className="bg-gradient-to-r from-amber-500 to-amber-400 ml-2 mr-2 text-xs px-3 py-1 rounded hover:bg-yellow-600 transition w-[110px] mt-2 h-[40px] flex items-center justify-center">
                                         {!isLoading? 'REVEAL PRICE': 
                                         
                                         <div className="w-4 h-4 border-2 border-white border-dashed rounded-full animate-spin"></div>
@@ -451,7 +451,7 @@ const Step3 = () => {
                                                 }}
                                                 className={`flex-shrink-0 px-4 py-2 rounded-lg border ${
                                                     selectedDay === daySchedule.day
-                                                        ? 'bg-[#f78f37] text-white border-[#f78f37]'
+                                                        ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-white border-[#f78f37]'
                                                         : 'bg-white text-gray-700 border-gray-300 hover:border-[#f78f37]'
                                                 }`}
                                             >
@@ -478,7 +478,7 @@ const Step3 = () => {
                                                             onClick={() => setSelectedTimeSlot(slot.label)}
                                                             className={`px-3 py-2 text-sm rounded-lg border ${
                                                                 selectedTimeSlot === slot.label
-                                                                    ? 'bg-[#f78f37] text-white border-[#f78f37]'
+                                                                    ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-white border-[#f78f37]'
                                                                     : 'bg-white text-gray-700 border-gray-300 hover:border-[#f78f37]'
                                                             }`}
                                                         >
@@ -626,7 +626,7 @@ const Step3 = () => {
                                                     // In a real app, you would call an API to send the OTP
                                                 }
                                             }}
-                                            className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md"
+                                            className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md"
                                         >
                                             Send Verification Code
                                         </button>
@@ -668,7 +668,7 @@ const Step3 = () => {
                                                         setOtpError('Please enter a valid 6-digit code');
                                                     }
                                                 }}
-                                                className="bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md"
+                                                className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md"
                                             >
                                                 Verify Code
                                             </button>
@@ -696,7 +696,7 @@ const Step3 = () => {
                                         setShowPhoneVerification(false);
                                         setRevealPrice(true);
                                     }}
-                                    className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md"
+                                    className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md"
                                 >
                                     View Your Vehicle Price
                                 </button>

@@ -137,7 +137,7 @@ function Buy() {
           <SlidersHorizontal className="h-5 w-5 mr-2" />
           Filters
           {activeFiltersCount > 0 && (
-            <span className="ml-2 bg-[#f78f37] text-white text-xs px-2 py-1 rounded-full">
+            <span className="ml-2 bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs px-2 py-1 rounded-full">
               {activeFiltersCount}
             </span>
           )}
@@ -376,7 +376,7 @@ function Buy() {
                     <Filter className="h-4 w-4 mr-2" />
                     Filters
                     {activeFiltersCount > 0 && (
-                      <span className="ml-2 bg-[#f78f37] text-white text-xs px-2 py-1 rounded-full">
+                      <span className="ml-2 bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs px-2 py-1 rounded-full">
                         {activeFiltersCount}
                       </span>
                     )}
@@ -434,7 +434,7 @@ function Buy() {
                 <p className="text-gray-500 mb-4">Try adjusting your filters or search criteria</p>
                 <button
                   onClick={clearFilters}
-                  className="bg-[#f78f37] text-white px-6 py-2 rounded-lg hover:bg-[#e67d26] transition"
+                  className="bg-gradient-to-r from-amber-500 to-amber-400 text-white px-6 py-2 rounded-lg hover:bg-[#e67d26] transition"
                 >
                   Clear All Filters
                 </button>
@@ -544,7 +544,7 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
                 className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition text-sm">
                   View Details
                 </button>
-                <button className="bg-[#f78f37] hover:bg-[#e67d26] text-white px-4 py-2 rounded-lg transition text-sm">
+                <button className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white px-4 py-2 rounded-lg transition text-sm">
                   Contact Dealer
                 </button>
               </div>
@@ -620,7 +620,7 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
           <a href={`/car/${car.id}`} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-3 rounded-lg transition text-sm text-center">
             View Details
           </a>
-          <a href="#" className="flex-1 bg-[#f78f37] hover:bg-[#e67d26] text-white py-2 px-3 rounded-lg transition text-sm text-center">
+          <a href="#" className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white py-2 px-3 rounded-lg transition text-sm text-center">
             Inquire
           </a>
         </div>

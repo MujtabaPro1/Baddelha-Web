@@ -662,13 +662,13 @@ const CarDetail: React.FC = () => {
                           <div className="mb-8">
                             <div className="flex justify-between items-center mb-4">
                               <h4 className="font-semibold text-gray-700">Overall Condition</h4>
-                              <div className="bg-[#f78f37] text-white font-bold px-3 py-1 rounded-full">
+                              <div className="bg-gradient-to-r from-amber-500 to-amber-400 text-white font-bold px-3 py-1 rounded-full">
                                 Excellent
                               </div>
                             </div>
                             
                             <div className="w-full bg-gray-200 rounded-full h-2.5">
-                              <div className="bg-[#f78f37] h-2.5 rounded-full" style={{ width: '92%' }}></div>
+                              <div className="bg-gradient-to-r from-amber-500 to-amber-400 h-2.5 rounded-full" style={{ width: '92%' }}></div>
                             </div>
                             <div className="flex justify-between text-xs text-gray-500 mt-1">
                               <span>Poor</span>
@@ -866,14 +866,14 @@ const CarDetail: React.FC = () => {
                                 <span className="font-medium">SAR 136,242</span>
                               </div>
                             </div>
-                            <button className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
+                            <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
                               Apply Now
                             </button>
                           </div>
                           
                           {/* Option 2 */}
                           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition relative overflow-hidden">
-                            <div className="absolute -right-8 top-4 bg-[#f78f37] text-white text-xs font-bold py-1 px-10 transform rotate-45">
+                            <div className="absolute -right-8 top-4 bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs font-bold py-1 px-10 transform rotate-45">
                               Popular
                             </div>
                             <div className="text-center mb-4">
@@ -895,7 +895,7 @@ const CarDetail: React.FC = () => {
                                 <span className="font-medium">SAR 120,331</span>
                               </div>
                             </div>
-                            <button className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
+                            <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
                               Apply Now
                             </button>
                           </div>
@@ -921,7 +921,7 @@ const CarDetail: React.FC = () => {
                                 <span className="font-medium">Purchase or Return</span>
                               </div>
                             </div>
-                            <button className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
+                            <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
                               Apply Now
                             </button>
                           </div>
@@ -969,7 +969,7 @@ const CarDetail: React.FC = () => {
                                   <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">%</span>
                                 </div>
                               </div>
-                              <button className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition mt-2">
+                              <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition mt-2">
                                 Calculate
                               </button>
                             </div>
@@ -998,7 +998,7 @@ const CarDetail: React.FC = () => {
                                 </div>
                               </div>
                               <div className="pt-4 border-t border-gray-200">
-                                <button className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
+                                <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
                                   Apply for Financing
                                 </button>
                                 <div className="text-center mt-2">
@@ -1112,7 +1112,7 @@ const CarDetail: React.FC = () => {
                             {/* Service 1 */}
                             <div className="ml-10 relative">
                               <div className="absolute -left-10 mt-1.5">
-                                <div className="bg-[#f78f37] h-4 w-4 rounded-full border-4 border-white"></div>
+                                <div className="bg-gradient-to-r from-amber-500 to-amber-400 h-4 w-4 rounded-full border-4 border-white"></div>
                               </div>
                               <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                                 <div className="flex justify-between items-start mb-2">
@@ -1144,7 +1144,7 @@ const CarDetail: React.FC = () => {
                             {/* Service 2 */}
                             <div className="ml-10 relative">
                               <div className="absolute -left-10 mt-1.5">
-                                <div className="bg-[#f78f37] h-4 w-4 rounded-full border-4 border-white"></div>
+                                <div className="bg-gradient-to-r from-amber-500 to-amber-400 h-4 w-4 rounded-full border-4 border-white"></div>
                               </div>
                               <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                                 <div className="flex justify-between items-start mb-2">
@@ -1176,7 +1176,7 @@ const CarDetail: React.FC = () => {
                             {/* Service 3 */}
                             <div className="ml-10 relative">
                               <div className="absolute -left-10 mt-1.5">
-                                <div className="bg-[#f78f37] h-4 w-4 rounded-full border-4 border-white"></div>
+                                <div className="bg-gradient-to-r from-amber-500 to-amber-400 h-4 w-4 rounded-full border-4 border-white"></div>
                               </div>
                               <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                                 <div className="flex justify-between items-start mb-2">
@@ -1281,7 +1281,7 @@ const CarDetail: React.FC = () => {
                               <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8l0IRdya6kunKn7-nw6HW0MjMVD34HaN8YQ&s" 
                                 alt="Similar Car 1" 
                                 className="w-full h-48 object-cover" />
-                              <div className="absolute top-2 right-2 bg-[#f78f37] text-white text-xs font-bold py-1 px-2 rounded">
+                              <div className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs font-bold py-1 px-2 rounded">
                                 New Arrival
                               </div>
                             </div>
@@ -1306,7 +1306,7 @@ const CarDetail: React.FC = () => {
                                   <MapPin className="h-3 w-3 mr-1" /> Riyadh
                                 </div>
                               </div>
-                              <button className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
+                              <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
                                 View Details
                               </button>
                             </div>
@@ -1343,7 +1343,7 @@ const CarDetail: React.FC = () => {
                                   <MapPin className="h-3 w-3 mr-1" /> Jeddah
                                 </div>
                               </div>
-                              <button className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
+                              <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
                                 View Details
                               </button>
                             </div>
@@ -1377,7 +1377,7 @@ const CarDetail: React.FC = () => {
                                   <MapPin className="h-3 w-3 mr-1" /> Riyadh
                                 </div>
                               </div>
-                              <button className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
+                              <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
                                 View Details
                               </button>
                             </div>
@@ -1497,13 +1497,13 @@ const CarDetail: React.FC = () => {
               <div className="space-y-3">
                 <button 
                   onClick={() => window.location.href = `/purchase/${car.id}`}
-                  className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
                 >
                   Purchase Now
                 </button>
                 <button 
                   onClick={() => setShowContactForm(!showContactForm)}
-                  className="w-full border-2 border-[#f78f37] text-[#f78f37] hover:bg-[#f78f37] hover:text-white font-semibold py-3 px-6 rounded-lg transition"
+                  className="w-full border-2 border-[#f78f37] text-[#f78f37] hover:bg-gradient-to-r from-amber-500 to-amber-400 hover:text-white font-semibold py-3 px-6 rounded-lg transition"
                 >
                   Contact Dealer
                 </button>

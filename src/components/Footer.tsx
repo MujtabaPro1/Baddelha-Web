@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
   const { language } = useLanguage();
   const languageContent = language === 'ar' ? 'ar' : 'en';
   return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8">
+    <footer className="bg-[#3d3d40] text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           <div className="lg:col-span-2">
@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
                 />
               </span>
             </div>
-            <p className="text-gray-400 mb-6 max-w-md">
+            <p className="text-white mb-6 max-w-md">
               {lang[languageContent].footerText}
             </p>
             <div className="flex space-x-4 mb-6">
@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
                 <a 
                   key={index} 
                   href="#" 
-                  className="bg-gray-800 hover:bg-blue-800 p-2 rounded-full transition"
+                  className="bg-[#3d3d40] p-2 rounded-full transition"
                 >
                   <Icon className="h-5 w-5" />
                 </a>
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               {[lang[languageContent].buy, lang[languageContent].sell, lang[languageContent].tradeIn, lang[languageContent].carValuation].map((link, index) => (
                 <li key={index}>
-                  <a href={index == 0 ? "/buy" : index == 1 ? "/sell" : "/trade-in"} className="text-gray-400 hover:text-amber-500 transition">
+                  <a href={index == 0 ? "/buy" : index == 1 ? "/sell" : "/trade-in"} className="text-white hover:text-amber-500 transition">
                     {link}
                   </a>
                 </li>
@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               {[lang[languageContent].aboutUs, lang[languageContent].contactUs, lang[languageContent].privacyPolicy, lang[languageContent].termsOfService].map((link, index) => (
                 <li key={index}>
-                  <a href={index == 0 ? "/about-us" : index == 1 ? "/contact-us" : index == 2 ? "/privacy" : "/terms"} className="text-gray-400 hover:text-amber-500 transition">
+                  <a href={index == 0 ? "/about-us" : index == 1 ? "/contact-us" : index == 2 ? "/privacy" : "/terms"} className="text-white hover:text-amber-500 transition">
                     {link}
                   </a>
                 </li>
@@ -63,11 +63,11 @@ const Footer: React.FC = () => {
           
           <div>
             <h3 className="font-semibold text-lg mb-4">{lang[languageContent].contactUs}</h3>
-            <address className="not-italic text-gray-400 space-y-3">
+            <address className="not-italic text-white space-y-3">
               <p>{lang[languageContent].address}</p>
               <p className="pt-2">
                 <a dir="ltr" href="tel:+966920032590" className="hover:text-amber-500 transition">
-                   +966-920032590
+                   920032590
                 </a>
               </p>
               <p>
@@ -82,11 +82,11 @@ const Footer: React.FC = () => {
         
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-500 text-sm mb-4 md:mb-0">
+            <p className="text-white text-sm mb-4 md:mb-0">
               &copy; {new Date().getFullYear()} BADDELHA |
 بدلها. All rights reserved.
             </p>
-            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+            <div className="flex flex-wrap gap-4 text-sm text-white">
               <a href="/terms" className="hover:text-amber-500 transition">{lang[languageContent].termsOfService}</a>
               <a href="/privacy" className="hover:text-amber-500 transition">{lang[languageContent].privacyPolicy}</a>
             </div>

@@ -19,62 +19,48 @@ interface Car {
 const cars: Car[] = [
   {
     id: 1,
-    make: 'BMW',
-    model: '3 Series',
-    year: 2022,
-    price: 42999,
-    image: 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    mileage: 15000,
-    fuelType: 'Gasoline',
+    make: 'JAECO',
+    model: 'J5',
+    year: 2025,
+    price: 79900,
+    image: 'https://omodajaecoo-dubai.ae/wp-content/uploads/2025/08/jaecoo-j5_alpine_green_front_view_canyon_black_01.webp',
+    mileage: 0,
+    fuelType: 'Petrol',
     transmission: 'Automatic',
-    featured: true
   },
   {
     id: 2,
-    make: 'Mercedes-Benz',
-    model: 'C-Class',
-    year: 2023,
-    price: 48500,
-    image: 'https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    mileage: 8000,
-    fuelType: 'Hybrid',
+    make: 'JAECO',
+    model: 'J7',
+    year: 2025,
+    price: 82900,
+    image: 'https://omodajaecoo-dubai.ae/wp-content/uploads/2025/05/Jaecoo-J7-comfort-front-white-523x432-1.webp',
+    mileage: 0,
+    fuelType: 'Petrol',
     transmission: 'Automatic',
-    featured: true
   },
   {
     id: 3,
-    make: 'Audi',
-    model: 'A4',
-    year: 2021,
-    price: 39999,
-    image: 'https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    mileage: 22000,
-    fuelType: 'Gasoline',
+    make: 'JAECO',
+    model: 'J8',
+    year: 2025,
+    price: 121900,
+    image: 'https://omodajaecoo-dubai.ae/wp-content/uploads/2025/05/jaecoo-j8-product-pic-black-size.webp',
+    mileage: 0,
+    fuelType: 'Petrol',
     transmission: 'Automatic'
   },
   {
     id: 4,
-    make: 'Lexus',
-    model: 'ES',
-    year: 2022,
-    price: 45800,
-    image: 'https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    mileage: 18500,
-    fuelType: 'Hybrid',
+    make: 'OMODO',
+    model: 'C5',
+    year: 2025,
+    price: 88500,
+    image: 'https://omodajaecoo-dubai.ae/wp-content/uploads/2025/06/product-omoda-c5-prermuim-size.webp',
+    mileage: 0,
+    fuelType: 'Petrol',
     transmission: 'Automatic'
   },
-  {
-    id: 5,
-    make: 'Tesla',
-    model: 'Model 3',
-    year: 2023,
-    price: 52999,
-    image: 'https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    mileage: 5000,
-    fuelType: 'Electric',
-    transmission: 'Automatic',
-    featured: true
-  }
 ];
 
 const CarCard: React.FC<{ car: Car }> = ({ car }) => {
@@ -88,7 +74,7 @@ const CarCard: React.FC<{ car: Car }> = ({ car }) => {
         <img 
           src={car.image} 
           alt={`${car.year} ${car.make} ${car.model}`} 
-          className="w-full h-56 object-cover"
+          className="w-full h-56 object-contain"
         />
         <button 
           onClick={() => setIsLiked(!isLiked)}
@@ -111,7 +97,7 @@ const CarCard: React.FC<{ car: Car }> = ({ car }) => {
             <p className="text-gray-500 text-sm">{car.year}</p>
           </div>
           <div className="text-right">
-            <p className="font-bold text-lg text-blue-800">${car.price.toLocaleString()}</p>
+            <p className="font-bold text-lg text-blue-800">SAR {car.price.toLocaleString()}</p>
             <p className="text-gray-500 text-xs">Est. SAR 499/mo</p>
           </div>
         </div>
@@ -132,7 +118,7 @@ const CarCard: React.FC<{ car: Car }> = ({ car }) => {
         </div>
         
         <div className="flex gap-2 mt-5">
-          <button className="bg-blue-800 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg w-full transition">
+          <button className="bg-gradient-to-r from-amber-500 to-amber-400  text-white font-medium py-2 px-4 rounded-lg w-full transition">
             {lang[languageContent].viewDetails}
           </button>
           <button className="border border-blue-800 text-blue-800 hover:bg-blue-50 font-medium py-2 px-4 rounded-lg transition flex items-center justify-center">
@@ -169,7 +155,7 @@ const FeaturedCars: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-10">
           <div>
-            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">{lang[languageContent].featuredCars}</span>
+            <span className="text-[#F7AF37] font-semibold text-sm uppercase tracking-wider">{lang[languageContent].featuredCars}</span>
             <h2 className="text-3xl md:text-4xl font-bold mt-2">{lang[languageContent].findYourPerfectMatch}</h2>
           </div>
           
@@ -203,7 +189,11 @@ const FeaturedCars: React.FC = () => {
         </div>
         
         <div className="text-center mt-10">
-          <button className="bg-blue-50 text-blue-800 hover:bg-blue-100 font-semibold py-3 px-6 rounded-lg transition">
+          <button
+          onClick={()=>{
+             window.location.href = '/buy';
+          }}
+          className="bg-gradient-to-r from-amber-500 to-amber-400 text-white font-semibold py-3 px-6 rounded-lg transition">
             {lang[languageContent].viewAllCars}
           </button>
         </div>

@@ -404,7 +404,7 @@ const Auction: React.FC = () => {
                   onClick={() => setSelectedCategory(id as any)}
                   className={`flex items-center px-4 py-2 rounded-lg font-medium transition ${
                     selectedCategory === id
-                      ? 'bg-[#f78f37] text-white'
+                      ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -596,7 +596,7 @@ const AuctionCard: React.FC<AuctionCardProps> = ({
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
-              className="bg-[#f78f37] h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-amber-500 to-amber-400 h-2 rounded-full transition-all duration-300"
               style={{ 
                 width: `${((car.currentBid - car.minBid) / (car.maxBid - car.minBid)) * 100}%` 
               }}
@@ -639,7 +639,7 @@ const AuctionCard: React.FC<AuctionCardProps> = ({
           <div className="flex gap-2">
             <button
               onClick={() => setShowBidForm(true)}
-              className="flex-1 bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-2 px-4 rounded-lg transition transform hover:scale-105"
+              className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-2 px-4 rounded-lg transition transform hover:scale-105"
             >
               Place Bid
             </button>
@@ -663,7 +663,7 @@ const AuctionCard: React.FC<AuctionCardProps> = ({
               <button
                 onClick={onPlaceBid}
                 disabled={!bidAmount || parseFloat(bidAmount) <= car.currentBid}
-                className="bg-[#f78f37] hover:bg-[#e67d26] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold px-4 py-2 rounded-lg transition"
+                className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold px-4 py-2 rounded-lg transition"
               >
                 Bid
               </button>

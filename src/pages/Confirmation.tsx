@@ -148,7 +148,7 @@ const Confirmation = () => {
                     <h2 className="text-xl font-bold mb-2">Error</h2>
                     <p>{error}</p>
                     <div className="mt-4">
-                        <Link to="/" className="bg-[#f78f37] hover:bg-[#e67d26] text-white font-bold py-2 px-4 rounded-lg transition">
+                        <Link to="/" className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-bold py-2 px-4 rounded-lg transition">
                             Return to Home
                         </Link>
                     </div>
@@ -263,7 +263,7 @@ const Confirmation = () => {
                             </div>
 
                             <div className="mt-6 flex justify-center">
-                                <Link to="/" className="bg-[#f78f37] hover:bg-[#e67d26] text-white font-bold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md">
+                                <Link to="/" className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-bold py-3 px-6 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-[#f78f37] focus:ring-opacity-50 shadow-md">
                                     {lang[languageContent].returnToHome}
                                 </Link>
                             </div>
@@ -275,21 +275,21 @@ const Confirmation = () => {
                         <h3 className="text-xl font-bold mb-4">{lang[languageContent].whatToExpect}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="border rounded-lg p-4">
-                                <div className="bg-[#f78f37] w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                                <div className="bg-gradient-to-r from-amber-500 to-amber-400 w-10 h-10 rounded-full flex items-center justify-center mb-3">
                                     <span className="text-white font-bold">1</span>
                                 </div>
                                 <h4 className="font-bold mb-2">{lang[languageContent].arrival}</h4>
                                 <p className="text-sm text-gray-600">{lang[languageContent].pleaseArrive10MinutesBeforeYourScheduledAppointmentBringYourVehicleRegistrationAndID}</p>
                             </div>
                             <div className="border rounded-lg p-4">
-                                <div className="bg-[#f78f37] w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                                <div className="bg-gradient-to-r from-amber-500 to-amber-400 w-10 h-10 rounded-full flex items-center justify-center mb-3">
                                     <span className="text-white font-bold">2</span>
                                 </div>
                                 <h4 className="font-bold mb-2">{lang[languageContent].inspection}</h4>
                                 <p className="text-sm text-gray-600">{lang[languageContent].ourExpertsWillConductAComprehensiveInspectionOfYourVehicleWhichTakesApproximately3045Minutes}</p>
                             </div>
                             <div className="border rounded-lg p-4">
-                                <div className="bg-[#f78f37] w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                                <div className="bg-gradient-to-r from-amber-500 to-amber-400 w-10 h-10 rounded-full flex items-center justify-center mb-3">
                                     <span className="text-white font-bold">3</span>
                                 </div>
                                 <h4 className="font-bold mb-2">{lang[languageContent].results}</h4>

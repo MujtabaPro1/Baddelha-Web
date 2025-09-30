@@ -281,11 +281,11 @@ const Purchase: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => window.location.href = '/'}
-                  className="bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105"
+                  className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105"
                 >
                   Return Home
                 </button>
-                <button className="border-2 border-[#f78f37] text-[#f78f37] hover:bg-[#f78f37] hover:text-white font-semibold py-3 px-8 rounded-lg transition">
+                <button className="border-2 border-[#f78f37] text-[#f78f37] hover:bg-gradient-to-r from-amber-500 to-amber-400 hover:text-white font-semibold py-3 px-8 rounded-lg transition">
                   Track Order
                 </button>
               </div>
@@ -326,7 +326,7 @@ const Purchase: React.FC = () => {
               <div key={id} className="flex items-center">
                 <div className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition ${
                   currentStep === id 
-                    ? 'bg-[#f78f37] border-[#f78f37] text-white' 
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-400 border-[#f78f37] text-white' 
                     : index < ['review', 'details', 'payment'].indexOf(currentStep)
                     ? 'bg-green-500 border-green-500 text-white'
                     : 'border-gray-300 text-gray-400'
@@ -395,7 +395,7 @@ const Purchase: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
                             <div className={`p-2 rounded-lg mr-4 ${
-                              selectedServices.has(service.id) ? 'bg-[#f78f37] text-white' : 'bg-gray-100 text-gray-600'
+                              selectedServices.has(service.id) ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-white' : 'bg-gray-100 text-gray-600'
                             }`}>
                               {service.icon}
                             </div>
@@ -423,7 +423,7 @@ const Purchase: React.FC = () => {
                             {!service.included && (
                               <div className={`w-5 h-5 rounded border-2 mt-1 ml-auto ${
                                 selectedServices.has(service.id)
-                                  ? 'bg-[#f78f37] border-[#f78f37]'
+                                  ? 'bg-gradient-to-r from-amber-500 to-amber-400 border-[#f78f37]'
                                   : 'border-gray-300'
                               }`}>
                                 {selectedServices.has(service.id) && (
@@ -440,7 +440,7 @@ const Purchase: React.FC = () => {
 
                 <button
                   onClick={() => setCurrentStep('details')}
-                  className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
                 >
                   Continue to Details
                 </button>
@@ -592,7 +592,7 @@ const Purchase: React.FC = () => {
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
+                      className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
                     >
                       Continue to Payment
                     </button>
@@ -731,7 +731,7 @@ const Purchase: React.FC = () => {
                       <button
                         type="submit"
                         disabled={isProcessing}
-                        className="flex-1 bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isProcessing ? (
                           <div className="flex items-center justify-center">

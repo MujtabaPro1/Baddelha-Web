@@ -484,13 +484,13 @@ const TradeIn: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => window.location.href = '/'}
-                  className="bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105"
+                  className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105"
                 >
                   Return Home
                 </button>
                 <button
                   onClick={() => alert('Calendar integration coming soon!')}
-                  className="border-2 border-[#f78f37] text-[#f78f37] hover:bg-[#f78f37] hover:text-white font-semibold py-3 px-8 rounded-lg transition"
+                  className="border-2 border-[#f78f37] text-[#f78f37] hover:bg-gradient-to-r from-amber-500 to-amber-400 hover:text-white font-semibold py-3 px-8 rounded-lg transition"
                 >
                   Add to Calendar
                 </button>
@@ -740,7 +740,7 @@ const TradeIn: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
+                  className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
                 >
                   Schedule Appointment
                   <ArrowRight className="inline-block ml-2 h-5 w-5" />
@@ -858,7 +858,7 @@ const TradeIn: React.FC = () => {
                     <div className="flex gap-2">
                       <button 
                         onClick={() => handleCarSelect(car)}
-                        className="flex-1 bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-2 px-4 rounded-lg transition transform hover:scale-105"
+                        className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-2 px-4 rounded-lg transition transform hover:scale-105"
                       >
                         Select This Car
                       </button>
@@ -960,7 +960,7 @@ const TradeIn: React.FC = () => {
 
                     <button
                       onClick={() => handleDealershipSelect(dealership.id)}
-                      className="w-full bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
+                      className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
                     >
                       View Inventory
                     </button>
@@ -1151,7 +1151,7 @@ const TradeIn: React.FC = () => {
             <div className="text-center">
               <button
                 type="submit"
-                className="bg-[#f78f37] hover:bg-[#e67d26] text-white font-semibold py-4 px-12 rounded-lg transition transform hover:scale-105 text-lg"
+                className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-4 px-12 rounded-lg transition transform hover:scale-105 text-lg"
               >
                 {lang[languageContent].findDealerships}
                 <ArrowRight className="inline-block ml-2 h-5 w-5" />

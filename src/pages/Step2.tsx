@@ -148,17 +148,17 @@ const Step2 = () => {
             <div className="mb-8">
                 <div className="relative">
                     <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                        <div style={{ width: '66%' }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#f78f37]"></div>
+                        <div style={{ width: '66%' }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-amber-500 to-amber-400"></div>
                     </div>
                     <div className="flex justify-between">
                         <div className="text-center">
-                            <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
+                            <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-r from-amber-500 to-amber-400 flex items-center justify-center">
                                 <Check className="h-6 w-6 text-white" />
                             </div>
                             <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].select}</div>
                         </div>
                         <div className="text-center">
-                            <div className="w-10 h-10 mx-auto rounded-full bg-[#f78f37] flex items-center justify-center">
+                            <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-r from-amber-500 to-amber-400 flex items-center justify-center">
                                 <div className="h-3 w-3 bg-white rounded-full"></div>
                             </div>
                             <div className="mt-2 font-medium text-[#f78f37]">{lang[languageContent].condition}</div>

@@ -1,14 +1,14 @@
 
 const lang = {
     en: {
-        "phone": "920032590",
+        "phone": "92 00 32590",
         "sell": "Sell",
         "buy": "Buy",
         "tradeIn": "Trade In",
         "yourJourney": "Your Journey",
         "search": "Search cars...",
         "beginsHere": "Begins Here.",
-        "buySellTrade": "Buy, Sell, or Trade Your Car.",
+        "buySellTrade": "Buy, Sell, or Trade Car.",
         "premiumServices": "Experience premium car services with instant valuation, competitive trade-in offers, and hassle-free buying and selling.",
         "getStarted": "Get Started",
         "learnMore": "Learn More",
@@ -166,7 +166,8 @@ const lang = {
         "option": "Option",
         "termsOfService": "Terms & Conditions",
         "legal": "Legal",
-        "premiumServicesDesc": "Ensuring fair and transparent competitive market value for your car based on expert inspection"
+        "premiumServicesDesc": "Ensuring fair and transparent competitive market value for your car based on expert inspection",
+        "viewAllCars": "View All Cars"
 
                  
        } ,
@@ -338,6 +339,7 @@ const lang = {
         "option": "الخيار",
         "termsOfService": "الشروط والأحكام",
         "legal": "قانوني",
+        "viewAllCars": "عرض جميع السيارات"
 
 
        } 

@@ -22,18 +22,25 @@ const CtaSection: React.FC = () => {
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div className="flex items-center bg-white/10 rounded-lg p-4 hover:bg-white/20 transition">
+                <a href="tel:+966920032590" className="flex items-center bg-white/10 rounded-lg p-4 hover:bg-white/20 transition">
                   <Phone className="h-5 w-5 text-amber-400 mr-3 ml-2" />
-                  <span dir="ltr" className="text-white font-medium">920032590</span>
-                </div>
-                <div className="flex items-center bg-white/10 rounded-lg p-4 hover:bg-white/20 transition">
+                  <span dir="ltr" className="text-white font-medium">92 00 32590</span>
+                </a>
+                <a href="mailto:info@baddelha.sa" className="flex items-center bg-white/10 rounded-lg p-4 hover:bg-white/20 transition">
                   <Mail className="h-5 w-5 text-amber-400 mr-3 ml-2" />
                   <span className="text-white font-medium">info@baddelha.sa</span>
-                </div>
+                </a>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-amber-500 hover:bg-amber-400 text-blue-900 font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105 flex items-center justify-center">
+                <button
+                onClick={()=>{
+                  document.scrollingElement?.scrollTo({
+                    top: document.getElementById('valuation')?.offsetTop || 0,
+                    behavior: 'smooth'
+                  });
+                }}
+                className="bg-amber-500 hover:bg-amber-400 text-blue-900 font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105 flex items-center justify-center">
                   {lang[languageContent].scheduleAppointment} {language == 'en' ? <ArrowRight className="ml-2 h-5 w-5" /> : <ArrowLeft className="mr-2 h-5 w-5" />}
                 </button>
                 <button className="bg-transparent border-2 border-white hover:bg-white/10 text-white font-semibold py-3 px-6 rounded-lg transition">
@@ -49,7 +56,14 @@ const CtaSection: React.FC = () => {
                   <p className="text-blue-100 mb-6">
                     {lang[languageContent].getFreeCarValuationDesc}
                   </p>
-                  <button className="w-full bg-white hover:bg-gray-100 text-blue-800 font-semibold py-3 px-6 rounded-lg transition">
+                  <button
+                  onClick={() => {
+                    document.scrollingElement?.scrollTo({
+                      top: document.getElementById('valuation')?.offsetTop || 0,
+                      behavior: 'smooth'
+                    });
+                  }}
+                  className="w-full bg-white hover:bg-gray-100 text-blue-800 font-semibold py-3 px-6 rounded-lg transition">
                     {lang[languageContent].startFreeValuation}
                   </button>
                 </div>
