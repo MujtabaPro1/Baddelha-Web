@@ -7,38 +7,26 @@ import {
   MapPin, 
   Calendar, 
   Fuel, 
-  Settings, 
-  Shield,
-  Star,
   Car,
-  Zap,
-  FileText,
   Check,
-  DollarSign,
-  Clock,
+  ArrowRight,
+  Shield,
   Award,
-  Truck,
+  Star,
+  Zap,
   Wrench,
-  AlertCircle,
-  Info,
+  FileText,
   ThumbsUp,
-  Users,
-  Percent,
-  Plus,
-  ArrowRight, 
-  BarChart2, 
-  Gauge
+  Plus
 } from 'lucide-react';
 import axiosInstance from '../services/axiosInstance';
 import { inspectionData, numberWithCommas } from '../lib/utils';
 import CarBodySvgView from '../components/CarBodyView';
 
-
-
 const CarDetail: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'features' | 'inspection' | 'financing' | 'history' | 'similar'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'features' | 'inspection'  | 'similar'>('overview');
   const [showContactForm, setShowContactForm] = useState(false);
   const [car, setCar] = useState<any>(null);
   const [images, setImages] = useState<string[]>([]);
@@ -142,14 +130,14 @@ const CarDetail: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-white mt-[120px]">
+      <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Breadcrumb */}
-        <nav className="mb-6">
+        <nav className="mb-4">
           <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <a href="/buy" className="hover:text-[#f78f37] transition">Cars for Sale</a>
+            <a href="/buy" className="hover:text-red-500 transition">Cars for Sale</a>
             <ChevronRight className="h-4 w-4" />
-            <a href="/buy" className="hover:text-[#f78f37] transition">{car?.make}</a>
+            <a href="/buy" className="hover:text-red-500 transition">{car?.make}</a>
             <ChevronRight className="h-4 w-4" />
             <span className="text-gray-900">{car?.model}</span>
           </div>
@@ -159,10 +147,10 @@ const CarDetail: React.FC = () => {
           {/* Left Column - Images and Main Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Image Slider */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative">
                 <img
-                  src={images.length > 0 ? images[currentImageIndex] : car?.images[currentImageIndex]}
+                  src={images.length > 0 ? images?.[currentImageIndex] : car?.images?.[currentImageIndex]}
                   alt={car ? `${car.year || ''} ${car.make || ''} ${car.model || ''}` : `${car?.year} ${car?.make} ${car?.model}`}
                   className="w-full h-96 object-cover"
                 />
@@ -208,7 +196,7 @@ const CarDetail: React.FC = () => {
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
                       className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition ${
-                        index === currentImageIndex ? 'border-[#f78f37]' : 'border-gray-200'
+                        index === currentImageIndex ? 'border-red-500' : 'border-gray-200'
                       }`}
                     >
                       <img src={image} alt={`View ${index + 1}`} className="w-full h-full object-cover" />
@@ -219,78 +207,66 @@ const CarDetail: React.FC = () => {
             </div>
 
             {/* Car Title and Basic Info */}
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900">
+                  <h1 className="text-2xl font-bold text-gray-900">
                     {car ? `${car.year || ''} ${car.make || ''} ${car.model || ''}` : `${car?.year} ${car?.make} ${car?.model}`}
                   </h1>
-                  <div className="flex items-center space-x-4 mt-2 text-gray-600">
-                    <span className="flex items-center">
+                  <div className="flex items-center mt-2 text-gray-600">
+                    <span className="flex items-center mr-4">
                       <MapPin className="h-4 w-4 mr-1" />
-                      {car?.location || car?.location}
-                    </span>
-                    <span className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      {car?.condition || car?.condition}
+                      {car?.location || 'Riyadh, Saudi Arabia'}
                     </span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-[#3d3d40]">
-                    SAR {numberWithCommas(car?.bookValue)}
+                  <div className="text-2xl font-bold text-red-500">
+                    SAR {numberWithCommas(car?.bookValue || 114210)}
                   </div>
-    
                 </div>
               </div>
 
               {/* Key Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
-                <div className="text-center">
-                  <Settings className="h-6 w-6 mx-auto text-gray-600 mb-1" />
-                  <div className="font-semibold">{car?.mileage ? car.mileage.toLocaleString() : '0'} km</div>
-                  <div className="text-sm text-gray-600">Mileage</div>
+              <div className="grid grid-cols-4 gap-4 mt-6">
+                <div className="text-center border-r border-gray-200 last:border-r-0">
+                  <div className="text-sm text-gray-500">Year</div>
+                  <div className="font-semibold mt-1">{car?.year || '2022'}</div>
                 </div>
-                <div className="text-center">
-                  <Fuel className="h-6 w-6 mx-auto text-gray-600 mb-1" />
-                  <div className="font-semibold">{car?.fuelType || 'Petrol'}</div>
-                  <div className="text-sm text-gray-600">Fuel Type</div>
+                <div className="text-center border-r border-gray-200 last:border-r-0">
+                  <div className="text-sm text-gray-500">Mileage</div>
+                  <div className="font-semibold mt-1">{car?.mileage ? car.mileage.toLocaleString() : '42,500'} km</div>
                 </div>
-                <div className="text-center">
-                  <Zap className="h-6 w-6 mx-auto text-gray-600 mb-1" />
-                  <div className="font-semibold">{car?.transmission || 'Automatic'}</div>
-                  <div className="text-sm text-gray-600">Transmission</div>
+                <div className="text-center border-r border-gray-200 last:border-r-0">
+                  <div className="text-sm text-gray-500">Fuel Type</div>
+                  <div className="font-semibold mt-1">{car?.fuelType || 'Petrol'}</div>
                 </div>
-                <div className="text-center">
-                  <Car className="h-6 w-6 mx-auto text-gray-600 mb-1" />
-                  <div className="font-semibold">{car?.bodyType}</div>
-                  <div className="text-sm text-gray-600">Body Type</div>
+                <div className="text-center border-r border-gray-200 last:border-r-0">
+                  <div className="text-sm text-gray-500">Transmission</div>
+                  <div className="font-semibold mt-1">{car?.transmission || 'Automatic'}</div>
                 </div>
               </div>
             </div>
 
-            {/* Tabs */}
-            <div className="bg-white rounded-xl shadow-md">
+            {/* Specifications */}
+            <div className="bg-white border border-gray-200 rounded-lg">
               <div className="border-b border-gray-200">
-                <nav className="flex space-x-4 px-6 overflow-x-auto">
+                <nav className="flex px-4 overflow-x-auto">
                   {[
-                    { id: 'overview', label: 'Overview', icon: FileText },
-                    { id: 'features', label: 'Features', icon: Check },
-                    { id: 'inspection', label: 'Inspection', icon: Shield },
-                    { id: 'financing', label: 'Financing', icon: DollarSign },
-                    { id: 'history', label: 'History', icon: Clock },
-                    { id: 'similar', label: 'Similar Cars', icon: Car },
-                  ].map(({ id, label, icon: Icon }) => (
+                    { id: 'overview', label: 'Overview' },
+                    { id: 'features', label: 'Features' },
+                    { id: 'inspection', label: 'Inspection' },
+                    { id: 'similar', label: 'Similar Cars' },
+                  ].map(({ id, label }) => (
                     <button
                       key={id}
                       onClick={() => setActiveTab(id as any)}
-                      className={`flex items-center py-4 px-3 border-b-2 font-medium text-sm transition whitespace-nowrap ${
+                      className={`py-4 px-4 border-b-2 font-medium text-sm transition whitespace-nowrap ${
                         activeTab === id
-                          ? 'border-[#f78f37] text-[#f78f37]'
+                          ? 'border-red-500 text-red-500'
                           : 'border-transparent text-gray-500 hover:text-gray-700'
                       }`}
                     >
-                      <Icon className="h-4 w-4 mr-2" />
                       {label}
                     </button>
                   ))}
@@ -300,150 +276,69 @@ const CarDetail: React.FC = () => {
               <div className="p-6">
                 {/* Overview Tab */}
                 {activeTab === 'overview' && (
-                  <div className="space-y-8">
-                    {/* Vehicle Details Section */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <FileText className="h-5 w-5 mr-2 text-[#f78f37]" /> Vehicle Details
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg">
-                        <div>
-                          <h4 className="font-semibold mb-3 text-gray-700">Basic Information</h4>
-                          <div className="space-y-3 text-sm">
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">VIN:</span>
-                              <span className="font-mono">{car?.vin || '100 100 100 100'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Make:</span>
-                              <span>{car?.make || 'Audi'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Model:</span>
-                              <span>{car?.model || 'A4'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Year:</span>
-                              <span>{car?.year || '2023'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Trim:</span>
-                              <span>{car?.trim || 'Premium Plus'}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold mb-3 text-gray-700">Appearance</h4>
-                          <div className="space-y-3 text-sm">
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Exterior Color:</span>
-                              <span>{car?.exteriorColor || 'Black'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Interior Color:</span>
-                              <span>{car?.interiorColor || 'Black'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Body Type:</span>
-                              <span>{car?.bodyType || 'Sedan'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Doors:</span>
-                              <span>{car?.doors || '4'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Seats:</span>
-                              <span>{car?.seats || '5'}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Performance Section */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <Zap className="h-5 w-5 mr-2 text-[#f78f37]" /> Performance & Specifications
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg">
-                        <div>
-                          <h4 className="font-semibold mb-3 text-gray-700">Engine & Transmission</h4>
-                          <div className="space-y-3 text-sm">
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Engine:</span>
-                              <span>{car?.engine || '2.0L Turbo'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Horsepower:</span>
-                              <span>{car?.horsepower || '248 hp'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Transmission:</span>
-                              <span>{car?.transmission || 'Automatic'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Drive Type:</span>
-                              <span>{car?.driveType || '4WD'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Fuel Type:</span>
-                              <span>{car?.fuelType || 'Petrol'}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold mb-3 text-gray-700">Performance Metrics</h4>
-                          <div className="space-y-3 text-sm">
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Mileage:</span>
-                              <span>{car?.mileage ? car.mileage.toLocaleString() : '0'} km</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Fuel Economy (City):</span>
-                              <span>{car?.fuelEconomyCity || '10.5 L/100km'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Fuel Economy (Highway):</span>
-                              <span>{car?.fuelEconomyHighway || '7.2 L/100km'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">0-100 km/h:</span>
-                              <span>{car?.acceleration || '5.6 seconds'}</span>
-                            </div>
-                            <div className="flex justify-between border-b border-gray-200 pb-2">
-                              <span className="text-gray-600">Top Speed:</span>
-                              <span>{car?.topSpeed || '210 km/h'}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Seller Notes */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <Info className="h-5 w-5 mr-2 text-[#f78f37]" /> Seller Notes
-                      </h3>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <p className="text-gray-700">
-                          {car?.sellerNotes || 'This beautiful Audi A4 is in excellent condition with low mileage. It has been well-maintained with regular service and comes with a full service history. The car features premium leather seats, panoramic sunroof, and the latest technology package. Perfect for someone looking for luxury, comfort, and performance in one package.'}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    {/* Location */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <MapPin className="h-5 w-5 mr-2 text-[#f78f37]" /> Location
-                      </h3>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <p className="text-gray-700 mb-4">
-                          This vehicle is located at: <strong>{car?.location || 'Riyadh, Saudi Arabia'}</strong>
-                        </p>
-                        <div className="h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <p className="text-gray-500">Map placeholder</p>
-                        </div>
-                      </div>
+                  <div>
+                    {/* Specifications Table */}
+                    <div className="overflow-hidden">
+                      <table className="min-w-full">
+                        <tbody>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500 w-1/2">Brand</td>
+                            <td className="py-3 text-sm font-medium">{car?.make || 'Toyota'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Model</td>
+                            <td className="py-3 text-sm font-medium">{car?.model || 'RAV4'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Year</td>
+                            <td className="py-3 text-sm font-medium">{car?.year || '2022'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Mileage</td>
+                            <td className="py-3 text-sm font-medium">{car?.mileage ? car.mileage.toLocaleString() : '42,500'} km</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Fuel Type</td>
+                            <td className="py-3 text-sm font-medium">{car?.fuelType || 'Petrol'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Transmission</td>
+                            <td className="py-3 text-sm font-medium">{car?.transmission || 'Automatic'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Engine</td>
+                            <td className="py-3 text-sm font-medium">{car?.engine || '2.5L 4-Cylinder'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Drive Type</td>
+                            <td className="py-3 text-sm font-medium">{car?.driveType || 'AWD'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Exterior Color</td>
+                            <td className="py-3 text-sm font-medium">{car?.exteriorColor || 'White'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Interior Color</td>
+                            <td className="py-3 text-sm font-medium">{car?.interiorColor || 'Black'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Body Type</td>
+                            <td className="py-3 text-sm font-medium">{car?.bodyType || 'SUV'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Doors</td>
+                            <td className="py-3 text-sm font-medium">{car?.doors || '5'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">Seats</td>
+                            <td className="py-3 text-sm font-medium">{car?.seats || '5'}</td>
+                          </tr>
+                          <tr className="border-b border-gray-200">
+                            <td className="py-3 text-sm text-gray-500">VIN</td>
+                            <td className="py-3 text-sm font-medium font-mono">{car?.vin || 'JTMWRREV7ND123456'}</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 )}
@@ -1262,288 +1157,195 @@ const CarDetail: React.FC = () => {
                 
                 {/* Similar Cars Tab */}
                 {activeTab === 'similar' && (
-                  <div className="space-y-8">
-                    {/* Similar Cars */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <Car className="h-5 w-5 mr-2 text-[#f78f37]" /> Similar Vehicles
-                      </h3>
-                      
-                      <div className="bg-gray-50 p-6 rounded-lg">
-                        <p className="text-gray-700 mb-6">
-                          Explore similar vehicles that match your preferences. Compare features, prices, and specifications to find your perfect car.
-                        </p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                          {/* Car 1 */}
-                          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition">
-                            <div className="relative">
-                              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8l0IRdya6kunKn7-nw6HW0MjMVD34HaN8YQ&s" 
-                                alt="Similar Car 1" 
-                                className="w-full h-48 object-cover" />
-                              <div className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs font-bold py-1 px-2 rounded">
-                                New Arrival
-                              </div>
-                            </div>
-                            <div className="p-4">
-                              <h4 className="font-bold text-gray-800 mb-1 truncate text-ellipsis">2021 Mercedes-Benz C-Class</h4>
-                              <p className="text-sm text-gray-500 mb-3 truncate text-ellipsis">C 200 AMG Line</p>
-                              <div className="flex justify-between items-center mb-3">
-                                <span className="font-bold text-[#f78f37]">SAR 129,900</span>
-                                <span className="text-xs text-gray-500">38,200 km</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 mb-4">
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <Calendar className="h-3 w-3 mr-1" /> 2021
-                                </div>
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <Fuel className="h-3 w-3 mr-1" /> Petrol
-                                </div>
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <Gauge className="h-3 w-3 mr-1" /> Automatic
-                                </div>
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <MapPin className="h-3 w-3 mr-1" /> Riyadh
-                                </div>
-                              </div>
-                              <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
-                                View Details
-                              </button>
-                            </div>
-                          </div>
-                          
-                          {/* Car 2 */}
-                          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition">
-                            <div className="relative">
-                              <img src="https://images.unsplash.com/photo-1553440569-bcc63803a83d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
-                                alt="Similar Car 2" 
-                                className="w-full h-48 object-cover" />
-                              <div className="absolute top-2 right-2 bg-green-600 text-white text-xs font-bold py-1 px-2 rounded">
-                                Best Deal
-                              </div>
-                            </div>
-                            <div className="p-4">
-                              <h4 className="font-bold text-gray-800 mb-1 truncate text-ellipsis">2020 BMW 3 Series</h4>
-                              <p className="text-sm text-gray-500 mb-3 truncate text-ellipsis">330i M Sport</p>
-                              <div className="flex justify-between items-center mb-3">
-                                <span className="font-bold text-[#f78f37]">SAR 119,500</span>
-                                <span className="text-xs text-gray-500">45,600 km</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 mb-4">
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <Calendar className="h-3 w-3 mr-1" /> 2020
-                                </div>
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <Fuel className="h-3 w-3 mr-1" /> Petrol
-                                </div>
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <Gauge className="h-3 w-3 mr-1" /> Automatic
-                                </div>
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <MapPin className="h-3 w-3 mr-1" /> Jeddah
-                                </div>
-                              </div>
-                              <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
-                                View Details
-                              </button>
-                            </div>
-                          </div>
-                          
-                          {/* Car 3 */}
-                          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition">
-                            <div className="relative">
-                              <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
-                                alt="Similar Car 3" 
-                                className="w-full h-48 object-cover" />
-                            </div>
-                            <div className="p-4">
-                              <h4 className="font-bold text-gray-800 mb-1 truncate text-ellipsis">2021 Audi A4</h4>
-                              <p className="text-sm text-gray-500 mb-3 truncate text-ellipsis">40 TFSI S Line</p>
-                              <div className="flex justify-between items-center mb-3">
-                                <span className="font-bold text-[#f78f37]">SAR 124,750</span>
-                                <span className="text-xs text-gray-500">32,100 km</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 mb-4">
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <Calendar className="h-3 w-3 mr-1" /> 2021
-                                </div>
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <Fuel className="h-3 w-3 mr-1" /> Petrol
-                                </div>
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <Gauge className="h-3 w-3 mr-1" /> Automatic
-                                </div>
-                                <div className="flex items-center text-xs text-gray-600">
-                                  <MapPin className="h-3 w-3 mr-1" /> Riyadh
-                                </div>
-                              </div>
-                              <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
-                                View Details
-                              </button>
-                            </div>
-                          </div>
+                  <div>
+                    <h3 className="text-lg font-medium mb-4">Similar Cars</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      {/* Car 1 */}
+                      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-sm transition">
+                        <div className="relative">
+                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8l0IRdya6kunKn7-nw6HW0MjMVD34HaN8YQ&s" 
+                            alt="Similar Car 1" 
+                            className="w-full h-36 object-cover" />
                         </div>
-                        
-                        <div className="mt-6 text-center">
-                          <button className="bg-white hover:bg-gray-50 text-[#f78f37] font-medium py-2 px-6 rounded border border-[#f78f37] transition inline-flex items-center">
-                            View More Similar Cars <ArrowRight className="h-4 w-4 ml-2" />
+                        <div className="p-3">
+                          <h4 className="font-medium text-gray-800 mb-1 truncate text-ellipsis text-sm">2021 Mercedes-Benz C-Class</h4>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="font-bold text-red-500 text-sm">SAR 129,900</span>
+                            <span className="text-xs text-gray-500">38,200 km</span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-1 mb-2">
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Calendar className="h-3 w-3 mr-1" /> 2021
+                            </div>
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Fuel className="h-3 w-3 mr-1" /> Petrol
+                            </div>
+                          </div>
+                          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-xs font-medium py-1 px-2 rounded transition">
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Car 2 */}
+                      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-sm transition">
+                        <div className="relative">
+                          <img src="https://images.unsplash.com/photo-1553440569-bcc63803a83d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                            alt="Similar Car 2" 
+                            className="w-full h-36 object-cover" />
+                        </div>
+                        <div className="p-3">
+                          <h4 className="font-medium text-gray-800 mb-1 truncate text-ellipsis text-sm">2020 BMW 3 Series</h4>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="font-bold text-red-500 text-sm">SAR 119,500</span>
+                            <span className="text-xs text-gray-500">45,600 km</span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-1 mb-2">
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Calendar className="h-3 w-3 mr-1" /> 2020
+                            </div>
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Fuel className="h-3 w-3 mr-1" /> Petrol
+                            </div>
+                          </div>
+                          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-xs font-medium py-1 px-2 rounded transition">
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Car 3 */}
+                      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-sm transition">
+                        <div className="relative">
+                          <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                            alt="Similar Car 3" 
+                            className="w-full h-36 object-cover" />
+                        </div>
+                        <div className="p-3">
+                          <h4 className="font-medium text-gray-800 mb-1 truncate text-ellipsis text-sm">2021 Audi A4</h4>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="font-bold text-red-500 text-sm">SAR 124,750</span>
+                            <span className="text-xs text-gray-500">32,100 km</span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-1 mb-2">
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Calendar className="h-3 w-3 mr-1" /> 2021
+                            </div>
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Fuel className="h-3 w-3 mr-1" /> Petrol
+                            </div>
+                          </div>
+                          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-xs font-medium py-1 px-2 rounded transition">
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Car 4 */}
+                      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-sm transition">
+                        <div className="relative">
+                          <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                            alt="Similar Car 4" 
+                            className="w-full h-36 object-cover" />
+                        </div>
+                        <div className="p-3">
+                          <h4 className="font-medium text-gray-800 mb-1 truncate text-ellipsis text-sm">2022 Lexus ES</h4>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="font-bold text-red-500 text-sm">SAR 135,000</span>
+                            <span className="text-xs text-gray-500">25,800 km</span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-1 mb-2">
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Calendar className="h-3 w-3 mr-1" /> 2022
+                            </div>
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Fuel className="h-3 w-3 mr-1" /> Petrol
+                            </div>
+                          </div>
+                          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-xs font-medium py-1 px-2 rounded transition">
+                            View Details
                           </button>
                         </div>
                       </div>
                     </div>
                     
-                    {/* Compare Features */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <BarChart2 className="h-5 w-5 mr-2 text-[#f78f37]" /> Compare Features
-                      </h3>
-                      
-                      <div className="bg-gray-50 p-6 rounded-lg overflow-x-auto">
-                        <table className="w-full min-w-[800px] border-collapse">
-                          <thead>
-                            <tr className="bg-gray-100">
-                              <th className="p-3 text-left text-gray-700 font-semibold border-b border-gray-200 w-1/4">Feature</th>
-                              <th className="p-3 text-center text-gray-700 font-semibold border-b border-gray-200">
-                                <div>This Car</div>
-                                <div className="text-sm font-normal text-gray-500">Mercedes-Benz E-Class</div>
-                              </th>
-                              <th className="p-3 text-center text-gray-700 font-semibold border-b border-gray-200">
-                                <div>Mercedes-Benz C-Class</div>
-                                <div className="text-sm font-normal text-gray-500">C 200 AMG Line</div>
-                              </th>
-                              <th className="p-3 text-center text-gray-700 font-semibold border-b border-gray-200">
-                                <div>BMW 3 Series</div>
-                                <div className="text-sm font-normal text-gray-500">330i M Sport</div>
-                              </th>
-                              <th className="p-3 text-center text-gray-700 font-semibold border-b border-gray-200">
-                                <div>Audi A4</div>
-                                <div className="text-sm font-normal text-gray-500">40 TFSI S Line</div>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td className="p-3 border-b border-gray-200 font-medium text-gray-700">Price</td>
-                              <td className="p-3 border-b border-gray-200 text-center">SAR 114,210</td>
-                              <td className="p-3 border-b border-gray-200 text-center">SAR 129,900</td>
-                              <td className="p-3 border-b border-gray-200 text-center">SAR 119,500</td>
-                              <td className="p-3 border-b border-gray-200 text-center">SAR 124,750</td>
-                            </tr>
-                            <tr>
-                              <td className="p-3 border-b border-gray-200 font-medium text-gray-700">Engine</td>
-                              <td className="p-3 border-b border-gray-200 text-center">2.0L Turbo</td>
-                              <td className="p-3 border-b border-gray-200 text-center">1.5L Turbo</td>
-                              <td className="p-3 border-b border-gray-200 text-center">2.0L Turbo</td>
-                              <td className="p-3 border-b border-gray-200 text-center">2.0L Turbo</td>
-                            </tr>
-                            <tr>
-                              <td className="p-3 border-b border-gray-200 font-medium text-gray-700">Power</td>
-                              <td className="p-3 border-b border-gray-200 text-center">197 HP</td>
-                              <td className="p-3 border-b border-gray-200 text-center">184 HP</td>
-                              <td className="p-3 border-b border-gray-200 text-center">258 HP</td>
-                              <td className="p-3 border-b border-gray-200 text-center">204 HP</td>
-                            </tr>
-                            <tr>
-                              <td className="p-3 border-b border-gray-200 font-medium text-gray-700">Fuel Economy</td>
-                              <td className="p-3 border-b border-gray-200 text-center">7.1 L/100km</td>
-                              <td className="p-3 border-b border-gray-200 text-center">6.5 L/100km</td>
-                              <td className="p-3 border-b border-gray-200 text-center">6.8 L/100km</td>
-                              <td className="p-3 border-b border-gray-200 text-center">7.0 L/100km</td>
-                            </tr>
-                            <tr>
-                              <td className="p-3 border-b border-gray-200 font-medium text-gray-700">0-100 km/h</td>
-                              <td className="p-3 border-b border-gray-200 text-center">7.5 sec</td>
-                              <td className="p-3 border-b border-gray-200 text-center">7.9 sec</td>
-                              <td className="p-3 border-b border-gray-200 text-center">5.8 sec</td>
-                              <td className="p-3 border-b border-gray-200 text-center">7.1 sec</td>
-                            </tr>
-                            <tr>
-                              <td className="p-3 border-b border-gray-200 font-medium text-gray-700">Warranty</td>
-                              <td className="p-3 border-b border-gray-200 text-center">2 years remaining</td>
-                              <td className="p-3 border-b border-gray-200 text-center">3 years</td>
-                              <td className="p-3 border-b border-gray-200 text-center">2 years</td>
-                              <td className="p-3 border-b border-gray-200 text-center">3 years</td>
-                            </tr>
-                            <tr>
-                              <td className="p-3 border-b border-gray-200 font-medium text-gray-700">Mileage</td>
-                              <td className="p-3 border-b border-gray-200 text-center">42,500 km</td>
-                              <td className="p-3 border-b border-gray-200 text-center">38,200 km</td>
-                              <td className="p-3 border-b border-gray-200 text-center">45,600 km</td>
-                              <td className="p-3 border-b border-gray-200 text-center">32,100 km</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                    <div className="mt-6 text-center">
+                      <button className="bg-white hover:bg-gray-50 text-red-500 font-medium py-2 px-6 rounded border border-red-500 transition inline-flex items-center text-sm">
+                        View More Similar Cars <ArrowRight className="h-4 w-4 ml-2" />
+                      </button>
                     </div>
                   </div>
                 )}
-            
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Dealer Info and Actions */}
-          <div className="space-y-6">
-            {/* Price and Actions */}
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
-              <div className="text-center mb-6">
-                <div className="text-3xl font-bold text-[#3d3d40] mb-2">
-                  SAR {numberWithCommas(car?.bookValue)}
-                </div>
+                      
+                      </div>
+                    </div>
+                  </div>
+               
       
         
+
+          {/* Right Column - Contact and Actions */}
+          <div className="space-y-6">
+            {/* Price and Actions */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6 sticky top-24">
+              <div className="mb-6">
+                <div className="text-2xl font-bold text-red-500 mb-1">
+                  SAR {numberWithCommas(car?.bookValue || 114210)}
+                </div>
+                <div className="text-sm text-gray-500">
+                  Price includes VAT
+                </div>
               </div>
 
               <div className="space-y-3">
                 <button 
-                  onClick={() => window.location.href = `/purchase/${car.id}`}
-                  className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
+                  onClick={() => window.location.href = `/purchase/${car?.id || 1}`}
+                  className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition"
                 >
-                  Purchase Now
+                  Buy Now
                 </button>
                 <button 
                   onClick={() => setShowContactForm(!showContactForm)}
-                  className="w-full border-2 border-[#f78f37] text-[#f78f37] hover:bg-gradient-to-r from-amber-500 to-amber-400 hover:text-white font-semibold py-3 px-6 rounded-lg transition"
+                  className="w-full flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg transition"
                 >
-                  Contact Dealer
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  WhatsApp
+                </button>
+                <button 
+                  onClick={() => setShowContactForm(!showContactForm)}
+                  className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium py-3 px-6 rounded-lg transition"
+                >
+                  Contact Seller
                 </button>
               </div>
-
-         
             </div>
 
-           
-
-            {/* Quick Facts */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-4">Quick Facts</h3>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Condition</span>
-                  <span className="font-medium">Good</span>
+            {/* Seller Info */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <h3 className="text-lg font-medium mb-4">Seller Information</h3>
+              <div className="flex items-center mb-4">
+                <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 mr-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Body Type</span>
-                  <span className="font-medium">{car?.bodyType}</span>
+                <div>
+                  <div className="font-medium">{car?.seller?.name || 'Cars.ly Certified Dealer'}</div>
+                  <div className="text-sm text-gray-500">Member since {car?.seller?.memberSince || 'Jan 2020'}</div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Engine</span>
-                  <span className="font-medium">{car?.engine}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Drive Type</span>
-                  <span className="font-medium">4WD</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Fuel Type</span>
-                  <span className="font-medium">Petrol</span>
+              </div>
+              <div className="text-sm text-gray-700 mb-4">
+                <div className="flex items-center mb-1">
+                  <MapPin className="h-4 w-4 mr-2 text-gray-400" />
+                  {car?.location || 'Riyadh, Saudi Arabia'}
                 </div>
               </div>
             </div>
           </div>
+          </div></div>
         </div>
-      </div>
-    </div>
   );
 };
 
