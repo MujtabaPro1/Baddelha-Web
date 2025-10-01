@@ -17,7 +17,10 @@ import {
   Wrench,
   FileText,
   ThumbsUp,
-  Plus
+  Plus,
+  Truck,
+  Users,
+  AlertCircle
 } from 'lucide-react';
 import axiosInstance from '../services/axiosInstance';
 import { inspectionData, numberWithCommas } from '../lib/utils';
@@ -263,7 +266,7 @@ const CarDetail: React.FC = () => {
                       onClick={() => setActiveTab(id as any)}
                       className={`py-4 px-4 border-b-2 font-medium text-sm transition whitespace-nowrap ${
                         activeTab === id
-                          ? 'border-red-500 text-red-500'
+                          ? 'border-amber-500 text-amber-500'
                           : 'border-transparent text-gray-500 hover:text-gray-700'
                       }`}
                     >
@@ -724,437 +727,9 @@ const CarDetail: React.FC = () => {
                   </div>
                 )}
                 
-                {/* Financing Tab */}
-                {activeTab === 'financing' && (
-                  <div className="space-y-8">
-                    {/* Financing Options */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <DollarSign className="h-5 w-5 mr-2 text-[#f78f37]" /> Financing Options
-                      </h3>
-                      
-                      <div className="bg-gray-50 p-6 rounded-lg">
-                        <p className="text-gray-700 mb-6">
-                          Explore our flexible financing options to make owning this vehicle more affordable. 
-                          We offer competitive rates and terms tailored to your needs.
-                        </p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                          {/* Option 1 */}
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition">
-                            <div className="text-center mb-4">
-                              <h4 className="font-bold text-lg text-gray-800">Standard Loan</h4>
-                              <div className="text-[#f78f37] text-2xl font-bold mt-2">SAR 1,890<span className="text-sm text-gray-500">/mo</span></div>
-                              <p className="text-sm text-gray-500 mt-1">60 months</p>
-                            </div>
-                            <div className="space-y-2 text-sm mb-4">
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Down Payment:</span>
-                                <span className="font-medium">SAR 22,842</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Interest Rate:</span>
-                                <span className="font-medium">3.9%</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Total Cost:</span>
-                                <span className="font-medium">SAR 136,242</span>
-                              </div>
-                            </div>
-                            <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
-                              Apply Now
-                            </button>
-                          </div>
-                          
-                          {/* Option 2 */}
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition relative overflow-hidden">
-                            <div className="absolute -right-8 top-4 bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs font-bold py-1 px-10 transform rotate-45">
-                              Popular
-                            </div>
-                            <div className="text-center mb-4">
-                              <h4 className="font-bold text-lg text-gray-800">Flex Payment</h4>
-                              <div className="text-[#f78f37] text-2xl font-bold mt-2">SAR 2,150<span className="text-sm text-gray-500">/mo</span></div>
-                              <p className="text-sm text-gray-500 mt-1">48 months</p>
-                            </div>
-                            <div className="space-y-2 text-sm mb-4">
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Down Payment:</span>
-                                <span className="font-medium">SAR 17,131</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Interest Rate:</span>
-                                <span className="font-medium">2.9%</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Total Cost:</span>
-                                <span className="font-medium">SAR 120,331</span>
-                              </div>
-                            </div>
-                            <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
-                              Apply Now
-                            </button>
-                          </div>
-                          
-                          {/* Option 3 */}
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition">
-                            <div className="text-center mb-4">
-                              <h4 className="font-bold text-lg text-gray-800">Premium Lease</h4>
-                              <div className="text-[#f78f37] text-2xl font-bold mt-2">SAR 2,450<span className="text-sm text-gray-500">/mo</span></div>
-                              <p className="text-sm text-gray-500 mt-1">36 months</p>
-                            </div>
-                            <div className="space-y-2 text-sm mb-4">
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Initial Payment:</span>
-                                <span className="font-medium">SAR 7,350</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Mileage Limit:</span>
-                                <span className="font-medium">15,000 km/year</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">End Option:</span>
-                                <span className="font-medium">Purchase or Return</span>
-                              </div>
-                            </div>
-                            <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
-                              Apply Now
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Financing Calculator */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <Percent className="h-5 w-5 mr-2 text-[#f78f37]" /> Payment Calculator
-                      </h3>
-                      <div className="bg-gray-50 p-6 rounded-lg">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                          <div>
-                            <h4 className="font-semibold mb-4 text-gray-700">Estimate Your Monthly Payment</h4>
-                            <div className="space-y-4">
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Price</label>
-                                <div className="relative">
-                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">SAR</span>
-                                  <input type="text" value="114,210" className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-md focus:ring-[#f78f37] focus:border-[#f78f37]" />
-                                </div>
-                              </div>
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Down Payment</label>
-                                <div className="relative">
-                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">SAR</span>
-                                  <input type="text" value="22,842" className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-md focus:ring-[#f78f37] focus:border-[#f78f37]" />
-                                </div>
-                              </div>
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Loan Term</label>
-                                <select className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#f78f37] focus:border-[#f78f37]">
-                                  <option>36 months</option>
-                                  <option>48 months</option>
-                                  <option selected>60 months</option>
-                                  <option>72 months</option>
-                                </select>
-                              </div>
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Interest Rate</label>
-                                <div className="relative">
-                                  <input type="text" value="3.9" className="w-full pl-4 pr-8 py-2 border border-gray-300 rounded-md focus:ring-[#f78f37] focus:border-[#f78f37]" />
-                                  <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">%</span>
-                                </div>
-                              </div>
-                              <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition mt-2">
-                                Calculate
-                              </button>
-                            </div>
-                          </div>
-                          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                            <h4 className="font-semibold mb-4 text-gray-700">Payment Summary</h4>
-                            <div className="space-y-4">
-                              <div className="pb-4 border-b border-gray-200">
-                                <div className="text-center">
-                                  <div className="text-sm text-gray-500">Estimated Monthly Payment</div>
-                                  <div className="text-3xl font-bold text-[#f78f37] mt-1">SAR 1,890</div>
-                                </div>
-                              </div>
-                              <div className="space-y-2">
-                                <div className="flex justify-between">
-                                  <span className="text-gray-600">Loan Amount:</span>
-                                  <span className="font-medium">SAR 91,368</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-gray-600">Total Interest:</span>
-                                  <span className="font-medium">SAR 22,032</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-gray-600">Total Cost:</span>
-                                  <span className="font-medium">SAR 136,242</span>
-                                </div>
-                              </div>
-                              <div className="pt-4 border-t border-gray-200">
-                                <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white font-medium py-2 px-4 rounded transition">
-                                  Apply for Financing
-                                </button>
-                                <div className="text-center mt-2">
-                                  <a href="#" className="text-sm text-[#f78f37] hover:underline">Contact a Finance Specialist</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                {/* History Tab */}
-                {activeTab === 'history' && (
-                  <div className="space-y-8">
-                    {/* Vehicle History Overview */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <Clock className="h-5 w-5 mr-2 text-[#f78f37]" /> Vehicle History Overview
-                      </h3>
-                      
-                      <div className="bg-gray-50 p-6 rounded-lg">
-                        <div className="flex items-center justify-between mb-6">
-                          <div className="flex items-center">
-                            <div className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
-                              Clean History
-                            </div>
-                          </div>
-                          <button className="text-[#f78f37] hover:text-[#e67d26] font-medium flex items-center">
-                            <FileText className="h-4 w-4 mr-1" /> Download Full Report
-                          </button>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                            <div className="flex items-center mb-2">
-                              <AlertCircle className="h-5 w-5 text-green-500 mr-2" />
-                              <h5 className="font-semibold text-gray-700">Accident History</h5>
-                            </div>
-                            <p className="text-sm text-gray-600">No accidents or damage reported</p>
-                          </div>
-                          
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                            <div className="flex items-center mb-2">
-                              <Users className="h-5 w-5 text-[#f78f37] mr-2" />
-                              <h5 className="font-semibold text-gray-700">Ownership</h5>
-                            </div>
-                            <p className="text-sm text-gray-600">1 previous owner, personal use only</p>
-                          </div>
-                          
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                            <div className="flex items-center mb-2">
-                              <Truck className="h-5 w-5 text-[#f78f37] mr-2" />
-                              <h5 className="font-semibold text-gray-700">Service History</h5>
-                            </div>
-                            <p className="text-sm text-gray-600">Full service history available</p>
-                          </div>
-                        </div>
-                        
-                        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6">
-                          <h4 className="font-semibold text-gray-700 mb-3">Vehicle Summary</h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">First Registration:</span>
-                                <span className="font-medium">March 15, 2020</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">Imported From:</span>
-                                <span className="font-medium">Germany</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">Odometer Reading:</span>
-                                <span className="font-medium">42,500 km (verified)</span>
-                              </div>
-                            </div>
-                            <div className="space-y-2">
-                              <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">Last Service:</span>
-                                <span className="font-medium">January 10, 2023</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">Warranty Valid Until:</span>
-                                <span className="font-medium">March 15, 2025</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">Recall Status:</span>
-                                <span className="font-medium">No open recalls</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Service History */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <Wrench className="h-5 w-5 mr-2 text-[#f78f37]" /> Service History
-                      </h3>
-                      
-                      <div className="bg-gray-50 p-6 rounded-lg">
-                        <div className="relative">
-                          {/* Timeline */}
-                          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                          
-                          {/* Service Events */}
-                          <div className="space-y-8 relative">
-                            {/* Service 1 */}
-                            <div className="ml-10 relative">
-                              <div className="absolute -left-10 mt-1.5">
-                                <div className="bg-gradient-to-r from-amber-500 to-amber-400 h-4 w-4 rounded-full border-4 border-white"></div>
-                              </div>
-                              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                                <div className="flex justify-between items-start mb-2">
-                                  <h4 className="font-semibold text-gray-700">40,000 km Service</h4>
-                                  <span className="text-sm text-gray-500">January 10, 2023</span>
-                                </div>
-                                <p className="text-sm text-gray-600 mb-3">Regular maintenance service performed at authorized dealer.</p>
-                                <div className="space-y-1">
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Oil and filter change</span>
-                                  </div>
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Brake fluid replacement</span>
-                                  </div>
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Air filter replacement</span>
-                                  </div>
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Multi-point inspection</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            {/* Service 2 */}
-                            <div className="ml-10 relative">
-                              <div className="absolute -left-10 mt-1.5">
-                                <div className="bg-gradient-to-r from-amber-500 to-amber-400 h-4 w-4 rounded-full border-4 border-white"></div>
-                              </div>
-                              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                                <div className="flex justify-between items-start mb-2">
-                                  <h4 className="font-semibold text-gray-700">20,000 km Service</h4>
-                                  <span className="text-sm text-gray-500">February 5, 2022</span>
-                                </div>
-                                <p className="text-sm text-gray-600 mb-3">Regular maintenance service performed at authorized dealer.</p>
-                                <div className="space-y-1">
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Oil and filter change</span>
-                                  </div>
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Cabin air filter replacement</span>
-                                  </div>
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Software update</span>
-                                  </div>
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Multi-point inspection</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            {/* Service 3 */}
-                            <div className="ml-10 relative">
-                              <div className="absolute -left-10 mt-1.5">
-                                <div className="bg-gradient-to-r from-amber-500 to-amber-400 h-4 w-4 rounded-full border-4 border-white"></div>
-                              </div>
-                              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                                <div className="flex justify-between items-start mb-2">
-                                  <h4 className="font-semibold text-gray-700">Pre-Delivery Inspection</h4>
-                                  <span className="text-sm text-gray-500">March 10, 2020</span>
-                                </div>
-                                <p className="text-sm text-gray-600 mb-3">Initial inspection and setup before delivery.</p>
-                                <div className="space-y-1">
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Full vehicle inspection</span>
-                                  </div>
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Fluid levels check</span>
-                                  </div>
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Software verification</span>
-                                  </div>
-                                  <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-[#f78f37] mr-2 mt-0.5" />
-                                    <span className="text-sm text-gray-600">Road test</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Ownership History */}
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                        <Users className="h-5 w-5 mr-2 text-[#f78f37]" /> Ownership History
-                      </h3>
-                      
-                      <div className="bg-gray-50 p-6 rounded-lg">
-                        <div className="space-y-4">
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                            <div className="flex justify-between items-start mb-2">
-                              <h4 className="font-semibold text-gray-700">Current Owner</h4>
-                              <span className="text-sm text-gray-500">Since April 2023</span>
-                            </div>
-                            <div className="space-y-2 text-sm">
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Type:</span>
-                                <span className="font-medium">Dealership</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Location:</span>
-                                <span className="font-medium">Riyadh, Saudi Arabia</span>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                            <div className="flex justify-between items-start mb-2">
-                              <h4 className="font-semibold text-gray-700">Previous Owner</h4>
-                              <span className="text-sm text-gray-500">March 2020 - April 2023</span>
-                            </div>
-                            <div className="space-y-2 text-sm">
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Type:</span>
-                                <span className="font-medium">Private Individual</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Usage:</span>
-                                <span className="font-medium">Personal Use Only</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Location:</span>
-                                <span className="font-medium">Riyadh, Saudi Arabia</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
+            
+              
+              
                 {/* Similar Cars Tab */}
                 {activeTab === 'similar' && (
                   <div>
@@ -1181,7 +756,7 @@ const CarDetail: React.FC = () => {
                               <Fuel className="h-3 w-3 mr-1" /> Petrol
                             </div>
                           </div>
-                          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-xs font-medium py-1 px-2 rounded transition">
+                          <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs font-medium py-1 px-2 rounded transition">
                             View Details
                           </button>
                         </div>
@@ -1208,7 +783,7 @@ const CarDetail: React.FC = () => {
                               <Fuel className="h-3 w-3 mr-1" /> Petrol
                             </div>
                           </div>
-                          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-xs font-medium py-1 px-2 rounded transition">
+                          <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs font-medium py-1 px-2 rounded transition">
                             View Details
                           </button>
                         </div>
@@ -1235,7 +810,7 @@ const CarDetail: React.FC = () => {
                               <Fuel className="h-3 w-3 mr-1" /> Petrol
                             </div>
                           </div>
-                          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-xs font-medium py-1 px-2 rounded transition">
+                          <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs font-medium py-1 px-2 rounded transition">
                             View Details
                           </button>
                         </div>
@@ -1262,7 +837,7 @@ const CarDetail: React.FC = () => {
                               <Fuel className="h-3 w-3 mr-1" /> Petrol
                             </div>
                           </div>
-                          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-xs font-medium py-1 px-2 rounded transition">
+                          <button className="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-white text-xs font-medium py-1 px-2 rounded transition">
                             View Details
                           </button>
                         </div>
@@ -1300,7 +875,7 @@ const CarDetail: React.FC = () => {
               <div className="space-y-3">
                 <button 
                   onClick={() => window.location.href = `/purchase/${car?.id || 1}`}
-                  className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition"
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-white font-medium py-3 px-6 rounded-lg transition"
                 >
                   Buy Now
                 </button>
