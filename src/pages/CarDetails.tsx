@@ -111,6 +111,10 @@ const CarDetail: React.FC = () => {
                   // Use car images if available
                   setImages(_car.images);
               }
+              else if (res?.data?.carImages && res.data.carImages.length > 0) {
+                  const imageUrls = res.data.carImages.map((img: any) => img.url || img.imageUrl || img);
+                  setImages(imageUrls);
+              }
               
               // Process car videos if available
               if (res?.data?.carImages) {

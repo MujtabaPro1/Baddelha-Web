@@ -465,15 +465,19 @@ function Buy() {
 
 
 const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
+  console.log('CarCard');
   if (viewMode === 'list') {
     return (
       <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-80 relative">
             <img 
-              src={car.coverImage?.url} 
-              alt={`${car.modelYear} ${car.make} ${car.model}`}
+              src={car?.coverImage?.url || 'https://miamiconcours.com/wp-content/themes/miami/assets/image/vote-placeholder.png'}
+                 alt={`${car.modelYear} ${car.make} ${car.model}`}
               className="w-full h-48 md:h-full object-cover"
+              onError={()=>{
+                console.log('onError');
+              }}
             />
             <button
               onClick={onToggleLike}
@@ -537,16 +541,14 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
                 Sold by: <span className="font-medium">{car?.organizationId ? 'Company' : 'Private'}</span>
               </div>
               <div className="flex gap-2">
-                <button
-                onClick={()=>{
-                  window.location.href = '/cars/' + car?.id;
-                }}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition text-sm">
+                <a
+                href={`/car/${car.id}`}
+                className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white px-4 py-2 rounded-lg transition text-sm">
                   View Details
-                </button>
-                <button className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white px-4 py-2 rounded-lg transition text-sm">
+                </a>
+                {/* <button className="bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white px-4 py-2 rounded-lg transition text-sm">
                   Contact Dealer
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
@@ -559,10 +561,14 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       <div className="relative">
         <img 
-          src={car.coverImage?.url} 
+          src={car?.coverImage?.url || 'https://miamiconcours.com/wp-content/themes/miami/assets/image/vote-placeholder.png'} 
           alt={`${car.modelYear} ${car.make} ${car.model}`}
           className="w-full h-[280px] object-cover"
+          onError={()=>{
+            console.log('onError');
+          }}
         />
+      
         <button
           onClick={onToggleLike}
           className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md hover:bg-white transition"
@@ -617,12 +623,12 @@ const CarCard: React.FC<any> = ({ car, viewMode, isLiked, onToggleLike }) => {
           </div>
 
         <div className="flex gap-2">
-          <a href={`/car/${car.id}`} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-3 rounded-lg transition text-sm text-center">
+          <a href={`/car/${car.id}`} className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white py-2 px-3 rounded-lg transition text-sm text-center">
             View Details
           </a>
-          <a href="#" className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white py-2 px-3 rounded-lg transition text-sm text-center">
+          {/* <a href="#" className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:bg-[#e67d26] text-white py-2 px-3 rounded-lg transition text-sm text-center">
             Inquire
-          </a>
+          </a> */}
         </div>
       </div>
     </div>
